@@ -4,8 +4,8 @@ current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 source $current_dir/../functions/generals.sh
 
-chef_path="/var/$(basename $0 | awk -F '.sh' '{print \$1}')"
-chef_repo_path="$chef_path/git_main_project_name"
+chef_path="/var/$(basename "${BASH_SOURCE[0]}" | awk -F '.sh' '{print \$1}')"
+chef_repo_path="$chef_path/$git_main_project_name"
 cookbook_path="$chef_repo_path/cookbooks"
 libraries_path="$chef_repo_path/libraries"
 resources_path="$chef_repo_path/resources"
