@@ -2,7 +2,7 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source $current_dir/functions/generals.sh
+source $current_dir/../functions/generals.sh
 
 chef_path="/var/$(basename $0 | awk -F '.sh' '{print \$1}')"
 cookbook_path='$chef_path/cookbooks'

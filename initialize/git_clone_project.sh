@@ -12,6 +12,7 @@ load_cookbooks
 
 for github_repo in "${cookbooks[@]}"
 do
+  cd $main_repo_dir
   #echo "github_repo = $github_repo"
   eval $github_repo
   executing_git_clone "$type" "$name" "$fork_from_public" "$git_url"
