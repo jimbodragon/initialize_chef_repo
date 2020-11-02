@@ -1,5 +1,9 @@
 #!/bin/bash
 
+current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source $current_dir/functions/generals.sh
+
 chef_path="/var/$(basename $0 | awk -F '.sh' '{print \$1}')"
 cookbook_path='$chef_path/cookbooks'
 checksum_path='$chef_path/checksums'
@@ -10,7 +14,7 @@ file_cache_path='$chef_path/cache'
 role_path='$chef_path/roles'
 
 cd $cookbook_path
-git clone git@github.com:jimbodragon/jimbodragon_chef_repo.git
+git_clone_main_project
 
 
 cat << EOS > solo.rb

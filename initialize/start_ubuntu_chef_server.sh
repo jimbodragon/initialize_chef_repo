@@ -2,7 +2,7 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-$current_dir/functions/git.sh
+source $current_dir/functions/generals.sh
 
 ### Install chef to start chef-solo
 

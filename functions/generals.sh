@@ -5,12 +5,13 @@ export git_org='jimbodragon'
 export git_baseurl='github.com'
 export git_user='git'
 export git_fork_upstream_name='chef-public-cookbook'
-export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}/.." )" >/dev/null 2>&1 && pwd )"
+#export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}/.." )" >/dev/null 2>&1 && pwd )"
+export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 export functions_dir="$( cd "$main_repo_dir/functions" >/dev/null 2>&1 && pwd )"
 export initialize_dir="$( cd "$main_repo_dir/initialize" >/dev/null 2>&1 && pwd )"
-export cookbooks_file="$main_repo_dir/cookbooks.sh"
+export git_repos_file="$main_repo_dir/git_repos.sh"
 
-$functions_dir/git.sh
+source $functions_dir/git.sh
 
 function create_dir()
 {
@@ -19,6 +20,7 @@ function create_dir()
     mkdir $1
   fi
 }
+export -f create_dir
 
 function yes_no_question()
 {
@@ -39,8 +41,10 @@ function yes_no_question()
 
 	esac
 }
+export -f yes_no_question
 
 function validate_git_repo()
 {
 	yes_no_question "Be sure to have a git repository. Do you want to continue? " keep_continue "" "exit 1"
 }
+export -f validate_git_repo
