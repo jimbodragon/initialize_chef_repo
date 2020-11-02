@@ -6,10 +6,11 @@ export git_baseurl='github.com'
 export git_user='git'
 export git_fork_upstream_name='chef-public-cookbook'
 #export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}/.." )" >/dev/null 2>&1 && pwd )"
-export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
-export functions_dir="$( cd "$main_repo_dir/functions" >/dev/null 2>&1 && pwd )"
-export initialize_dir="$( cd "$main_repo_dir/initialize" >/dev/null 2>&1 && pwd )"
-export git_repos_file="$main_repo_dir/git_repos.sh"
+export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
+export initialize_chef_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
+export functions_dir="$( cd "$initialize_chef_dir/functions" >/dev/null 2>&1 && pwd )"
+export initialize_dir="$( cd "$initialize_chef_dir/initialize" >/dev/null 2>&1 && pwd )"
+export git_repos_file="$initialize_chef_dir/git_repos.sh"
 
 source $functions_dir/git.sh
 

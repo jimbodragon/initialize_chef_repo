@@ -12,11 +12,11 @@ load_git_repos
 
 for github_repo in "${git_repos[@]}"
 do
-  cd $(git rev-parse --show-toplevel)
-  echo "github_repo = $github_repo"
+  cd $main_repo_dir
   eval $github_repo
   #executing_git_clone $type $name $fork_from_public
   cd $type/$name
   commit_and_push "Push all $git_main_project_name project"
-  cd ../..
+  echo
+  echo
 done
