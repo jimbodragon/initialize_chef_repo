@@ -3,7 +3,7 @@
 
 current_dir="$(pwd)"
 
-scripts_dir_name="scripts"
+scripts_dir_name="initialize_chef_repo"
 functions_dir_name="functions"
 initialize_dir_name="initialize"
 initializator_script_name="initialize_initializator.sh"
@@ -22,9 +22,9 @@ function create_directory()
 
 function download_raw()
 {
-  raw_url="https://raw.githubusercontent.com/jimbodragon/jimbodragon_chef_repo/main/"
-  script_relative_path=$(echo $1 | awk -F "$current_dir/" '{print $2}')
-  wget -o "$script_relative_path" "$raw_url/$script_relative_path"
+  raw_url="https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/"
+  script_relative_path=$(echo $1 | awk -F "$scripts_dir/" '{print $2}')
+  wget --quiet -O "$1" "$raw_url/$script_relative_path"
 }
 
 create_directory "$scripts_dir"
