@@ -9,24 +9,28 @@ chef_repo_path="$chef_path/$git_main_project_name"
 cookbook_path="$chef_repo_path/cookbooks"
 libraries_path="$chef_repo_path/libraries"
 resources_path="$chef_repo_path/resources"
-checksum_path="$chef_repo_path/checksums"
 data_bag_path="$chef_repo_path/data_bags"
 environment_path="$chef_repo_path/environments"
+role_path="$chef_repo_path/roles"
+
+checksum_path="$chef_repo_path/checksums"
 file_backup_path="$chef_repo_path/backup"
 file_cache_path="$chef_repo_path/cache"
-role_path="$chef_repo_path/roles"
+log_path="$chef_repo_path/logs"
 
 mkdir $chef_path
 cd $chef_path
 git_clone_main_project
 mkdir $cookbook_path
-mkdir $checksum_path
+mkdir $libraries_path
+mkdir $resources_path
 mkdir $data_bag_path
 mkdir $environment_path
+mkdir $role_path
+mkdir $checksum_path
 mkdir $file_backup_path
 mkdir $file_cache_path
-mkdir $role_path
-
+mkdir $log_path
 
 cat << EOS > solo.rb
 checksum_path '$checksum_path'
@@ -55,4 +59,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]'
+chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L

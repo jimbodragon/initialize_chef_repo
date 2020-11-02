@@ -27,7 +27,11 @@ data_bags/README.md
 environments/README.md
 roles/README.md
 environments/example.json
-roles/example.json|g' .gitignore
+roles/example.json
+checksums
+backup
+cache
+logs|g' .gitignore
 
 git add *
 git commit -m 'Initializing repo'
