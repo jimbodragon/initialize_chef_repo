@@ -7,9 +7,9 @@ export git_user='git'
 export git_fork_upstream_name='chef-public-cookbook'
 #export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}/.." )" >/dev/null 2>&1 && pwd )"
 export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
-export initialize_chef_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
-export functions_dir="$( cd "$initialize_chef_dir/functions" >/dev/null 2>&1 && pwd )"
-export initialize_dir="$( cd "$initialize_chef_dir/initialize" >/dev/null 2>&1 && pwd )"
+export initialize_chef_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
+export functions_dir="$initialize_chef_dir/functions"
+export initialize_dir="$initialize_chef_dir/initialize"
 export git_repos_file="$initialize_chef_dir/git_repos.sh"
 
 source $functions_dir/git.sh
@@ -46,6 +46,6 @@ export -f yes_no_question
 
 function validate_git_repo()
 {
-	yes_no_question "Be sure to have a git repository. Do you want to continue? " keep_continue "" "exit 1"
+	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " keep_continue "" "exit 1"
 }
 export -f validate_git_repo

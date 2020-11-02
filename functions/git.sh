@@ -10,8 +10,8 @@ function install_git()
 {
   if [ "$(for git in $(sudo apt-cache madison git | cut -d '|' -f 2); do sudo dpkg -l | grep git | grep $git; done | head -n 1 | awk '{print $1}')" != "ii" ]
   then
-    apt-get update && sudo apt-get upgrade
-    apt-get install git
+    #apt-get -y update && sudo apt-get -y upgrade
+    apt-get -y install git
   fi
 }
 export -f install_git
