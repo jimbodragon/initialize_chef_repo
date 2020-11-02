@@ -16,4 +16,4 @@ install_git
 wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_version/$os/$os_version/chef-workstation_$chef_version-1_amd64.deb
 dpkg -i $download_file
 
-sudo bash install_chef_infra.sh
+$current_dir/install_chef_infra.sh

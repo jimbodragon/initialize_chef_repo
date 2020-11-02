@@ -2,8 +2,8 @@
 # Script to execute to initialize a fresh new chef repository
 
 # https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh
-# wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh
-# bash initialize_chef_repo/initialize/start_ubuntu_chef_server.sh
+# wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh && bash initialize_initializator.sh && bash initialize_chef_repo/initialize/start_ubuntu_chef_server.sh
+
 
 current_dir="$(pwd)"
 
