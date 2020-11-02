@@ -8,12 +8,18 @@ source $current_dir/../functions/generals.sh
 
 os='ubuntu'
 os_version='18.04'
-chef_version='20.10.168'
-download_file='/tmp/chef_workstation_install.deb'
+chef_workstation_version='20.10.168'
+chef_client_version='16.6.14'
+chef_version=$chef_client_version
+download_file='/tmp/chef_install.deb'
 
 install_git
 
-wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_version/$os/$os_version/chef-workstation_$chef_version-1_amd64.deb
+# Chef workstation
+# wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
+
+# Chef client
+wget -O $download_file https://packages.chef.io/files/stable/chef/$chef_client_version/$os/$os_version/chef_$chef_client_version-1_amd64.deb
 dpkg -i $download_file
 
 $current_dir/install_chef_infra.sh
