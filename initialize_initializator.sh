@@ -29,6 +29,7 @@ function download_raw()
   raw_url="https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/"
   script_relative_path=$(echo $1 | awk -F "$scripts_dir/" '{print $2}')
   wget --quiet -O "$1" "$raw_url/$script_relative_path"
+  chmod a+x $1
 }
 
 create_directory "$scripts_dir"
