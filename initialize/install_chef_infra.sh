@@ -4,7 +4,7 @@ current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 source $current_dir/../functions/generals.sh
 
-chef_path="/var/$(basename "${BASH_SOURCE[0]}" | awk -F '.sh' '{print \$1}')"
+chef_path="/var/$(basename "${BASH_SOURCE[0]}" | awk -F '.sh' '{print $1}')"
 chef_repo_path="$chef_path/$git_main_project_name"
 cookbook_path="$chef_repo_path/cookbooks"
 libraries_path="$chef_repo_path/libraries"
@@ -59,4 +59,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L
+chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log
