@@ -128,6 +128,37 @@ function executing_git_clone()
 }
 export -f executing_git_clone
 
+function git_push_submodule()
+{
+  load_git_repos
+
+  for github_repo in "${git_repos[@]}"
+  do
+    cd $main_repo_dir
+    eval $github_repo
+    echo "Pushing $type $name $fork_from_public $git_url"
+    cd $type/$name
+    commit_and_push "Push all $git_main_project_name project"
+    echo
+    echo
+  done
+}
+export -f git_push_submodule
+
+function git_import_submodule()
+{
+  load_git_repos
+
+  for github_repo in "${git_repos[@]}"
+  do
+    cd $main_repo_dir
+    #echo "github_repo = $github_repo"
+    eval $github_repo
+    executing_git_clone "$type" "$name" "$fork_from_public" "$git_url"
+  done
+}
+export -f git_import_submodule
+
 function git_clone_main_project()
 {
   git_main_url="$git_user@$git_baseurl:$git_org/$git_main_project_name.git"

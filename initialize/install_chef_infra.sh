@@ -21,6 +21,8 @@ log_path="$chef_repo_path/logs"
 mkdir $chef_path
 cd $chef_path
 git_clone_main_project
+source $current_dir/../functions/generals.sh
+git_import_submodule
 mkdir $cookbook_path
 mkdir $libraries_path
 mkdir $resources_path
@@ -59,4 +61,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log
+chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
