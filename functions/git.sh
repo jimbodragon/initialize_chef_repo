@@ -189,6 +189,7 @@ function git_clone_main_project()
     install_git
     git clone $git_main_url
     cd $git_main_project_name
+    git submodule update --init --recursive .
   fi
 }
 export -f git_clone_main_project

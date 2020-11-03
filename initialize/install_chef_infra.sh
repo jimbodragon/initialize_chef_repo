@@ -62,4 +62,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' -c $solo_file -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
+chef-solo --chef-license 'accept' --config $solo_file --override-runlist 'recipe[infra_chef]' --log_level info --logfile $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
