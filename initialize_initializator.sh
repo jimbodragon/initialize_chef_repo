@@ -3,7 +3,8 @@
 
 # https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh
 # wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh && bash initialize_initializator.sh && bash initialize_chef_repo/initialize/start_ubuntu_chef_server.sh
-
+#
+# rm -rf /var/install_chef_infra/ && rm -rf initialize_* && wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/main/initialize_initializator.sh && bash initialize_initializator.sh && bash initialize_chef_repo/initialize/start_ubuntu_chef_server.sh
 
 current_dir="$(pwd)"
 
