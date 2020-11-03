@@ -159,6 +159,21 @@ function git_import_submodule()
 }
 export -f git_import_submodule
 
+function git_update_submodule()
+{
+  load_git_repos
+
+  for github_repo in "${git_repos[@]}"
+  do
+    cd $main_repo_dir
+    #echo "github_repo = $github_repo"
+    eval $github_repo
+    git submodule update --recursive "$type/$name"
+    executing_git_clone "$type" "$name" "$fork_from_public" "$git_url"
+  done
+}
+export -f git_update_submodule
+
 function git_clone_main_project()
 {
   git_main_url="$git_user@$git_baseurl:$git_org/$git_main_project_name.git"
@@ -169,7 +184,7 @@ function git_clone_main_project()
     then
       remote add second_origin $git_main_url
     fi
-    git submodule update --recursive
+    git submodule update --init --recursive .
   else
     install_git
     git clone $git_main_url
