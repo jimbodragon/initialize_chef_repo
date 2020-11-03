@@ -9,6 +9,6 @@ function berks_vendor_repo()
     cd $1/$cookbook
     berks vendor $2
     cd $1
-    cp -R $cookbook $2
+    #cp -R $cookbook $2
   done
 }

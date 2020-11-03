@@ -39,7 +39,12 @@ mkdir $berks_vendor
 
 cat << EOS > $solo_file
 checksum_path '$checksum_path'
-cookbook_path '$berks_vendor'
+cookbook_path [
+                '$cookbook_path',
+                '$libraries_path',
+                '$resources_path',
+                '$berks_vendor'
+              ]
 data_bag_path '$data_bag_path'
 environment '$chef_environment'
 environment_path '$environment_path'
