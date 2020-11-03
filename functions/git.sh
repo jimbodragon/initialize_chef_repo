@@ -188,8 +188,7 @@ function git_clone_main_project()
   else
     install_git
     git clone $git_main_url
-    cd $git_main_project_nam
-    echo "pwd = $(pwd)"
+    cd $git_main_project_name
   fi
 }
 export -f git_clone_main_project

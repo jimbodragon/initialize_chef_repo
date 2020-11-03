@@ -18,6 +18,8 @@ file_backup_path="$chef_repo_path/backup"
 file_cache_path="$chef_repo_path/cache"
 log_path="$chef_repo_path/logs"
 
+solo_file="$chef_repo_path/solo.rb"
+
 mkdir $chef_path
 cd $chef_path
 git_clone_main_project
@@ -33,7 +35,7 @@ mkdir $file_backup_path
 mkdir $file_cache_path
 mkdir $log_path
 
-cat << EOS > solo.rb
+cat << EOS > $solo_file
 checksum_path '$checksum_path'
 cookbook_path [
                '$cookbook_path',
@@ -60,4 +62,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' -c solo.rb -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
+chef-solo --chef-license 'accept' -c $solo_file -r 'recipe[infra_chef]' -l info -L $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
