@@ -120,7 +120,7 @@ function executing_git_clone()
       commit_and_push "Initializing $1 $2"
       cd ..
     ;;
-    "scripts" | "databag" | "environment" | "roles" | "nodes" )
+    "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" )
       initializing_project_submodule $2 $3 $4
     ;;
   esac
