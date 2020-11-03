@@ -43,7 +43,7 @@ cookbook_path [
                '$resources_path'
               ]
 data_bag_path '$data_bag_path'
-environment 'production'
+environment '$chef_environment'
 environment_path '$environment_path'
 file_backup_path '$file_backup_path'
 file_cache_path '$file_cache_path'
@@ -62,4 +62,4 @@ umask 0022
 verbose_logging nil
 EOS
 
-chef-solo --chef-license 'accept' --config $solo_file --override-runlist 'recipe[infra_chef]' --log_level info --logfile $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
+chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --log_level info --logfile $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock

@@ -13,6 +13,7 @@ export initialize_dir="$initialize_chef_dir/initialize"
 export git_repos_file="$initialize_chef_dir/git_repos.sh"
 
 source $functions_dir/git.sh
+source $functions_dir/chef.sh
 
 function create_dir()
 {
