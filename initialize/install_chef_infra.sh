@@ -17,6 +17,7 @@ checksum_path="$chef_repo_path/checksums"
 file_backup_path="$chef_repo_path/backup"
 file_cache_path="$chef_repo_path/cache"
 log_path="$chef_repo_path/logs"
+berks_vendor="$chef_repo_path/berks_vendor"
 
 solo_file="$chef_repo_path/solo.rb"
 
@@ -34,13 +35,15 @@ mkdir $checksum_path
 mkdir $file_backup_path
 mkdir $file_cache_path
 mkdir $log_path
+mkdir $berks_vendor
 
 cat << EOS > $solo_file
 checksum_path '$checksum_path'
 cookbook_path [
                '$cookbook_path',
                '$libraries_path',
-               '$resources_path'
+               '$resources_path',
+               '$berks_vendor'
               ]
 data_bag_path '$data_bag_path'
 environment '$chef_environment'
@@ -61,5 +64,23 @@ syntax_check_cache_path
 umask 0022
 verbose_logging nil
 EOS
+
+for cookbook in $(ls $cookbook_path)
+do
+  cd $cookbook_path/$cookbook
+  berks vendor $berks_vendor
+done
+
+for library in $(ls $cookbook_path)
+do
+  cd $libraries_path/$library
+  berks vendor $berks_vendor
+done
+
+for resource in $(ls $resources_path)
+do
+  cd $resources_path/$resource
+  berks vendor $berks_vendor
+done
 
 chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --log_level info --logfile $log_path/chef_solo.log --lockfile $chef_repo_path/chef-solo.lock
