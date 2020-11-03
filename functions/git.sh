@@ -169,6 +169,7 @@ function git_clone_main_project()
     then
       remote add second_origin $git_main_url
     fi
+    git submodule update --recursive
   else
     install_git
     git clone $git_main_url

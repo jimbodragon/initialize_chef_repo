@@ -37,7 +37,7 @@ create_directory "$functions_dir"
 create_directory "$initialize_dir"
 
 
-download_raw "$scripts_dir/cookbooks.sh"
+download_raw "$scripts_dir/git_repos.sh"
 download_raw "$scripts_dir/initialize_initializator.sh"
 download_raw "$functions_dir/generals.sh"
 download_raw "$functions_dir/git.sh"
