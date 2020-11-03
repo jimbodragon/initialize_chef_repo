@@ -22,7 +22,6 @@ mkdir $chef_path
 cd $chef_path
 git_clone_main_project
 source $current_dir/../functions/generals.sh
-git_import_submodule
 mkdir $cookbook_path
 mkdir $libraries_path
 mkdir $resources_path
