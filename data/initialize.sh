@@ -15,6 +15,7 @@ export initialize_dir_name="initialize"
 export build_dir_name="build"
 export data_dir_name="data"
 export log_dir_name="logs"
+export install_dir_name="install"
 export extension=".sh"
 
 export source_file="${BASH_SOURCE[0]}"
@@ -26,14 +27,13 @@ export functions_dir="$scripts_dir/$functions_dir_name"
 export build_dir="$scripts_dir/$build_dir_name"
 export data_dir="$scripts_dir/$data_dir_name"
 export log_dir="$scripts_dir/$log_dir_name"
+export install_dir="$scripts_dir/$log_dir_name"
 
 export build_file="$build_dir/$project_name$extension"
 
 export file_list=(
   "$initialize_dir/initializing_chef_repo.sh"
-  "$initialize_dir/install_chef_infra.sh"
   "$initialize_dir/git_clone_project.sh"
-  "$initialize_dir/start_ubuntu_chef_server.sh"
   "$functions_dir/initialize.sh"
   "$functions_dir/generals.sh"
   "$functions_dir/git.sh"
@@ -42,6 +42,8 @@ export file_list=(
   "$data_dir/git.sh"
   "$data_dir/chef.sh"
   "$data_dir/initialize.sh"
+  "$install_dir/install_chef_infra.sh"
+  "$install_dir/start_ubuntu_chef_server.sh"
   "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
 )
