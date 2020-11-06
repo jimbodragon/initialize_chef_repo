@@ -45,11 +45,3 @@ export file_list=(
   "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
 )
-
-echo "scripts_dir = $scripts_dir"
-echo "initialize_dir = $initialize_dir"
-echo "functions_dir = $functions_dir"
-echo "build_dir = $build_dir"
-echo "data_dir = $data_dir"
-echo "log_dir = $log_dir"
-echo "scripts_dir = $scripts_dir"
