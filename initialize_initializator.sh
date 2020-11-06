@@ -59,7 +59,7 @@ function download()
   raw_url="$http_git/$project_name/$git_branch"
   script_relative_path="$(echo $1 | awk -F "$scripts_dir" '{print $2}')"
   downloadurl="$raw_url$script_relative_path"
-  wget -O "$1" "$downloadurl"
+  wget --quiet -O "$1" "$downloadurl"
   chmod a+x "$1"
 }
 

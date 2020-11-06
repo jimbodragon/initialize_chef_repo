@@ -3,7 +3,7 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $current_dir/../data/$(basename "${BASH_SOURCE[0]}") "$( cd "$( dirname "$current_dir" )/.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
-source $current_dir/chef.sh
+source $current_dir/generals.sh
 
 function create_directory()
 {
