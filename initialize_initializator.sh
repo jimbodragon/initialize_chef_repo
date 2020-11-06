@@ -31,9 +31,7 @@ build_file="$build_dir/$project_name$extension"
 
 file_list=(
   "$initialize_dir/initializing_chef_repo.sh"
-  "$initialize_dir/install_chef_infra.sh"
   "$initialize_dir/git_clone_project.sh"
-  "$initialize_dir/start_ubuntu_chef_server.sh"
   "$functions_dir/initialize.sh"
   "$functions_dir/generals.sh"
   "$functions_dir/git.sh"
@@ -42,8 +40,10 @@ file_list=(
   "$data_dir/git.sh"
   "$data_dir/chef.sh"
   "$data_dir/initialize.sh"
+  "$install_dir/install_chef_infra.sh"
+  "$install_dir/start_ubuntu_chef_server.sh"
+  "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
-  "$build_file"
 )
 
 function create_directory()
@@ -77,7 +77,6 @@ function download_project()
 {
   create_directory_project
 
-  echo "Downloading file list: ${file_list[@]}"
   for file in ${file_list[@]}
   do
     download "$file"
