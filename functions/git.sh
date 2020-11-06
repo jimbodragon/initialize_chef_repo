@@ -154,8 +154,6 @@ function update_from_fork()
   default_upstream_name="$2" # "origin"
   default_branch_name="$3" # "master"
 
-  realign_commit_with_branch "$message" "$default_upstream_name" "$fork_name" "$default_branch_name"
-
   git fetch $fork_name $default_branch_name
   git pull $fork_name $default_branch_name
   git push $default_upstream_name $default_branch_name
