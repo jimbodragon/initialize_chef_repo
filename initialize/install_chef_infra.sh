@@ -2,7 +2,7 @@
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source $current_dir/../functions/generals.sh
+source $current_dir/../functions/initialize.sh
 
 chef_path="/var/$(basename "${BASH_SOURCE[0]}" | awk -F '.sh' '{print $1}')"
 chef_repo_path="$chef_path/$git_main_project_name"
