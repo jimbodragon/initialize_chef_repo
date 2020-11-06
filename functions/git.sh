@@ -55,16 +55,16 @@ function initialize_git()
     create_branch_and_switch $branch_name
   fi
 }
-export -f initializing_git_submodule
+export -f initialize_git
 
-function initialize_git()
+function create_branch_and_switch()
 {
   branch_name=$1
 
   git branch $branch_name
   git checkout $branch_name
 }
-export -f initializing_git_submodule
+export -f create_branch_and_switch
 
 function merge_2_branches()
 {
@@ -73,7 +73,7 @@ function merge_2_branches()
 
   git merge $destination_branch $source_branch
 }
-export -f initializing_git_submodule
+export -f merge_2_branches
 
 function initializing_git_submodule()
 {
@@ -147,6 +147,20 @@ function add_commit_and_push_for_fork_mirror()
   git push $default_upstream_name $default_branch_name
 }
 export -f add_commit_and_push_for_fork_mirror
+
+function update_from_fork()
+{
+  fork_name="$1" # "fork"
+  default_upstream_name="$2" # "origin"
+  default_branch_name="$3" # "master"
+
+  realign_commit_with_branch "$message" "$default_upstream_name" "$fork_name" "$default_branch_name"
+
+  git fetch $fork_name $default_branch_name
+  git pull $fork_name $default_branch_name
+  git push $default_upstream_name $default_branch_name
+}
+export -f update_from_fork
 
 function git_push_submodule()
 {
