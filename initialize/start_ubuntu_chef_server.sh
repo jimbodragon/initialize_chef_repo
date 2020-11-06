@@ -15,10 +15,7 @@ download_file='/tmp/chef_install.deb'
 install_git
 
 # Chef workstation
-# wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
-
-# Chef client
-wget -O $download_file https://packages.chef.io/files/stable/chef/$chef_client_version/$os/$os_version/chef_$chef_client_version-1_amd64.deb
+wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
 dpkg -i $download_file
 
 $initialize_dir/install_chef_infra.sh
