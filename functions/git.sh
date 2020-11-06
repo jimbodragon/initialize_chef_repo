@@ -123,6 +123,23 @@ function commit_and_push()
 }
 export -f commit_and_push
 
+function add_commit_and_push_for_fork_mirror()
+{
+  message=$1
+  fork_name="$2"
+  default_upstream="master"
+  fork_branch="master"
+
+  git add *
+  git commit -m "$message"
+  git branch temp
+  git push -f origin $fork_branch
+  git branch -D temp
+  git pull $fork_name $fork_branch
+  git push origin master
+}
+export -f add_commit_and_push_for_mirror
+
 function git_push_submodule()
 {
   load_git_repos
