@@ -61,8 +61,9 @@ function initialize_git()
     create_branch_and_switch $branch_name
   fi
 }
+export -f initializing_git_submodule
 
-function create_branch_and_switch()
+function initialize_git()
 {
   branch_name=$1
 
