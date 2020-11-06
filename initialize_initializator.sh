@@ -15,6 +15,7 @@ initialize_dir_name="initialize"
 build_dir_name="build"
 data_dir_name="data"
 log_dir_name="logs"
+install_dir_name="install"
 extension=".sh"
 
 source_file="${BASH_SOURCE[0]}"
@@ -26,6 +27,7 @@ functions_dir="$scripts_dir/$functions_dir_name"
 build_dir="$scripts_dir/$build_dir_name"
 data_dir="$scripts_dir/$data_dir_name"
 log_dir="$scripts_dir/$log_dir_name"
+install_dir="$scripts_dir/$install_dir_name"
 
 build_file="$build_dir/$project_name$extension"
 
