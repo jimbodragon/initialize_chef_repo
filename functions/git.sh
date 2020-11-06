@@ -142,17 +142,16 @@ export -f realign_commit_with_branch
 function add_commit_and_push_for_fork_mirror()
 {
   message=$1
-  fork_name="$2"
-  default_upstream_name="origin"
-  default_branch_name="master"
-  message=$5
+  fork_name="$2" # "fork"
+  default_upstream_name="$3" # "origin"
+  default_branch_name="$4" # "master"
 
-  realign_commit_with_branch "$message" "$default_upstream_name"  "$fork_name" "$default_branch_name"
+  realign_commit_with_branch "$message" "$default_upstream_name" "$fork_name" "$default_branch_name"
 
   git pull $fork_name $default_branch_name
   git push $default_upstream_name $default_branch_name
 }
-export -f add_commit_and_push_for_mirror
+export -f add_commit_and_push_for_fork_mirror
 
 function git_push_submodule()
 {
