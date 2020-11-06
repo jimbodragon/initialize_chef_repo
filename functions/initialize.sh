@@ -39,6 +39,7 @@ function create_directory_project()
   create_directory "$build_dir"
   create_directory "$data_dir"
   create_directory "$log_dir"
+  create_directory "$install_dir"
 }
 export -f create_directory_project
 

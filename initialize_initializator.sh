@@ -71,6 +71,7 @@ function create_directory_project()
   create_directory "$build_dir"
   create_directory "$data_dir"
   create_directory "$log_dir"
+  create_directory "$install_dir"
 }
 
 function download_project()
