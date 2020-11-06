@@ -123,20 +123,34 @@ function commit_and_push()
 }
 export -f commit_and_push
 
-function add_commit_and_push_for_fork_mirror()
+function realign_commit_with_branch()
 {
   message=$1
-  fork_name="$2"
-  default_upstream="master"
-  fork_branch="master"
+  default_upstream_name="$2"
+  fork_name="$3"
+  default_branch_name="$4"
 
   git add *
   git commit -m "$message"
   git branch temp
-  git push -f origin $fork_branch
+  git push -f $default_upstream_name $default_branch_name
+  git branch master
   git branch -D temp
-  git pull $fork_name $fork_branch
-  git push origin master
+}
+export -f realign_commit_with_branch
+
+function add_commit_and_push_for_fork_mirror()
+{
+  message=$1
+  fork_name="$2"
+  default_upstream_name="origin"
+  default_branch_name="master"
+  message=$5
+
+  realign_commit_with_branch "$message" "$default_upstream_name"  "$fork_name" "$default_branch_name"
+
+  git pull $fork_name $default_branch_name
+  git push $default_upstream_name $default_branch_name
 }
 export -f add_commit_and_push_for_mirror
 
