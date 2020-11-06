@@ -1,44 +1,39 @@
 #!/bin/bash
 
-export git_main_project_name='jimbodragon_chef_repo'
-export git_org='jimbodragon'
-export git_baseurl='github.com'
-export git_user='git'
-export git_fork_upstream_name='chef-public-cookbook'
-#export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}/.." )" >/dev/null 2>&1 && pwd )"
-export main_repo_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
-export initialize_chef_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && git rev-parse --show-toplevel || pwd )"
-export functions_dir="$initialize_chef_dir/functions"
-export initialize_dir="$initialize_chef_dir/initialize"
-export git_repos_file="$initialize_chef_dir/git_repos.sh"
+current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $current_dir/../data/${basename ${BASH_SOURCE[0]}}
 
-source $functions_dir/git.sh
-source $functions_dir/chef.sh
+source $current_dir/chef.sh
 
 function create_dir()
 {
-  if [ ! -d $1 ]
+  folder_path=$1
+  if [ ! -d $folder_path ]
   then
-    mkdir $1
+    mkdir $folder_path
   fi
 }
 export -f create_dir
 
 function yes_no_question()
 {
-	read -p "$1" "$2"
+  message=$1
+  return_variable_as_same_as_the_question_on_recursive_method=$2
+  command_to_execute_if_yes=$3
+  command_to_execute_if_no=$3
+	read -p "$folder_path" "$variable_to_put_answer_to"
 	eval "input=\$$2"
 	case $input in
 		"Y" | "y" | "Yes" | "yes" )
-			$3
+			$command_to_execute_if_yes
 		;;
 		"N" | "n" | "No" | "no" )
-			$4
+			$command_to_execute_if_no
 		;;
 
 		* )
 			echo "Enter a valid yes/no"
-			$2
+			$return_variable_as_same_as_the_question_on_recursive_method
 		;;
 
 	esac
@@ -47,6 +42,6 @@ export -f yes_no_question
 
 function validate_git_repo()
 {
-	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " keep_continue "" "exit 1"
+	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " validate_git_repo "" "exit 1"
 }
 export -f validate_git_repo

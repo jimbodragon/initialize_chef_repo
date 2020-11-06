@@ -8,4 +8,4 @@ install_git
 
 git_clone_main_project
 
-git_import_submodule
+chef_import_submodule

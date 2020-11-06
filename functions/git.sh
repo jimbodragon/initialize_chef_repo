@@ -1,5 +1,8 @@
 #!/bin/bash
 
+current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $current_dir/../data/${basename ${BASH_SOURCE[0]}}
+
 function load_git_repos()
 {
   source $git_repos_file
@@ -18,115 +21,107 @@ export -f install_git
 
 function merging_from_fork()
 {
-  cd $1
-  if [ $(git remote -v | awk '{print $1}' | grep $git_fork_upstream_name | head -n 1) != "" ]
+  project_folder=$1
+  remote_project_url=$2
+  git_upstream_name=$git_fork_upstream_name #$3
+  branch_to_fork_with=$4
+
+  branch_to_fork_with='master'
+
+  remote_project_name=$(git remote -v | grep "$git_upstream_name" | awk '{print $1}' | head -n 1)
+  actual_remote_project_url=$(git remote -v | grep "$git_upstream_name" | awk '{print $2}' | head -n 1)
+  cd $project_folder
+  if [ $remote_project_name == "" ]
   then
-    git remote add $git_fork_upstream_name $2
-    git fetch $git_fork_upstream_name
-    git checkout master
-    git merge $git_fork_upstream_name/master
+    git remote add $git_upstream_name $remote_project_url
+    git fetch $git_upstream_name master
+    git checkout $branch_to_fork_with
+    git merge $git_upstream_name/master
     git push
+  elif [ "$remote_project_url" == "$actual_remote_project_url" ]
+  then
+    echo "Remote project '$remote_project_name' -> '$actual_remote_project_url' already exist"
+  else
+    echo "Already have a remote project call '$git_upstream_name' -> '$actual_remote_project_url'"
   fi
   cd ..
 }
 export -f merging_from_fork
 
+function initialize_git()
+{
+  branch_name=$1
+
+  git init
+  touch README.md
+  git add README.md
+  git commit -m 'Initializing git repo for project $(basename $(pwd))'
+  if [ "$branch_name" != "master" ]
+  then
+    create_branch_and_switch $branch_name
+  fi
+}
+
+function create_branch_and_switch()
+{
+  branch_name=$1
+
+  git branch $branch_name
+  git checkout $branch_name
+}
+export -f initializing_git_submodule
+
+function merge_2_branches()
+{
+  destination_branch=$1
+  source_branch=$2
+
+  git merge $destination_branch $source_branch
+}
+export -f initializing_git_submodule
+
 function initializing_git_submodule()
 {
-  # $1 = Repository name
-  # $3 = git_url
-  git submodule add $2 $1
-  git submodule update --init $2.git $1
+  folder_relative_path=$1
+  git_url=$2
+  git submodule add $git_url $folder_relative_path
+  git submodule update --init $git_url $folder_relative_path
 }
 export -f initializing_git_submodule
 
 function initializing_project_submodule()
 {
-  # $1 = Repository name
-  # $2 = fork from public
-  # $3 = git_url
-  if [ "$3" == "" ]
+  repository_name=$1
+  fork_from_public=$2
+  git_url=$3
+  if [ "$git_url" == "" ]
   then
-    initializing_git_submodule "$git_user@$git_baseurl:$git_org/$1.git" "$1"
+    initializing_git_submodule "$git_user@$git_baseurl:$git_org/$repository_name.git" "$repository_name"
   else
-    initializing_git_submodule "$3" "$1"
+    initializing_git_submodule "$git_url" "$repository_name"
   fi
-  if [ "$2" != "" ]
+  if [ "$fork_from_public" != "" ]
   then
-    merging_from_fork $1 $2
+    merging_from_fork $repository_name $fork_from_public
   fi
 }
 export -f initializing_project_submodule
 
+function git_push_for_fork()
+{
+  fork_name=$1
+  git push origin master --tags
+  git push $fork_name
+}
+
 function commit_and_push()
 {
+  message=$1
   git add *
-  git commit -m "$1"
+  git commit -m "$message"
   git push
 }
 export -f commit_and_push
-
-function initializing_cookbook()
-{
-  # $1 = cookbook name
-  # $2 = fork from public
-  # $3 = git_url
-  if [ ! -d $1/.git ]
-  then
-    initializing_project_submodule $1 $2 $3
-    if [ ! -f $1/metadata.rb ]
-    then
-      chef_generate cookbook $1
-      cd $1
-      commit_and_push "Initializing cookbook $1"
-      cd ..
-    fi
-  fi
-}
-export -f initializing_cookbook
-
-function chef_generate()
-{
-  echo "Generating $1 $2"
-  chef generate $1 $2
-}
-export -f chef_generate
-
-function executing_git_clone()
-{
-  # $1 = Repository type: [cookbooks. libraries, resources]
-  # $2 = Repository name
-  # $3 = fork from public
-  # $4 = git_url
-  # echo "initializing_cookbook in $(pwd) for type $1 for cookbook $2"
-  if [ ! -d $1 ]
-  then
-    mkdir $1
-  fi
-  cd $1
-  case $1 in
-    "cookbooks" | "libraries" | "resources" )
-      initializing_cookbook $2 $3 $4
-    ;;&
-    "libraries" )
-      cd $2
-      chef_generate helpers $2
-    ;;&
-    "resources" )
-      cd $2
-      chef_generate resource $2
-    ;;&
-    "libraries" | "resources" )
-      commit_and_push "Initializing $1 $2"
-      cd ..
-    ;;
-    "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" )
-      initializing_project_submodule $2 $3 $4
-    ;;
-  esac
-  cd ..
-}
-export -f executing_git_clone
 
 function git_push_submodule()
 {
@@ -144,35 +139,6 @@ function git_push_submodule()
   done
 }
 export -f git_push_submodule
-
-function git_import_submodule()
-{
-  load_git_repos
-
-  for github_repo in "${git_repos[@]}"
-  do
-    cd $main_repo_dir
-    #echo "github_repo = $github_repo"
-    eval $github_repo
-    executing_git_clone "$type" "$name" "$fork_from_public" "$git_url"
-  done
-}
-export -f git_import_submodule
-
-function git_update_submodule()
-{
-  load_git_repos
-
-  for github_repo in "${git_repos[@]}"
-  do
-    cd $main_repo_dir
-    #echo "github_repo = $github_repo"
-    eval $github_repo
-    git submodule update --recursive "$type/$name"
-    executing_git_clone "$type" "$name" "$fork_from_public" "$git_url"
-  done
-}
-export -f git_update_submodule
 
 function git_clone_main_project()
 {
@@ -196,9 +162,9 @@ export -f git_clone_main_project
 
 function download_git_raw()
 {
-  # ARG1 = Git repository name
-  # ARG2 = File to download
-  raw_url="https://raw.githubusercontent.com/$git_org/$1/main/"
-  wget --quiet -O "$2" "$raw_url/$2"
+  git_repository_name=$1
+  file_to_download=$2
+  raw_url="https://raw.githubusercontent.com/$git_org/$git_repository_name/master/"
+  wget --quiet -O "$file_to_download" "$raw_url/$file_to_download"
 }
 export -f download_git_raw

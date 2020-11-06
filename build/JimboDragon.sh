@@ -6,6 +6,20 @@ source $current_dir/../functions/generals.sh
 
 chef_path="/var/$(basename "${BASH_SOURCE[0]}" | awk -F '.sh' '{print $1}')"
 chef_repo_path="$chef_path/$git_main_project_name"
+cookbook_path="$chef_repo_path/cookbooks"
+libraries_path="$chef_repo_path/libraries"
+resources_path="$chef_repo_path/resources"
+data_bag_path="$chef_repo_path/data_bags"
+environment_path="$chef_repo_path/environments"
+role_path="$chef_repo_path/roles"
+
+checksum_path="$chef_repo_path/checksums"
+file_backup_path="$chef_repo_path/backup"
+file_cache_path="$chef_repo_path/cache"
+log_path="$chef_repo_path/logs"
+berks_vendor="$chef_repo_path/berks_vendor"
+
+solo_file="$chef_repo_path/solo.rb"
 
 mkdir $chef_path
 cd $chef_path
