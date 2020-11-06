@@ -1,5 +1,7 @@
 #!/bin/bash
 
+root_dir="$1"
+
 export http_git="https://raw.githubusercontent.com/JimboDragonGit"
 export git_branch="master"
 export git_main_project_name='jimbodragon_chef_repo'
@@ -18,7 +20,7 @@ export extension=".sh"
 export source_file="${BASH_SOURCE[0]}"
 export file_name="$(basename $source_file)"
 
-export scripts_dir="$current_dir/$project_name"
+export scripts_dir="$root_dir/$project_name"
 export initialize_dir="$scripts_dir/$initialize_dir_name"
 export functions_dir="$scripts_dir/$functions_dir_name"
 export build_dir="$scripts_dir/$build_dir_name"
@@ -31,6 +33,7 @@ export file_list=(
   "$initialize_dir/initializing_chef_repo.sh"
   "$initialize_dir/install_chef_infra.sh"
   "$initialize_dir/git_clone_project.sh"
+  "$initialize_dir/start_ubuntu_chef_server.sh"
   "$functions_dir/initialize.sh"
   "$functions_dir/generals.sh"
   "$functions_dir/git.sh"
@@ -42,3 +45,11 @@ export file_list=(
   "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
 )
+
+echo "scripts_dir = $scripts_dir"
+echo "initialize_dir = $initialize_dir"
+echo "functions_dir = $functions_dir"
+echo "build_dir = $build_dir"
+echo "data_dir = $data_dir"
+echo "log_dir = $log_dir"
+echo "scripts_dir = $scripts_dir"

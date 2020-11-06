@@ -33,6 +33,7 @@ file_list=(
   "$initialize_dir/initializing_chef_repo.sh"
   "$initialize_dir/install_chef_infra.sh"
   "$initialize_dir/git_clone_project.sh"
+  "$initialize_dir/start_ubuntu_chef_server.sh"
   "$functions_dir/initialize.sh"
   "$functions_dir/generals.sh"
   "$functions_dir/git.sh"
