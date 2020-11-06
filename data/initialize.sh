@@ -27,7 +27,7 @@ export functions_dir="$scripts_dir/$functions_dir_name"
 export build_dir="$scripts_dir/$build_dir_name"
 export data_dir="$scripts_dir/$data_dir_name"
 export log_dir="$scripts_dir/$log_dir_name"
-export install_dir="$scripts_dir/$install_dir_name"
+export install_dir="$scripts_dir/$log_dir_name"
 
 export build_file="$build_dir/$project_name$extension"
 
