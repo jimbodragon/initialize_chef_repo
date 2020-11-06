@@ -1,7 +1,6 @@
 #!/bin/bash
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 source $current_dir/../functions/initialize.sh
 
 ### Install chef to start chef-solo
@@ -22,4 +21,4 @@ install_git
 wget -O $download_file https://packages.chef.io/files/stable/chef/$chef_client_version/$os/$os_version/chef_$chef_client_version-1_amd64.deb
 dpkg -i $download_file
 
-$current_dir/install_chef_infra.sh
+$initialize_dir/install_chef_infra.sh
