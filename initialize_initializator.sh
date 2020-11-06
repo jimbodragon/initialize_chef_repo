@@ -16,8 +16,7 @@ log_dir_name="logs"
 extension=".sh"
 
 source_file="${BASH_SOURCE[0]}"
-# file_name="$(basename $source_file)"
-file_name="initialize_initializator.sh"
+file_name="$(basename $source_file)"
 
 scripts_dir="$current_dir/$project_name"
 initialize_dir="$scripts_dir/$initialize_dir_name"
@@ -26,21 +25,27 @@ build_dir="$scripts_dir/$build_dir_name"
 data_dir="$scripts_dir/$data_dir_name"
 log_dir="$scripts_dir/$log_dir_name"
 
-file_list=("$initialize_dir/initializing_chef_repo.sh" "$initialize_dir/install_chef_infra.sh" "$initialize_dir/git_clone_project.sh" "$functions_dir/generals.sh" "$functions_dir/git.sh" "$functions_dir/chef.sh" "$data_dir_name/generals.sh" "$data_dir_name/git.sh" "$data_dir_name/chef.sh" "$build_dir/$project_name$extension" "$file_name")
+file_list=("$initialize_dir/initializing_chef_repo.sh" "$initialize_dir/install_chef_infra.sh" "$initialize_dir/git_clone_project.sh" "$functions_dir/generals.sh" "$functions_dir/git.sh" "$functions_dir/chef.sh" "$data_dir/generals.sh" "$data_dir/git.sh" "$data_dir/chef.sh" "$build_dir/$project_name$extension" "$scripts_dir/$file_name")
 
 echo "current_dir = $current_dir"
+echo
 echo "project_name = $project_name"
 echo "functions_dir_name = $functions_dir_name"
 echo "initialize_dir_name = $initialize_dir_name"
 echo "build_dir_name = $build_dir_name"
 echo "data_dir_name = $data_dir_name"
 echo "log_dir_name = $log_dir_name"
+echo
+
 echo "extension = $extension"
 echo "source_file = $source_file"
 echo "file_name = $file_name"
 echo "scripts_dir = $scripts_dir"
 echo "functions_dir = $functions_dir"
 echo "initialize_dir = $initialize_dir"
+echo "data_dir = $data_dir"
+echo "log_dir = $log_dir"
+echo
 
 function create_directory()
 {
@@ -53,7 +58,7 @@ function create_directory()
 
 function relative_path()
 {
-  rel_path="$(echo $1 | awk -F "$scripts_dir" '{print $2}')"
+  rel_path="$(echo "$1"| awk -F "$scripts_dir" '{print $2}')"
   echo "relative_path = $rel_path"
   return $rel_path
 }
@@ -61,13 +66,13 @@ function relative_path()
 function download()
 {
   raw_url="$http_git/$project_name/$git_branch"
-  echo "Remove $scripts_dir from path $1"
+  echo "Remove $scripts_dir from path $1 to download on $raw_url"
   script_relative_path="$(echo $1 | awk -F "$scripts_dir" '{print $2}')"
   downloadurl="$raw_url$script_relative_path"
   echo "Download file $downloadurl to $1"
   wget -O "$1" "$downloadurl"
   chmod a+x "$1"
-  echo -e "\n\n\n\n"
+  echo -e "\n"
 }
 
 echo "Functions Loaded"
@@ -82,10 +87,13 @@ create_directory "$log_dir"
 echo "Downloading file list: ${file_list[@]}"
 for file in ${file_list[@]}
 do
-  echo "Downloadoing $file"
-  download "$scripts_dir/$file"
+  echo "Downloading $file"
+  download "$file"
+  read -p "Download complete of $file"
+  echo -e "\n\n"
 done
 
+echo "Compiling the environement project"
 for environment in "$project_name" "$@"
 do
     source ${BASH_SOURCE[0]}
@@ -96,9 +104,12 @@ do
       initial_script_file="$build_dir/$project_name-$environment$extension"
     fi
     echo "Execute file $initial_script_file"
-    download_raw $initial_script_file
+    download $initial_script_file
     sleep 5
 
     bash "$initial_script_file"
     echo -e "\n\n\n\n"
+    read -p "Completing executed file $initial_script_file"
 done
+echo -e "\n\n\n\n"
+read -p "Completing compilation of $@"
