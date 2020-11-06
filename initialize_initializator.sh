@@ -93,10 +93,9 @@ do
   echo -e "\n\n"
 done
 
-echo "Compiling the environement project"
+echo "Compiling the environement project $project_name"
 for environment in "$project_name" "$@"
 do
-    source ${BASH_SOURCE[0]}
     if [ "$environment" ==  "$project_name" ]
     then
       initial_script_file="$build_dir/$project_name$extension"
