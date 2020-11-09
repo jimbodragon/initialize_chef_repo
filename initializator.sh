@@ -33,12 +33,13 @@ then
   dpkg -i $download_file
 fi
 
+mkdir initial_cookbooks > /dev/null 2>&1
 mkdir cookbooks > /dev/null 2>&1
 
-cd cookbooks
+cd initial_cookbooks
 git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
 cd chef_workstation_initialize
-berks vendor ../cookbooks
+berks vendor --delete ../cookbooks
 cd ../..
 cat << EOS > solo.rb
 cookbook_path ['cookbooks']
