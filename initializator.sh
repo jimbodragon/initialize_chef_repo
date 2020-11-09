@@ -33,15 +33,18 @@ then
   dpkg -i $download_file
 fi
 
-mkdir cookbooks
+mkdir cookbooks > /dev/null 2>&1
+
 cd cookbooks
-git clone git@github.com:jimbodragon/chef_workstation_initialize.git
-cd ..
+git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
+cd chef_workstation_initialize
+berks vendor ../cookbooks
+cd ../..
 cat << EOS > solo.rb
 cookbook_path ['cookbooks']
 EOS
 
-chef_solo_command="chef-solo --chef-license 'accept' --json-attributes node.json --config solo.rb --override-runlist \"recipe[chef_workstation_initialize]\""
+chef_solo_command="chef-solo --chef-license 'accept' --json-attributes node.json --config solo.rb --override-runlist 'recipe[chef_workstation_initialize]'"
 
 cat<<EOS > node.json
 {
@@ -55,4 +58,5 @@ cat<<EOS > node.json
 }
 EOS
 
-$chef_solo_command
+echo "chef_solo_command = $chef_solo_command"
+eval "$chef_solo_command"
