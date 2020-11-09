@@ -40,14 +40,19 @@ cd ..
 cat << EOS > solo.rb
 cookbook_path ['cookbooks']
 EOS
+
+chef_solo_command="chef-solo --chef-license 'accept' --json-attributes node.json --config solo.rb --override-runlist \"recipe[chef_workstation_initialize]\""
+
 cat<<EOS > node.json
 {
-  "chef_workstation": {
+  "chef_workstation_initialize": {
     "project_name": "project_name",
-    "environment": [$chef_environment_json],
-    "initial_command": "$initial_command"
+    "environments": [$chef_environment_json],
+    "initial_command": "$initial_command",
+    "install_dir": "$(pwd)",
+    "chef_solo_command": "$chef_solo_command"
   }
 }
 EOS
 
-chef-solo --chef-license 'accept' --json-attributes node.json --config solo.rb --override-runlist "recipe[chef_workstation_initialize]"
+$chef_solo_command

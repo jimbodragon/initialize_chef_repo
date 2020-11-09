@@ -2,14 +2,6 @@
 
 root_dir="$1"
 
-export http_git="https://raw.githubusercontent.com/JimboDragonGit"
-export git_branch="master"
-export git_main_project_name='jimbodragon_chef_repo'
-export git_org='jimbodragon'
-export git_baseurl='github.com'
-export git_user='git'
-
-export project_name="JimboDragon"
 export functions_dir_name="functions"
 export initialize_dir_name="initialize"
 export build_dir_name="build"
@@ -42,8 +34,11 @@ export file_list=(
   "$data_dir/git.sh"
   "$data_dir/chef.sh"
   "$data_dir/initialize.sh"
+  "$data_dir/project.sh"
   "$install_dir/install_chef_infra.sh"
   "$install_dir/start_ubuntu_chef_server.sh"
   "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
 )
+
+source "$data_dir/project.sh"

@@ -6,9 +6,6 @@ current_dir="$(pwd)"
 http_git="https://raw.githubusercontent.com/JimboDragonGit"
 git_branch="master"
 
-project_name="$1"export http_git="https://raw.githubusercontent.com/JimboDragonGit"
-export git_branch="master"
-
 project_name="$1"
 functions_dir_name="functions"
 initialize_dir_name="initialize"
@@ -42,6 +39,7 @@ file_list=(
   "$data_dir/git.sh"
   "$data_dir/chef.sh"
   "$data_dir/initialize.sh"
+  "$data_dir/project.sh"
   "$install_dir/install_chef_infra.sh"
   "$install_dir/start_ubuntu_chef_server.sh"
   "$build_dir/$project_name$extension"
