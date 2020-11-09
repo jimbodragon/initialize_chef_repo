@@ -9,6 +9,7 @@ The goal of this project is to create a auto fully automate Infrastructure suppo
   b) File ./data/chef.sh gives the environment and recipe to build your Infrastructure
   c) File ./data/general.sh provides the require variables for this project
   d) File ./data/initialize.sh gives a name to your Infrastructure and the base url of the git to save/download by default
+  e) File ./data/project.sh provide the information to build your project. Modified it for your own purpose.
 
 3. Folder ./functions/ is to export all require function to maintain a best practice with chef and git for developping your Infrastructure
   a) File ./functions/chef.sh provides function require to build your Infrastructure with Chef
@@ -28,6 +29,6 @@ The goal of this project is to create a auto fully automate Infrastructure suppo
 
 7. The root folder of the project is made to download easily the initialize_initializator.sh script without git install on the machine.
 
-8. Here is the magic: 'wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/initialize_initializator.sh && bash initialize_initializator.sh JimboDragon Test Dev QA SIT DR'
+8. Here is the magic: 'wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/initializator.sh && bash initializator.sh JimboDragon Test Dev QA SIT DR'
 
 ##Notes: If you are using a github acces to start, be sure that the starting machine has the access to fetch from your repository
