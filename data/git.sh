@@ -8,7 +8,7 @@
 export git_repos=(
 'name=infraClass type=libraries'
 'name=infra_chef type=cookbooks'
-'name=virtualbox-install type=cookbooks'
+'name=virtualbox type=cookbooks'
 'name=chef-ingredient type=cookbooks fork_from_public=git@github.com:chef-cookbooks/chef-ingredient.git'
 'name=initialize_chef_repo type=scripts'
 'name=chef_generator type=generators'
