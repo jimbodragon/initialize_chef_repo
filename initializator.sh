@@ -54,7 +54,7 @@ chef_solo_command="chef-solo --chef-license 'accept' --json-attributes node.json
 cat<<EOS > node.json
 {
   "chef_workstation_initialize": {
-    "project_name": "project_name",
+    "project_name": "$project_name",
     "environments": [$chef_environment_json],
     "initial_command": "$initial_command",
     "install_dir": "$(pwd)",
@@ -63,5 +63,4 @@ cat<<EOS > node.json
 }
 EOS
 
-echo "chef_solo_command = $chef_solo_command"
 eval "$chef_solo_command"
