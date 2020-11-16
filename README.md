@@ -29,6 +29,6 @@ The goal of this project is to create a auto fully automate Infrastructure suppo
 
 7. The root folder of the project is made to download easily the initialize_initializator.sh script without git install on the machine.
 
-8. Here is the magic: 'wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/initializator.sh && bash initializator.sh Exemple Test Dev QA SIT DR'
+8. Here is the magic: 'wget https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/initializator.sh && bash initializator.sh Example Test Dev QA SIT DR'
 
 ##Notes: If you are using a github acces to start, be sure that the starting machine has the access to fetch from your repository
