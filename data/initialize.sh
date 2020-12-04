@@ -37,7 +37,3 @@ export file_list=(
   "$install_dir_name/install_chef_infra.sh"
   "$build_dir_name/$project_name$extension"
 )
-
-source $data_dir/project.sh
-source $data_dir/system.sh
-source $functions_dir/generals.sh

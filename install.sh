@@ -29,23 +29,6 @@ install_dir="$scripts_dir/$install_dir_name"
 
 build_file="$build_dir/$project_name$extension"
 
-file_list=(
-  "$initialize_dir/initializing_chef_repo.sh"
-  "$initialize_dir/git_clone_project.sh"
-  "$functions_dir/initialize.sh"
-  "$functions_dir/generals.sh"
-  "$functions_dir/git.sh"
-  "$functions_dir/chef.sh"
-  "$data_dir/generals.sh"
-  "$data_dir/git.sh"
-  "$data_dir/chef.sh"
-  "$data_dir/initialize.sh"
-  "$data_dir/project.sh"
-  "$data_dir/system.sh"
-  "$build_dir/$project_name$extension"
-  "$scripts_dir/$file_name"
-)
-
 function create_directory()
 {
   if [ ! -d "$1" ]
@@ -70,6 +53,8 @@ function create_directory_project()
   create_directory "$initialize_dir"
   create_directory "$build_dir"
   create_directory "$data_dir"
+  download "$data_dir/generals.sh"
+  source $data_dir/generals.sh
   create_directory "$log_dir"
   create_directory "$install_dir"
 }
@@ -91,15 +76,19 @@ function prepare_project()
 }
 
 prepare_project
-if [ -f $build_file ]
+
+if [ ! -f $build_file ]
 then
-. $build_file
-else
-  source "$functions_dir/initialize.sh"
-  install_chef_workstation
-  #new_chef_infra "$new_project_name" "$new_git_branch" "$new_environment" "$new_git_main_project_name" "$new_git_org" $"new_git_baseurl" "$new_git_user" "$new_http_git" "$new_install_path"
-  new_chef_infra "$project_name" "master" "production" 'initialize_chef_repo' 'jimbodragon' 'github.com' 'git' "https://raw.githubusercontent.com" $current_dir "initialize_chef_repo" "$project_name"
-  cd $cookbook_path
-  git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
-  execute_chef_solo $current_dir "$project_name"
+  cat << EOF  >$build_file
+current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "\$(dirname \$current_dir)/functions/initialize.sh"
+install_chef_workstation
+#new_chef_infra "\$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path"
+new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path"
+cd \$cookbook_path
+git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
+execute_chef_solo $current_dir "$project_name"
+EOF
 fi
+
+. $build_file
