@@ -32,7 +32,7 @@ function get_relative_path()
 }
 export -f get_relative_path
 
-function download_git_raw()
+function download_github_raw()
 {
   raw_url="$http_git/$project_name/$git_branch"
   script_relative_path="$(echo $1 | awk -F "$initialize_install_dir" '{print $2}')"
@@ -66,7 +66,7 @@ function create_directory_project()
   create_directory "$initialize_dir"
   create_directory "$build_dir"
   create_directory "$data_dir"
-  download_git_raw "$data_dir/generals.sh"
+  download_github_raw "$data_dir/generals.sh"
   source $data_dir/generals.sh
   create_directory "$log_dir"
   create_directory "$install_dir"
@@ -78,7 +78,7 @@ function download_project()
 
   for file in ${file_list[@]}
   do
-    download_git_raw "$file"
+    download_github_raw "$file"
   done
 }
 
