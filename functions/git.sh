@@ -204,12 +204,3 @@ function git_clone_main_project()
   fi
 }
 export -f git_clone_main_project
-
-function download_github_raw()
-{
-  initialize_script_name=$1
-  file_to_download=$2
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
-  wget --quiet -O "$file_to_download" "$raw_url/$file_to_download"
-}
-export -f download_github_raw

@@ -11,7 +11,9 @@ initialize_script_name="initialize_chef_repo"
 git_org="jimbodragon"
 git_branch="master"
 data_dir_name="data"
+functions_dir_name="functions"
 data_dir="$current_dir/$data_dir_name"
+functions_dir="$current_dir/$functions_dir_name"
 initialize_install_dir="$current_dir"
 
 function create_directory()
@@ -24,19 +26,19 @@ function create_directory()
 
 function download_github_raw()
 {
-  initialize_script_name=$1
-  file_to_download=$2
+  file_to_download=$1
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
   wget --quiet -O "$file_to_download" "$raw_url/$file_to_download"
 }
 
 create_directory "$data_dir"
-download_github_raw "$data_dir/generals.sh"
+create_directory "$functions_dir"
 download_github_raw "$data_dir/initialize.sh"
-source $data_dir/initialize.sh
-source $data_dir/generals.sh
+download_github_raw "$functions_dir/initialize.sh"
 
-prepare_project
+source $functions_dir/initialize.sh
+download_project
+
+source $install_dir/source_project.sh
 create_build_file $project_name
-
 . $build_file

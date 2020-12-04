@@ -4,16 +4,6 @@ current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 source $current_dir/chef.sh
 
-function create_directory()
-{
-  folder_path=$1
-  if [ ! -d $folder_path ]
-  then
-    mkdir $folder_path
-  fi
-}
-export -f create_directory
-
 function get_relative_path()
 {
   if [ "$1" == "" ]
@@ -32,15 +22,6 @@ function get_relative_path()
 }
 export -f get_relative_path
 
-function download_github_raw()
-{
-  raw_url="$http_git/$project_name/$git_branch"
-  script_relative_path="$(echo $1 | awk -F "$initialize_install_dir" '{print $2}')"
-  downloadurl="$raw_url$script_relative_path"
-  wget --quiet -O "$1" "$downloadurl"
-  chmod a+x "$1"
-}
-
 function create_build_file()
 {
   new_build_file="$build_dir/$1$extension"
@@ -57,35 +38,6 @@ git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null
 execute_chef_solo \$current_dir "\$project_name"
 EOF
   fi
-}
-
-function create_directory_project()
-{
-  create_directory "$scripts_dir"
-  create_directory "$functions_dir"
-  create_directory "$initialize_dir"
-  create_directory "$build_dir"
-  create_directory "$data_dir"
-  download_github_raw "$data_dir/generals.sh"
-  source $data_dir/generals.sh
-  create_directory "$log_dir"
-  create_directory "$install_dir"
-}
-
-function download_project()
-{
-  create_directory_project
-
-  for file in ${file_list[@]}
-  do
-    download_github_raw "$file"
-  done
-}
-
-function prepare_project()
-{
-  create_directory_project
-  download_project
 }
 
 function yes_no_question()
