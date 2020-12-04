@@ -7,6 +7,7 @@ http_git="https://raw.githubusercontent.com/JimboDragonGit"
 git_branch="master"
 
 project_name="$1"
+shift
 functions_dir_name="functions"
 initialize_dir_name="initialize"
 build_dir_name="build"
@@ -40,8 +41,7 @@ file_list=(
   "$data_dir/chef.sh"
   "$data_dir/initialize.sh"
   "$data_dir/project.sh"
-  "$install_dir/install_chef_infra.sh"
-  "$install_dir/start_ubuntu_chef_server.sh"
+  "$data_dir/system.sh"
   "$build_dir/$project_name$extension"
   "$scripts_dir/$file_name"
 )
@@ -91,4 +91,15 @@ function prepare_project()
 }
 
 prepare_project
+if [ -f $build_file ]
+then
 . $build_file
+else
+  source "$functions_dir/initialize.sh"
+  install_chef_workstation
+  #new_chef_infra "$new_project_name" "$new_git_branch" "$new_environment" "$new_git_main_project_name" "$new_git_org" $"new_git_baseurl" "$new_git_user" "$new_http_git" "$new_install_path"
+  new_chef_infra "$project_name" "master" "production" 'initialize_chef_repo' 'jimbodragon' 'github.com' 'git' "https://raw.githubusercontent.com" $current_dir "initialize_chef_repo" "$project_name"
+  cd $cookbook_path
+  git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
+  execute_chef_solo $current_dir "$project_name"
+fi

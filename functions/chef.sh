@@ -1,8 +1,27 @@
 #!/bin/bash##!/bin/bash#
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $current_dir/../data/$(basename "${BASH_SOURCE[0]}")
+source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 source $current_dir/git.sh
+
+function install_chef_workstation()
+{
+  install_git
+  if [ "$(chef -v | grep Workstation | cut -d ':' -f 2)" != " $chef_workstation_version" ]
+  then
+    wget -O $download_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
+    dpkg -i $download_file
+  fi
+}
+export -f install_chef_workstation
+
+function berks_vendor_all()
+{
+  berks_vendor_repo "$cookbook_path" "$1"
+  berks_vendor_repo "$libraries_path" "$1"
+  berks_vendor_repo "$resources_path" "$1"
+}
+export -f berks_vendor_all
 
 function berks_vendor_repo()
 {
@@ -12,11 +31,12 @@ function berks_vendor_repo()
   for cookbook in $(ls $cookbook_folder)
   do
     cd $cookbook_folder/$cookbook
-    berks vendor $berks_vendor_folder
+    berks vendor $berks_vendor_folder > /dev/null
     cd $cookbook_folder
     #cp -R $cookbook $2
   done
 }
+export -f berks_vendor_repo
 
 function initializing_cookbook()
 {
@@ -88,7 +108,7 @@ function chef_import_submodule()
 
   for github_repo in "${git_repos[@]}"
   do
-    cd $main_repo_dir
+    cd $chef_repo
     #echo "github_repo = $github_repo"
     eval $github_repo
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
@@ -102,7 +122,7 @@ function chef_update_submodule()
 
   for github_repo in "${git_repos[@]}"
   do
-    cd $main_repo_dir
+    cd $chef_repo
     #echo "github_repo = $github_repo"
     eval $github_repo
     git submodule update --recursive "$type/$name"

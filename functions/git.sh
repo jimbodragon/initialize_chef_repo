@@ -1,7 +1,7 @@
 #!/bin/bash
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $current_dir/../data/$(basename "${BASH_SOURCE[0]}")
+source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 
 function install_git()
 {
@@ -12,6 +12,16 @@ function install_git()
   fi
 }
 export -f install_git
+
+function install_jq()
+{
+  if [ "$(for git in $(sudo apt-cache madison jq | cut -d '|' -f 2); do sudo dpkg -l | grep jq | grep $git; done | head -n 1 | awk '{print $1}')" != "ii" ]
+  then
+    #apt-get -y update && sudo apt-get -y upgrade
+    apt-get -y install jq
+  fi
+}
+export -f install_jq
 
 function merging_from_fork()
 {
@@ -164,7 +174,7 @@ function git_push_submodule()
 {
   for github_repo in "${git_repos[@]}"
   do
-    cd $main_repo_dir
+    cd $chef_repo
     eval $github_repo
     echo "Pushing $type $name $fork_from_public $git_url"
     cd $type/$name

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $current_dir/../functions/initialize.sh
+source "$(dirname $current_dir)/functions/initialize.sh"
 
 git_clone_main_project
 cd ..
@@ -36,5 +36,5 @@ git add *
 git commit -m 'Initializing repo'
 
 current_dir/git_clone_project.sh
-cd $main_repo_dir
+cd $chef_repo
 commit_and_push "Adding submodules"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $current_dir/../data/$(basename "${BASH_SOURCE[0]}")
+source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 source $current_dir/chef.sh
 
 function create_dir()
@@ -11,6 +11,24 @@ function create_dir()
   then
     mkdir $folder_path
   fi
+}
+export -f create_dir
+
+function get_relative_path()
+{
+  if [ "$1" == "" ]
+  then
+    echo "Error to get relative path '$1'" > /dev/stderr
+    exit 1
+  fi
+  case $(dirname $1) in
+    $chef_repo_path )
+      echo "${1#"$chef_repo_path"}"
+    ;;
+    *)
+      get_relative_path $(dirname $1)
+    ;;
+  esac
 }
 export -f create_dir
 
