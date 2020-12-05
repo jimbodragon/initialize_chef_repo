@@ -22,7 +22,7 @@ function get_relative_path()
       do
         echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
         if [ "$1" == "$project_folder" ]; then
-          if [ "" == "/"]
+          if [ "" == "/" ]
           then
             relative_project_folder="${project_folder#"$initialize_install_dir"}"
           else
