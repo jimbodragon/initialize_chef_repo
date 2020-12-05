@@ -18,11 +18,12 @@ function get_relative_path()
       echo "$1"
       ;;
     * )
-      for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
+      for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir" "$initialize_install_dir" "$initialize_install_dir" "$functions_dir" "$build_dir" "$data_dir" "$log_dir" "$install_dir"
       do
         echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
-        if [ "$parent_folder" == "$project_folder" ]; then
-          rel_path="${1#"$project_folder"}"
+        if [ "$1" == "$project_folder" ]; then
+          relative_project_folder="${project_folder#"$chef_repo_path"}"
+          rel_path="$relative_project_folder/${1#"$project_folder"}"
           break
         fi
       done
