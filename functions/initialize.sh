@@ -39,7 +39,7 @@ function download_github_raw()
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master"
   if [ ! -f "$file_to_download" ]
   then
-    download "$file_to_download" "$raw_url/$file_to_download"
+    download "$initialize_install_dir/$file_to_download" "$raw_url/$file_to_download"
   fi
 }
 export -f download_github_raw
@@ -64,11 +64,11 @@ function prepare_project()
 
   if [ "$chef_repo_path" == "/" ]
   then
-    new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "/usr/local" "$initial_role" "$initial_workstation_cookbook"
-    source "/$project_name/$functions_dir_name/initialize.sh"    
+    new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "/usr/local/chef/repo" "$initial_role" "$initial_workstation_cookbook"
+    source "/$project_name/$functions_dir_name/initialize.sh"
   fi
 }
-export -f download_project
+export -f prepare_project
 
 function copy_project()
 {
