@@ -8,9 +8,9 @@ cd ..
 chef generate repo -r --chef-license accept $git_main_project_name
 cd $git_main_project_name
 
-mkdir scripts
-mkdir libraries
-mkdir resources
+create_directory scripts
+create_directory libraries
+create_directory resources
 
 sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation
 

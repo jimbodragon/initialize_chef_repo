@@ -71,7 +71,7 @@ function executing_chef_clone()
   git_url=$4
   if [ ! -d $repository_type ]
   then
-    mkdir $repository_type
+    create_directory $repository_type
   fi
   cd $repository_type
   case $repository_type in

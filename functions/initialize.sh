@@ -36,7 +36,7 @@ export -f download
 function download_github_raw()
 {
   file_to_download=$1
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
+  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master"
   if [ ! -f "$file_to_download" ]
   then
     download "$file_to_download" "$raw_url/$file_to_download"

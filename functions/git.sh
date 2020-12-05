@@ -27,26 +27,22 @@ function merging_from_fork()
 {
   project_folder=$1
   remote_project_url=$2
-  git_upstream_name=$git_fork_upstream_name #$3
-  branch_to_fork_with=$4
 
-  branch_to_fork_with='master'
-
-  remote_project_name=$(git remote -v | grep "$git_upstream_name" | awk '{print $1}' | head -n 1)
-  actual_remote_project_url=$(git remote -v | grep "$git_upstream_name" | awk '{print $2}' | head -n 1)
+  remote_project_name=$(git remote -v | grep "$git_fork_upstream_name" | awk '{print $1}' | head -n 1)
+  actual_remote_project_url=$(git remote -v | grep "$git_fork_upstream_name" | awk '{print $2}' | head -n 1)
   cd $project_folder
   if [ $remote_project_name == "" ]
   then
-    git remote add $git_upstream_name $remote_project_url
-    git fetch $git_upstream_name master
-    git checkout $branch_to_fork_with
-    git merge $git_upstream_name/master
+    git remote add $git_fork_upstream_name $remote_project_url
+    git fetch $git_fork_upstream_name master
+    git checkout $git_branch
+    git merge $git_fork_upstream_name/master
     git push
   elif [ "$remote_project_url" == "$actual_remote_project_url" ]
   then
     echo "Remote project '$remote_project_name' -> '$actual_remote_project_url' already exist"
   else
-    echo "Already have a remote project call '$git_upstream_name' -> '$actual_remote_project_url'"
+    echo "Already have a remote project call '$git_fork_upstream_name' -> '$actual_remote_project_url'"
   fi
   cd ..
 }
@@ -193,7 +189,7 @@ function git_clone_main_project()
     if [ -d $git_main_project_name ]; then cd $git_main_project_name; fi
     if [ $(git remote -v 2>&1 | grep $git_main_url | wc -l) -eq 0 ] && [ $(git remote -v | grep origin | wc -l) -gt 0 ]
     then
-      remote add second_origin $git_main_url
+      git remote add second_origin $git_main_url
     fi
     git submodule update --init --recursive .
   else
@@ -204,3 +200,14 @@ function git_clone_main_project()
   fi
 }
 export -f git_clone_main_project
+
+function take_ownership()
+{
+  cd $chef_repo_path
+  $type=$1
+  initializing_git_submodule "$1/$2" "$3"
+  cd "$1/$2"
+  git remote rename origin $git_fork_upstream_name
+  cd $chef_repo_path
+}
+export -f take_ownership
