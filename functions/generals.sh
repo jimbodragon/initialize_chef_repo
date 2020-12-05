@@ -22,12 +22,6 @@ function get_relative_path()
 }
 export -f get_relative_path
 
-function download()
-{
-  wget --no-cache --no-cookies -O $1 $2
-}
-export -f download
-
 function create_build_file()
 {
   new_build_file="$build_dir/$1$extension"

@@ -26,6 +26,13 @@ function create_directory_project()
 }
 export -f create_directory_project
 
+function download()
+{
+  echo "downloading '$2' to '$1'"
+  wget --quiet --no-cache --no-cookies -O $1 $2
+}
+export -f download
+
 function download_github_raw()
 {
   file_to_download=$1
