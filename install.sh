@@ -28,6 +28,8 @@ function download_github_raw()
 {
   file_to_download=$1
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
+  echo "file_to_download = $file_to_download"
+  echo "raw_url = $raw_url"
   wget -O "$file_to_download" "$raw_url/$file_to_download"
 }
 
