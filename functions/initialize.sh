@@ -2,6 +2,7 @@
 # Script to execute to initialize a fresh new chef repository
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "current_dir = $current_dir"
 source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 
 function create_directory()
@@ -50,6 +51,7 @@ export -f download_project
 
 function prepare_project()
 {
+  echo "prepare_project"
   download_project
   source $install_dir/source_project.sh
 
