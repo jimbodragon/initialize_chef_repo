@@ -53,7 +53,9 @@ function prepare_project()
 {
   echo "prepare_project"
   download_project
-  source $install_dir/source_project.sh
+  source $data_dir/project.sh
+  source $data_dir/system.sh
+  source $functions_dir/generals.sh
 
   if [ "$chef_repo_path" == "/" ]
   then
