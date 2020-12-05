@@ -4,6 +4,42 @@ current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
 source $current_dir/chef.sh
 
+function get_initialize_relative_path()
+{
+  parent_folder=$(dirname $1)
+  file_base="$(basename $1)"
+  case "$1" in
+    "" )
+      echo "Error to get relative path '$1': Argument empty" > /dev/stderr
+      exit 1
+      ;;
+    "/" )
+      echo "Error to get relative path '$1': reach system root (/)" > /dev/stderr
+      echo "$1"
+      ;;
+    * )
+      for project_folder in "$initialize_install_dir" "$functions_dir" "$build_dir" "$data_dir" "$log_dir" "$install_dir"
+      do
+        echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
+        if [ "$1" == "$project_folder" ]; then
+          relative_project_folder="${project_folder#"$initialize_install_dir"}"
+          rel_path="$relative_project_folder/${1#"$project_folder"}"
+          break
+        fi
+      done
+
+      if [ "$rel_path" == "" ]
+      then
+        echo "$(get_initialize_relative_path $parent_folder)/$file_base"
+      else
+        echo "initialize Relative path is $rel_path" > /dev/stderr
+        echo "$rel_path"
+      fi
+      ;;
+  esac
+}
+export -f get_initialize_relative_path
+
 function get_relative_path()
 {
   parent_folder=$(dirname $1)
@@ -18,16 +54,11 @@ function get_relative_path()
       echo "$1"
       ;;
     * )
-      for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir" "$initialize_install_dir" "$functions_dir" "$build_dir" "$data_dir" "$log_dir" "$install_dir"
+      for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
       do
         echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
         if [ "$1" == "$project_folder" ]; then
-          if [ "" == "/" ]
-          then
-            relative_project_folder="${project_folder#"$initialize_install_dir"}"
-          else
-            relative_project_folder="${project_folder#"$chef_repo_path"}"
-          fi
+          relative_project_folder="${project_folder#"$chef_repo_path"}"
           rel_path="$relative_project_folder/${1#"$project_folder"}"
           break
         fi
