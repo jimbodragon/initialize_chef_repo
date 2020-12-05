@@ -26,6 +26,17 @@ function create_directory_project()
 }
 export -f create_directory_project
 
+function download_github_raw()
+{
+  file_to_download=$1
+  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
+  if [ ! -f "$file_to_download" ]
+  then
+    wget --no-cache --no-cookies --quiet -O "$file_to_download" "$raw_url/$file_to_download"
+  fi
+}
+export -f download_github_raw
+
 function download_project()
 {
   create_directory_project
@@ -37,10 +48,26 @@ function download_project()
 }
 export -f download_project
 
-function download_github_raw()
+function prepare_project()
 {
-  file_to_download=$1
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
-  wget --no-cache --no-cookies --quiet -O "$file_to_download" "$raw_url/$file_to_download"
+  download_project
+  source $install_dir/source_project.sh
+
+  if [ "$chef_repo_path" == "/" ]
+  then
+    new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "/$project_name" "$initial_role" "$initial_workstation_cookbook"
+    source "/$project_name/$functions_dir_name/initialize.sh"
+  fi
 }
-export -f download_github_raw
+export -f download_project
+
+function copy_project()
+{
+  for file in ${file_list[@]}
+  do
+    cp $initialize_install_dir/$file $1/$file
+  done
+}
+export -f copy_project
+
+prepare_project

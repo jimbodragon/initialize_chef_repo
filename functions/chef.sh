@@ -147,7 +147,7 @@ function new_chef_infra()
   project_file="$new_install_path/$(get_relative_path "$data_dir/project.sh")"
 
   echo "cp -r $chef_repo_path $new_install_path"
-  cp -r $chef_repo_path $new_install_path
+  copy_project $new_install_path
   create_directory "$new_install_path/$(get_relative_path "$data_dir")"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
