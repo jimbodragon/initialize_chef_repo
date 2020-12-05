@@ -20,7 +20,6 @@ function get_initialize_relative_path()
     * )
       for project_folder in "$initialize_install_dir" "$functions_dir" "$build_dir" "$data_dir" "$log_dir" "$install_dir"
       do
-        echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
         if [ "$1" == "$project_folder" ]; then
           relative_project_folder="${project_folder#"$initialize_install_dir"}"
           rel_path="$relative_project_folder/${1#"$project_folder"}"
@@ -32,7 +31,6 @@ function get_initialize_relative_path()
       then
         echo "$(get_initialize_relative_path $parent_folder)/$file_base"
       else
-        echo "initialize Relative path is $rel_path" > /dev/stderr
         echo "$rel_path"
       fi
       ;;
@@ -56,7 +54,6 @@ function get_relative_path()
     * )
       for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
       do
-        echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
         if [ "$1" == "$project_folder" ]; then
           relative_project_folder="${project_folder#"$chef_repo_path"}"
           rel_path="$relative_project_folder/${1#"$project_folder"}"
@@ -68,7 +65,6 @@ function get_relative_path()
       then
         echo "$(get_relative_path $parent_folder)/$file_base"
       else
-        echo "Relative path is $rel_path" > /dev/stderr
         echo "$rel_path"
       fi
       ;;
