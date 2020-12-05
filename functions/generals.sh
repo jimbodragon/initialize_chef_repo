@@ -6,6 +6,7 @@ source $current_dir/chef.sh
 
 function get_relative_path()
 {
+  echo "get relative path of '$1' compare with '$chef_repo_path'" > /dev/stderr
   if [ "$1" == "" ]
   then
     echo "Error to get relative path '$1'" > /dev/stderr
@@ -13,7 +14,9 @@ function get_relative_path()
   fi
   case $(dirname $1) in
     $chef_repo_path )
-      echo "${1#"$chef_repo_path"}"
+      rel_path="${1#"$chef_repo_path"}"
+      echo "Relative path is $rel_path" > /dev/stderr
+      echo "$rel_path"
     ;;
     *)
       get_relative_path $(dirname $1)
