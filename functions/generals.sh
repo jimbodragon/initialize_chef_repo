@@ -29,15 +29,31 @@ function create_build_file()
   then
     cat << EOF  >$new_build_file
 current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "\$(dirname \$current_dir)/functions/initialize.sh"
+source "\$(dirname \$current_dir)/install/source_project.sh"
 install_chef_workstation
-#new_chef_infra "\$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path"
-new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path"
+#new_chef_infra "\$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path" "\$initial_role" "\$initial_workstation_cookbook"
+new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$install_path" "\$initial_role" "\$initial_workstation_cookbook"
 cd \$cookbook_path
 git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
 execute_chef_solo \$current_dir "\$project_name"
 EOF
   fi
+}
+
+function convert_initialize_to_cookbook()
+{
+  for file in ${file_list[@]}
+  do
+    case "$(basename $(dirname $file))" in
+      "$data_dir_name" )
+        cd $cookbook_path/$initial_workstation_cookbook
+        chef_generate template -s $file $(basename $file)
+      ;;
+      *)
+        chef_generate file $(basename $file) )
+      ;;
+    esac
+  done
 }
 
 function yes_no_question()

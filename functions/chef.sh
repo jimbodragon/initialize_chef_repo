@@ -59,10 +59,8 @@ export -f initializing_cookbook
 
 function chef_generate()
 {
-  chef_type_name=$1
-  generate_option=$2
-  echo "Generating $chef_type_name $generate_option"
-  chef generate $chef_type_name $generate_option
+  echo "Generating $@"
+  chef generate $@
 }
 export -f chef_generate
 
@@ -144,6 +142,7 @@ function new_chef_infra()
   new_install_path="$9/$new_project_name"
   new_itialize_script_name="${10}"
   new_initial_role="${11}"
+  new_initial_workstation_cookbook="${12}"
 
   project_file="$new_install_path/$(get_relative_path "$data_dir/project.sh")"
 
@@ -160,6 +159,7 @@ function new_chef_infra()
   sed -i "s|$http_git|$new_http_git|g" $project_file
   sed -i "s|$initialize_script_name|$new_itialize_script_name|g" $project_file
   sed -i "s|$initial_role|$new_initial_role|g" $project_file
+  sed -i "s|$initial_workstation_cookbook|$new_initial_workstation_cookbook|g" $project_file
 
   echo "New Chef Infra at $new_install_path"
   echo
@@ -170,22 +170,25 @@ function ensure_default_attributes
 {
   echo -e "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
-export -f new_chef_infra
+export -f ensure_default_attributes
 
 function project_json
 {
   echo -e "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
 }
+export -f project_json
 
 function project_role_json()
 {
   project_json "Role"
 }
+export -f project_role_json
 
 function project_environment_json
 {
   project_json "Environment"
 }
+export -f project_environment_json
 
 function write_role_environment
 {
@@ -195,22 +198,26 @@ function write_role_environment
     echo "$3" > $json_file
   fi
 }
+export -f write_role_environment
 
 function write_main_role
 {
   write_role_environment "$role_path" "$project_name" "$project_role_json"
 }
+export -f write_main_role
 
 function write_main_environment
 {
   write_role_environment "$environments_path" "$environment" "$project_environment_json"
 }
+export -f write_main_environment
 
 function write_main_role_environment
 {
   write_main_role
   write_main_environment
 }
+export -f write_main_role_environment
 
 function execute_chef_solo()
 {
