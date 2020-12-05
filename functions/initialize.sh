@@ -32,7 +32,7 @@ function download_github_raw()
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
   if [ ! -f "$file_to_download" ]
   then
-    wget --no-cache --no-cookies --quiet -O "$file_to_download" "$raw_url/$file_to_download"
+    wget --no-cache --no-cookies --quiet -O "$file_to_download" "$raw_url/$file_to_download" --post-data="action=purge"
   fi
 }
 export -f download_github_raw

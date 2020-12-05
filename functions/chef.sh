@@ -9,7 +9,7 @@ function install_chef_workstation()
   install_git
   if [ "$(which chef)" == "" ] || [ "$(chef -v | grep Workstation | cut -d ':' -f 2)" != " $chef_workstation_version" ]
   then
-    wget --no-cache --no-cookies -O $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
+    wget --no-cache --no-cookies -O $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb --post-data="action=purge"
     dpkg -i $downloaded_chef_file
   fi
 }
@@ -59,7 +59,6 @@ export -f initializing_cookbook
 
 function chef_generate()
 {
-  echo "Generating $@"
   chef generate $@
 }
 export -f chef_generate
@@ -70,7 +69,6 @@ function executing_chef_clone()
   repository_name=$2 # $2 = Repository name
   fork_from_public=$3
   git_url=$4
-  # echo "initializing_cookbook in $(pwd) for type $1 for cookbook $2"
   if [ ! -d $repository_type ]
   then
     mkdir $repository_type
@@ -107,7 +105,6 @@ function chef_import_submodule()
   for github_repo in "${git_repos[@]}"
   do
     cd $chef_repo
-    #echo "github_repo = $github_repo"
     eval $github_repo
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
   done
@@ -121,7 +118,6 @@ function chef_update_submodule()
   for github_repo in "${git_repos[@]}"
   do
     cd $chef_repo
-    #echo "github_repo = $github_repo"
     eval $github_repo
     git submodule update --recursive "$type/$name"
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
