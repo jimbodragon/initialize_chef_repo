@@ -7,27 +7,35 @@ source $current_dir/chef.sh
 function get_relative_path()
 {
   echo "get relative path of '$1' compare with '$chef_repo_path'" > /dev/stderr
-  if [ "$1" == "" ]
-  then
-    echo "Error to get relative path '$1'" > /dev/stderr
-    exit 1
-  fi
+  parent_folder=$(dirname $1)
+  file_base="$(basename $1)"
+  case "$1" in
+    "" )
+      echo "Error to get relative path '$1'" > /dev/stderr
+      exit 1
+      ;;
+    "/" )
+      echo "Error to get relative path '$1'" > /dev/stderr
+      echo "$1"
+      ;;
+    * )
+      for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
+      do
+        if [ "$parent_folder" == "$project_folder" ]; then
+          rel_path="${1#"$project_folder"}"
+          break
+        fi
+      done
 
-  for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
-  do
-    if [ "$(dirname $1)" == "$project_folder" ]; then
-      rel_path="${1#"$project_folder"}"
-      break
-    fi
-  done
-
-  if [ "$rel_path" == "" ]
-  then
-    get_relative_path $(dirname $1)
-  else
-    echo "Relative path is $rel_path" > /dev/stderr
-    echo "$rel_path"
-  fi
+      if [ "$rel_path" == "" ]
+      then
+        echo "$(get_relative_path $parent_folder)/$file_base"
+      else
+        echo "Relative path is $rel_path" > /dev/stderr
+        echo "$rel_path"
+      fi
+      ;;
+  esac
 }
 export -f get_relative_path
 
