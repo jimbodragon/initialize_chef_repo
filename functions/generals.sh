@@ -51,7 +51,7 @@ function convert_initialize_to_cookbook()
         chef_generate template -s $file $(basename $file)
       ;;
       *)
-        chef_generate file -s $file $(basename $file) )
+        chef_generate file -s $file $(basename $file)
       ;;
     esac
   done
