@@ -146,7 +146,6 @@ function new_chef_infra()
 
   project_file="$new_install_path/$(get_relative_path "$data_dir/project.sh")"
 
-  echo "cp -r $chef_repo_path $new_install_path"
   copy_project $new_install_path
   create_directory "$new_install_path/$(get_relative_path "$data_dir")"
 
