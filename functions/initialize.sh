@@ -9,7 +9,7 @@ function create_directory()
   folder_path=$1
   if [ ! -d $folder_path ]
   then
-    mkdir $folder_path
+    mkdir -p $folder_path
   fi
 }
 export -f create_directory
@@ -28,7 +28,6 @@ export -f create_directory_project
 
 function download()
 {
-  echo "downloading '$2' to '$1'"
   wget --quiet --no-cache --no-cookies -O $1 $2
 }
 export -f download
