@@ -6,21 +6,21 @@ source $current_dir/chef.sh
 
 function get_relative_path()
 {
-  echo "get relative path of '$1' compare with '$chef_repo_path'" > /dev/stderr
   parent_folder=$(dirname $1)
   file_base="$(basename $1)"
   case "$1" in
     "" )
-      echo "Error to get relative path '$1'" > /dev/stderr
+      echo "Error to get relative path '$1': Argument empty" > /dev/stderr
       exit 1
       ;;
     "/" )
-      echo "Error to get relative path '$1'" > /dev/stderr
+      echo "Error to get relative path '$1': reach system root (/)" > /dev/stderr
       echo "$1"
       ;;
     * )
       for project_folder in "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
       do
+        echo "get relative path of '$1' compare with '$project_folder'" > /dev/stderr
         if [ "$parent_folder" == "$project_folder" ]; then
           rel_path="${1#"$project_folder"}"
           break
