@@ -41,6 +41,6 @@ function download_github_raw()
 {
   file_to_download=$1
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
-  wget --quiet -O "$file_to_download" "$raw_url/$file_to_download"
+  wget --no-cache --no-cookies --quiet -O "$file_to_download" "$raw_url/$file_to_download"
 }
 export -f download_github_raw

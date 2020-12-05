@@ -9,7 +9,7 @@ function install_chef_workstation()
   install_git
   if [ "$(which chef)" == "" ] || [ "$(chef -v | grep Workstation | cut -d ':' -f 2)" != " $chef_workstation_version" ]
   then
-    wget -O $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
+    wget --no-cache --no-cookies -O $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
     dpkg -i $downloaded_chef_file
   fi
 }
@@ -146,6 +146,7 @@ function new_chef_infra()
 
   project_file="$new_install_path/$(get_relative_path "$data_dir/project.sh")"
 
+  echo "cp -r $chef_repo_path $new_install_path"
   cp -r $chef_repo_path $new_install_path
   create_directory "$new_install_path/$(get_relative_path "$data_dir")"
 
