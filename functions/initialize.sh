@@ -67,7 +67,6 @@ function copy_project()
 {
   for file in ${file_list[@]}
   do
-    echo "cp '$initialize_install_dir'/'$file' '$1'/'$file'"
     cp $initialize_install_dir/$file $1/$file
   done
 }
