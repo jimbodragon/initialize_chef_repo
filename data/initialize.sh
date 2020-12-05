@@ -34,6 +34,6 @@ export file_list=(
   "$data_dir_name/initialize.sh"
   "$data_dir_name/system.sh"
   "$data_dir_name/project.sh"
-  "$install_dir_name/install_chef_infra.sh"
+  "$install_dir_name/source_project.sh"
   "$build_dir_name/$project_name$extension"
 )
