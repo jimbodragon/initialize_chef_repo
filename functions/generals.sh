@@ -6,22 +6,8 @@ source $current_dir/chef.sh
 
 function get_relative_path()
 {
-  echo "get relative path of '$1' compare with '$chef_repo_path'" > /dev/stderr
-  if [ "$1" == "" ]
-  then
-    echo "Error to get relative path '$1'" > /dev/stderr
-    exit 1
-  fi
-  case $(dirname $1) in
-    $chef_repo_path )
-      rel_path="${1#"$chef_repo_path"}"
-      echo "Relative path is $rel_path" > /dev/stderr
-      echo "$rel_path"
-    ;;
-    *)
-      get_relative_path $(dirname $1)
-    ;;
-  esac
+  echo "get relative path of '$1' compare with '$chef_repo_path' == ${1#"$chef_repo_path"}" > /dev/stderr
+  echo "${1#"$chef_repo_path"}"
 }
 export -f get_relative_path
 
