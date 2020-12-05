@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "include generals.sh"
+
 export git_fork_upstream_name='chef-public-cookbook'
 
 file_list=(

@@ -1,4 +1,6 @@
 
+echo "project.sh"
+
 export git_branch="master"
 export environment="production"
 export git_main_project_name='jimbodragon_chef_repo'

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "include initialize.sh"
+
 export functions_dir_name="functions"
 export initialize_dir_name="initialize"
 export build_dir_name="build"
