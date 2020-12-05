@@ -1,5 +1,4 @@
-
-echo "project.sh"
+#!/bin/bash
 
 export git_branch="master"
 export environment="production"

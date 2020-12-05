@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "include chef.sh"
-
 export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
 export chef_path="$(dirname "$chef_repo_path")"
 

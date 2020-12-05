@@ -12,8 +12,8 @@ git_org="jimbodragon"
 git_branch="master"
 data_dir_name="data"
 functions_dir_name="functions"
-data_dir="$current_dir/$data_dir_name"
-functions_dir="$current_dir/$functions_dir_name"
+data_dir="$data_dir_name"
+functions_dir="$functions_dir_name"
 initialize_install_dir="$current_dir"
 
 function create_directory()
@@ -28,8 +28,6 @@ function download_github_raw()
 {
   file_to_download=$1
   raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
-  echo "file_to_download = $file_to_download"
-  echo "raw_url = $raw_url"
   wget -O "$file_to_download" "$raw_url/$file_to_download"
 }
 

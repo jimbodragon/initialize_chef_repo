@@ -5,8 +5,6 @@
 #git_url (Optional) = Change to this git url
 #fork_from_public (Optional) = Use for creating an upstream (check with git remote -v)
 
-echo "include git.sh"
-
 export git_repos=(
 'name=infraClass type=libraries'
 'name=infra_chef type=cookbooks'
