@@ -1,1 +1,2 @@
-source $functions_dir/initialize.sh
+source ../functions/initialize.sh
+source $functions_dir/generals.sh
