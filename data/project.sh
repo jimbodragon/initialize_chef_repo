@@ -8,7 +8,7 @@ function redefine_project_data()
   export git_org='jimbodragon'
   export git_baseurl='github.com'
   export git_user='git'
-  export project_name="exemple"
+  export project_name="installation_of_initialize_chef_repo"
   export http_git="https://raw.githubusercontent.com"
 
   export initialize_script_name="initialize_chef_repo"
