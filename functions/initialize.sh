@@ -67,37 +67,39 @@ function download_latest_files() {
 }
 export -f download_latest_files
 
-function wait_for_command()
+function repeat_command()
 {
   while [ 1 -eq 1 ]
   do
-    for hour in {0..9999}
+    for day in {0..365}
     do
-      for min in {0..59}
+      for hour in {0..24}
       do
-        echo "******************************   $hour h $min min $sec sec: Starting '$4'   ******************************"
-        eval echo -en "$4"
-        for sec in `seq 0 $1 59`
+        for min in {0..59}
         do
-          echo "$hour h $min min $sec sec"
-          let "adjust_hour=$3 - 1"
-          let "adjust_min=$2 - 1"
-          if [ $hour -eq $adjust_hour ] && [ $min -eq $adjust_min ]
-          then
-            sleep $1
-          fi
+          echo "******************************   $day day $hour h $min min $sec sec: Starting '$5'   ******************************"
+
+          for sec in `seq 0 $1 59`
+          do
+            echo "$hour h $min min $sec sec"
+            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min" == "000" ]
+            then
+              eval $(echo -e "$5")
+            else
+              sleep $1
+            fi
+          done
+          echo "******************************   $day day $hour h $min min $sec sec: Stopping '$5'   ******************************"
         done
-        echo "******************************   $hour h $min min $sec sec: Stopping '$4'   ******************************"
       done
     done
-
   done
 }
-export -f wait_for_command
+export -f repeat_command
 
 function wait_for_project_command()
 {
-  wait_for_command $jump_in_second $max_min $max_hour "$1"
+  repeat_command $jump_in_second $max_min $max_hour $max_day "$1"
 }
 export -f wait_for_project_command
 
