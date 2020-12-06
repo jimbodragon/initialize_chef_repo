@@ -183,7 +183,9 @@ export -f prepare_project
 
 function run_project()
 {
+  echo "Running project $project_name at $chef_repo_path"
   validate_project is_good
+  echo "is_good = $is_good"
 
   case $is_good in
     0 )
@@ -191,6 +193,7 @@ function run_project()
 
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
       rename_project $project_name
+      run_project
       ;;
     1 )
       echo "chef_repo_running = $chef_repo_running"
