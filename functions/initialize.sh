@@ -65,7 +65,7 @@ function wait_for_command()
         for sec in `seq 0 $1 59`
         do echo "$hour h $min min $sec sec"
           let "adjust_hour=$3 - 1"
-          let "adjust_min=$3 - 1"
+          let "adjust_min=$2 - 1"
           if [ $hour -eq $adjust_hour ] && [ $min -eq $adjust_min ]
           then
             sleep $1
@@ -93,13 +93,13 @@ function valide_chef_repo()
   if [ "$chef_path" == "/" ]
   then
     eval "$1=0"
-    chef_path="$default_chef_path"
   fi
 }
 
 function redefine_data()
 {
-  redefine_initialize
+  initialize_parameters
+  redefine_initialize_data
   redefine_general_data
   redefine_chef_data
   redefine_git_data
@@ -133,17 +133,18 @@ function run_project()
   case $is_good in
     0 )
       echo "Houston we got a problem"
+      chef_path="$default_chef_path"
       chef_repo_path="$chef_path/$project_name"
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
       redefine_data
-      source "$functions_dir_name/initialize.sh"
+      source "$functions_dir/$(basename "${BASH_SOURCE[0]}")"
       ;;
     1 )
       if [ $chef_repo_running -eq 0 ]
       then
           export chef_repo_running=1
           create_build_file $build_file
-          wait_for_project_command
+          wait_for_project_command $build_file
       fi
       ;;
   esac

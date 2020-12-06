@@ -1,9 +1,19 @@
 #!/bin/bash
-export source_file="${BASH_SOURCE[0]}"
-export file_name="$(basename $source_file)"
-export initialize_install_dir="$(dirname "$(dirname $source_file)")"
 
-function redefine_initialize()
+function initialize_parameters()
+{
+  export source_file="${BASH_SOURCE[0]}"
+  export file_name="$(basename $source_file)"
+  export data_dir="$(dirname $source_file)"
+  export initialize_install_dir="$(dirname $data_dir)"
+
+  export scripts_dir="$(dirname $initialize_install_dir)"
+  export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
+  export chef_path="$(dirname "$chef_repo_path")"
+}
+export -f initialize_parameters
+
+function redefine_initialize_data()
 {
   export functions_dir_name="functions"
   export initialize_dir_name="initialize"
@@ -36,6 +46,7 @@ function redefine_initialize()
     "$data_dir_name/system.sh"
     "$data_dir_name/project.sh"
     "$install_dir_name/source_project.sh"
+    "$install_dir_name/git_clone.sh"
     "$build_dir_name/$project_name$extension"
   )
 
@@ -44,6 +55,6 @@ function redefine_initialize()
     export chef_repo_running=0
   fi
 }
-export -f redefine_initialize
+export -f redefine_initialize_data
 
-redefine_initialize
+redefine_initialize_data
