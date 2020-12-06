@@ -14,5 +14,13 @@ function redefine_project_data()
   export initialize_script_name="initialize_chef_repo"
   export initial_role="zentyal_chef_infra"
   export initial_workstation_cookbook="chef_workstation_initialize"
+
+  export require_git_clone=0
+
+  export jump_in_second=3
+  export max_min=3
+  export max_hour=0
+  export initial_current_dir="$(pwd)"
+  export default_chef_path="/usr/local/chef/repo"
 }
 export -f redefine_project_data

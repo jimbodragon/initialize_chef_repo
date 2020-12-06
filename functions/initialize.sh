@@ -54,14 +54,44 @@ function download_project()
 }
 export -f download_project
 
+function wait_for_command()
+{
+  while [ 1 -eq 1 ]
+  do
+    for hour in {0..9999}
+    do
+      for min in {0..59}
+      do
+        for sec in `seq 0 $1 59`
+        do echo "$hour h $min min $sec sec"
+          if [ $hour -eq $3 ] && [ $min -eq $2 ]
+          then
+            sleep $1
+          fi
+        done
+      done
+    done
+
+    eval echo -en "$4"
+  done
+}
+export -f wait_for_command
+
+function wait_for_project_command()
+{
+  # wait_for_command $jump_in_second $max_min $max_hour $build_file
+
+  wait_for_command "\ncd $initial_current_dir\nrm -rf /usr/local/chef/\nrm install.sh\nrm -rf data/\nrm -rf functions/\nrm -rf build/\nrm -rf initialize/\nrm -rf install/\nrm -rf logs/\nwget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/install.sh && bash install.sh $project_name"
+}
+export -f wait_for_project_command
+
 function valide_chef_repo()
 {
   eval "$1=1"
   if [ "$chef_path" == "/" ]
   then
     eval "$1=0"
-    default_install_dir="/usr/local/chef/repo"
-    chef_path="$default_install_dir"
+    chef_path="$default_chef_path"
   fi
 }
 
@@ -78,6 +108,11 @@ function redefine_data()
 
 function prepare_project()
 {
+  if [ $require_git_clone -eq 1 ]
+  then
+    git_clone_main_project
+    chef_import_submodule
+  fi
   download_project
   source $data_dir/project.sh
   source $data_dir/system.sh
@@ -91,7 +126,7 @@ function run_project()
   prepare_project
   valide_chef_repo is_good
 
-  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook"
+  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$default_chef_path" "$require_git_clone"
 
   case $is_good in
     0 )
@@ -106,7 +141,7 @@ function run_project()
       then
           export chef_repo_running=1
           create_build_file $build_file
-          . $build_file
+          wait_for_project_command
       fi
       ;;
   esac

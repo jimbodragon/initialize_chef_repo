@@ -135,6 +135,9 @@ function new_chef_infra()
   new_install_path="${10}/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
+  new_initial_current_dir=${13}
+  new_default_chef_path=${14}
+  new_require_git_clone={15}
 
   create_directory ${10}
   cd ${10}
@@ -185,6 +188,9 @@ function new_chef_infra()
   echo "$initialize_script_name => $new_itialize_script_name"
   echo "$initial_role => $new_initial_role"
   echo "$initial_workstation_cookbook => $new_initial_workstation_cookbook"
+  echo "$initial_current_dir => $new_initial_current_dir"
+  echo "$default_chef_path => $new_default_chef_path"
+  echo "$require_git_clone => $new_require_git_clone"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
@@ -197,6 +203,10 @@ function new_chef_infra()
   sed -i "s|$initialize_script_name|$new_itialize_script_name|g" $project_file
   sed -i "s|$initial_role|$new_initial_role|g" $project_file
   sed -i "s|$initial_workstation_cookbook|$new_initial_workstation_cookbook|g" $project_file
+  sed -i "s|$new_initial_current_dir|$new_initial_current_dir|g" $project_file
+  sed -i "s|\$(pwd)|$new_initial_current_dir|g" $project_file
+  sed -i "s|/usr/local/chef/repo|$default_chef_path|g" $project_file
+  sed -i "s|export require_git_clone=0|export require_git_clone=$require_git_clone|g" $project_file
 
   echo "$new_install_path/$(basename "$install_dir")/source_project.sh"
 }
