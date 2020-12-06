@@ -62,9 +62,6 @@ function valide_chef_repo()
     eval "$1=0"
     default_install_dir="/usr/local/chef/repo"
     chef_path="$default_install_dir"
-    chef_repo_path="$chef_path/$project_name"
-    initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
-    redefine_data
   fi
 }
 
@@ -99,7 +96,10 @@ function run_project()
   case $is_good in
     0 )
       echo "Houston we got a problem"
-      source "$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name/$functions_dir_name/initialize.sh"
+      chef_repo_path="$chef_path/$project_name"
+      initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
+      redefine_data
+      source "$functions_dir_name/initialize.sh"
       ;;
     1 )
       if [ $chef_repo_running -eq 0 ]
