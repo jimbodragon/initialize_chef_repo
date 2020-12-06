@@ -60,7 +60,7 @@ function chef_command()
 {
   chef generate $1 --chef-license accept $@
 }
-export -f chef_generate
+export -f chef_command
 
 function chef_generate()
 {
@@ -130,32 +130,16 @@ function generate_new_chef_repo()
 {
   create_directory $1
   cd $1
-  chef_generate repo -r --chef-license accept $2 > /dev/null 2>&1
+  chef_generate repo -r $2 > /dev/null 2>&1
   cd $2
 
   create_directory $(basename $scripts_dir)
   create_directory $(basename $libraries_path)
   create_directory $(basename $resources_path)
 
-  sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation
+sed -i $'s/You are good/You are good\\\nYou are the best/g' /output.txt
 
-  cookbooks/example
-  data_bags/example
-  environments/example
-  roles/example
-  libraries/example
-  resources/example
-  roles/example
-  cookbooks/README.md
-  data_bags/README.md
-  environments/README.md
-  roles/README.md
-  environments/example.json
-  roles/example.json
-  checksums
-  backup
-  cache
-  logs|g' .gitignore
+  sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\\\n\\\ncookbooks/example\\\ndata_bags/example\\\nenvironments/example\\\nroles/example\\\nlibraries/example\\\nresources/example\\\nroles/example\\\ncookbooks/README.md\\\ndata_bags/README.md\\\nenvironments/README.md\\\nroles/README.md\\\nenvironments/example.json\\\nroles/example.json\\\nchecksums\\\nbackup\\\ncache\\\nlogs|g' .gitignore
 
   git add *
   git commit -m 'Initializing repo' > /dev/null 2>&1
