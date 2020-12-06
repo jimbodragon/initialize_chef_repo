@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function redefinesystem_data()
+function redefine_system_data()
 {
   export os='ubuntu'
   export os_version='18.04'
