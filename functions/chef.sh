@@ -60,15 +60,27 @@ export -f initializing_cookbook
 
 function chef_command()
 {
+  chef_command=$1
+  shift
+  chef_options=$@
   install_chef_workstation
-  echo "Executing chef command from $(pwd): chef $1 --chef-license accept $@"
-  chef $1 --chef-license accept $@
+  echo "Executing chef command from $(pwd): chef $chef_command --chef-license accept $chef_options"
+  chef $chef_command --chef-license accept $chef_options
 }
 export -f chef_command
 
 function chef_generate()
 {
-  chef_command generate $@
+  generate_command=$1
+  shift
+  generate_options=$@
+  chef_command "generate $generate_command" $generate_options
+}
+export -f chef_generate
+
+function chef_generate()
+{
+  chef_generate repo -r $@
 }
 export -f chef_generate
 
@@ -134,7 +146,7 @@ function generate_new_chef_repo()
 {
   create_directory "$1"
   cd "$1"
-  chef_generate repo -r "$2"
+  chef_generate_repo "$2"
   cd "$1/$2"
 
   create_directory $(basename $scripts_dir)
