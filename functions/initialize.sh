@@ -97,9 +97,7 @@ export -f wait_for_command
 
 function wait_for_project_command()
 {
-  # wait_for_command $jump_in_second $max_min $max_hour $build_file
-
-  wait_for_command "\ncd $initial_current_dir\nrm -rf /usr/local/chef/\nrm install.sh\nrm -rf data/\nrm -rf functions/\nrm -rf build/\nrm -rf initialize/\nrm -rf install/\nrm -rf logs/\nwget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/install.sh && bash install.sh $project_name"
+  wait_for_command $jump_in_second $max_min $max_hour "\ncd $initial_current_dir\nrm -rf /usr/local/chef/\nrm install.sh\nrm -rf data/\nrm -rf functions/\nrm -rf build/\nrm -rf initialize/\nrm -rf install/\nrm -rf logs/\nwget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/install.sh && bash install.sh $project_name"
 }
 export -f wait_for_project_command
 
@@ -155,7 +153,7 @@ function run_project()
   prepare_project
   validate_project is_good
 
-  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$default_chef_path" "$is_require_git_clone"
+  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$initial_current_dir" "$default_chef_path" "$is_require_git_clone"
 
   case $is_good in
     0 )

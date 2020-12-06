@@ -56,9 +56,15 @@ function initializing_cookbook()
 }
 export -f initializing_cookbook
 
+function chef_command()
+{
+  chef generate $1 --chef-license accept $@
+}
+export -f chef_generate
+
 function chef_generate()
 {
-  chef generate $@
+  chef_command generate $@
 }
 export -f chef_generate
 
@@ -165,7 +171,7 @@ function new_chef_infra()
   new_git_org="$5"
   new_git_baseurl="$6"
   new_git_user="$7"
-  new_http_git="$8/$git_org"
+  new_http_git="$8"
   new_itialize_script_name="$9"
   if [ "${10}" == "/" ]
   then
@@ -178,7 +184,7 @@ function new_chef_infra()
   new_initial_workstation_cookbook="${12}"
   new_initial_current_dir=${13}
   new_default_chef_path=${14}
-  new_is_require_git_clone={15}
+  new_is_require_git_clone=${15}
 
   generate_new_chef_repo $new_chef_repo $new_project_name
 

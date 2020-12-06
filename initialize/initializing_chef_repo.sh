@@ -5,7 +5,7 @@ source "$current_dir/source_project.sh"
 
 git_clone_main_project
 cd ..
-chef generate repo -r --chef-license accept $git_main_project_name
+chef_generate repo -r $git_main_project_name
 cd $git_main_project_name
 
 create_directory scripts

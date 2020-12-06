@@ -9,7 +9,7 @@ function redefine_project_data()
   export git_baseurl='github.com'
   export git_user='git'
   export project_name="exemple"
-  export http_git="https://raw.githubusercontent.com/$git_org"
+  export http_git="https://raw.githubusercontent.com"
 
   export initialize_script_name="initialize_chef_repo"
   export initial_role="zentyal_chef_infra"
