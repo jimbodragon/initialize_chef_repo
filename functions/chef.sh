@@ -78,11 +78,11 @@ function chef_generate()
 }
 export -f chef_generate
 
-function chef_generate()
+function chef_generate_repo()
 {
   chef_generate repo -r $@
 }
-export -f chef_generate
+export -f chef_generate_repo
 
 function executing_chef_clone()
 {
