@@ -108,7 +108,7 @@ function redefine_data()
 
 function prepare_project()
 {
-  if [ $require_git_clone -eq 1 ]
+  if [ "$require_git_clone" != "" ] && [ $require_git_clone -eq 1 ]
   then
     git_clone_main_project
     chef_import_submodule
