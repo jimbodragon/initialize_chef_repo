@@ -22,5 +22,6 @@ function redefine_project_data()
   export max_hour=0
   export initial_current_dir="$(pwd)"
   export default_chef_path="/usr/local/chef/repo"
+  export install_file_name="/install.sh"
 }
 export -f redefine_project_data

@@ -97,9 +97,35 @@ export -f wait_for_command
 
 function wait_for_project_command()
 {
-  wait_for_command $jump_in_second $max_min $max_hour "\ncd $initial_current_dir\nrm -rf /usr/local/chef/\nrm install.sh\nrm -rf data/\nrm -rf functions/\nrm -rf build/\nrm -rf initialize/\nrm -rf install/\nrm -rf logs/\nwget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/install.sh && bash install.sh $project_name"
+  wait_for_command $jump_in_second $max_min $max_hour "clear_project\ndownload_and_run_project"
 }
 export -f wait_for_project_command
+
+function clear_project()
+{
+  cd $initial_current_dir
+  rm -rf $default_chef_path
+  rm install.sh*
+  rm -rf $functions_dir_narm
+  rm -rf $initialize_dir_name
+  rm -rf $build_dir_name
+  rm -rf $data_dir_name
+  rm -rf $log_dir_name
+  rm -rf $install_dir_name
+}
+export -f clear_project
+
+function download_and_run_project()
+{
+  cd $initial_current_dir
+  if [ ! -f "$install_file_name" ]
+  then
+    rm -f "$install_file_name"
+  fi
+  download_github_raw "$install_file_name"
+  bash "$install_file_name" $project_name
+}
+export -f download_and_run_project
 
 function valide_chef_repo()
 {
@@ -135,6 +161,7 @@ export -f redefine_data
 
 function prepare_project()
 {
+  clear_project
   initialize_parameters $source_file
   redefine_initialize_data
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]

@@ -183,6 +183,7 @@ function new_chef_infra()
   new_initial_current_dir=${13}
   new_default_chef_path=${14}
   new_is_require_git_clone=${15}
+  new_install_file_name=${16}
 
   generate_new_chef_repo $new_chef_repo $new_project_name
 
@@ -207,6 +208,7 @@ function new_chef_infra()
   echo "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
   echo "default_chef_path = $default_chef_path => $new_chef_repo"
   echo "is_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
+  echo "install_file_name = $install_file_name => $new_install_file_name"
   echo -e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
@@ -229,6 +231,7 @@ function new_chef_infra()
   sed -i "s|/usr/local/chef/repo|$new_chef_repo|g" $project_file
 
   sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
+  sed -i "s|$install_file_name|$new_install_file_name|g" $project_file
 
   echo "$new_install_path/$(basename "$install_dir")/source_project.sh"
 }
