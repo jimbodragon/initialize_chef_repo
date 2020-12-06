@@ -131,13 +131,14 @@ function new_chef_infra()
   new_git_baseurl="$6"
   new_git_user="$7"
   new_http_git="$8/$git_org"
-  new_itialize_script_name="${10}"
-  new_install_path="$9/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  new_itialize_script_name="$9"
+  new_install_path="${10}/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
 
-  cd $9
-  chef_generate repo -r --chef-license accept $new_project_name
+  create_directory ${10}
+  cd ${10}
+  chef_generate repo -r --chef-license accept $new_project_name > /dev/null 2>&1
   cd $new_project_name
 
   create_directory $(basename $scripts_dir)
@@ -165,7 +166,7 @@ function new_chef_infra()
   logs|g' .gitignore
 
   git add *
-  git commit -m 'Initializing repo'
+  git commit -m 'Initializing repo' > /dev/null 2>&1
 
   copy_project $new_install_path
   create_directory "$new_install_path/$(basename "$data_dir")"
