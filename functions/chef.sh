@@ -8,7 +8,9 @@ function install_chef_workstation()
   install_git
   if [ "$(which chef)" == "" ] || [ "$(chef -v | grep Workstation | cut -d ':' -f 2)" != " $chef_workstation_version" ]
   then
+    echo "Downloading Chef Workstation"
     download $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
+    echo "Installing Chef Workstation"
     dpkg -i $downloaded_chef_file
   fi
 }
@@ -59,7 +61,8 @@ export -f initializing_cookbook
 function chef_command()
 {
   install_chef_workstation
-  chef generate $1 --chef-license accept $@
+
+  chef $1 --chef-license accept $@
 }
 export -f chef_command
 
@@ -129,16 +132,14 @@ export -f chef_update_submodule
 
 function generate_new_chef_repo()
 {
-  create_directory $1
-  cd $1
-  chef_generate repo -r $2 > /dev/null 2>&1
-  cd $2
+  create_directory "$1"
+  cd "$1"
+  chef_generate repo -r "$2"
+  cd "$1/$2"
 
   create_directory $(basename $scripts_dir)
   create_directory $(basename $libraries_path)
   create_directory $(basename $resources_path)
-
-sed -i $'s/You are good/You are good\\\nYou are the best/g' /output.txt
 
   sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\\\n\\\ncookbooks/example\\\ndata_bags/example\\\nenvironments/example\\\nroles/example\\\nlibraries/example\\\nresources/example\\\nroles/example\\\ncookbooks/README.md\\\ndata_bags/README.md\\\nenvironments/README.md\\\nroles/README.md\\\nenvironments/example.json\\\nroles/example.json\\\nchecksums\\\nbackup\\\ncache\\\nlogs|g' .gitignore
 
