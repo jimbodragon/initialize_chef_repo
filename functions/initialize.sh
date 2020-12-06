@@ -142,6 +142,9 @@ function valide_chef_repo()
   if [ "$chef_repo_path" == "/" ]
   then
     is_good="0"
+  elif [ "$(basename $chef_repo_path)" != "$project_name" ]
+  then
+    is_good="0"
   fi
   echo "$is_good"
 }
@@ -179,8 +182,9 @@ function prepare_project()
   then
     git_clone_main_project
     chef_import_submodule
+  else
+    download_latest_files
   fi
-  download_latest_files
 
   redefine_data
 }
@@ -196,8 +200,12 @@ function run_project()
     "0" )
       echo "Houston we got a problem: installing on default path: $default_chef_path"
 
-      initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
+      new_source_file="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+      echo "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      initialize_parameters "$new_source_file"
+      redefine_data
       rename_project $project_name
+      read
       run_project
       ;;
     "1" )
