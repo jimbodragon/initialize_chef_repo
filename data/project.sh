@@ -8,8 +8,8 @@ function redefine_project_data()
 {
   export git_branch="master"
   export environment="production"
-  export git_main_project_name='jimbodragon_chef_repo'
-  export git_org='jimbodragon'
+  export git_main_project_name="installation_of_initialize_chef_repo"
+  export git_org="installation_of_initialize_chef_repo"
   export git_baseurl='github.com'
   export git_user='git'
   export http_git="https://raw.githubusercontent.com"

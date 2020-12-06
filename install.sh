@@ -3,16 +3,16 @@
 
 initialize_install_dir="$(pwd)"
 
-project_name="$1"
+export project_name="$1"
 shift
-additionnal_environments=$@
+export additionnal_environments=$@
 
-initialize_script_name="initialize_chef_repo"
-git_org="jimbodragon"
-git_branch="master"
-data_dir_name="data"
+export initialize_script_name="initialize_chef_repo"
+export git_org="jimbodragon"
+export git_branch="master"
+export data_dir_name="data"
 
-data_dir="$initialize_install_dir/$data_dir_name"
+export data_dir="$initialize_install_dir/$data_dir_name"
 
 function create_directory()
 {
@@ -43,7 +43,6 @@ function download_github_raw()
 }
 export -f download_github_raw
 
-export update_require=1
 download_github_raw "$data_dir_name/initialize.sh"
 source "$initialize_install_dir/$data_dir_name/initialize.sh"
-rename_project $1
+run_project
