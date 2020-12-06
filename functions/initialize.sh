@@ -62,8 +62,11 @@ function wait_for_command()
     do
       for min in {0..59}
       do
+        echo "******************************   $hour h $min min $sec sec: Starting '$4'   ******************************"
+        eval echo -en "$4"
         for sec in `seq 0 $1 59`
-        do echo "$hour h $min min $sec sec"
+        do
+          echo "$hour h $min min $sec sec"
           let "adjust_hour=$3 - 1"
           let "adjust_min=$2 - 1"
           if [ $hour -eq $adjust_hour ] && [ $min -eq $adjust_min ]
@@ -71,10 +74,10 @@ function wait_for_command()
             sleep $1
           fi
         done
+        echo "******************************   $hour h $min min $sec sec: Stopping '$4'   ******************************"
       done
     done
 
-    eval echo -en "$4"
   done
 }
 export -f wait_for_command
