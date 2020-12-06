@@ -172,6 +172,20 @@ function new_chef_infra()
   create_directory "$new_install_path/$(basename "$data_dir")"
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
+  echo "project_file = $project_file"
+
+  echo "$git_branch => $new_git_branch"
+  echo "$environment => $new_environment"
+  echo "$git_main_project_name => $new_git_main_project_name"
+  echo "$git_org => $new_git_org"
+  echo "$git_baseurl => $new_git_baseurl"
+  echo "$git_user => $new_git_user"
+  echo "$project_name => $new_project_name"
+  echo "$http_git => $new_http_git"
+  echo "$initialize_script_name => $new_itialize_script_name"
+  echo "$initial_role => $new_initial_role"
+  echo "$initial_workstation_cookbook => $new_initial_workstation_cookbook"
+
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
   sed -i "s|$git_main_project_name|$new_git_main_project_name|g" $project_file

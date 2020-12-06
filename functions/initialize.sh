@@ -72,7 +72,7 @@ function redefine_data()
   redefine_chef_data
   redefine_git_data
 
-  redefinesystem_data
+  redefine_system_data
   redefine_project_data
 }
 
