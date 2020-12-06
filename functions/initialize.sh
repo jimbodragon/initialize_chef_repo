@@ -64,7 +64,9 @@ function wait_for_command()
       do
         for sec in `seq 0 $1 59`
         do echo "$hour h $min min $sec sec"
-          if [ $hour -eq $3 ] && [ $min -eq $2 ]
+          let "adjust_hour=$3 - 1"
+          let "adjust_min=$3 - 1"
+          if [ $hour -eq $adjust_hour ] && [ $min -eq $adjust_min ]
           then
             sleep $1
           fi
