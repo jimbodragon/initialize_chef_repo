@@ -58,7 +58,6 @@ function source_all_require_files()
   do
     source "$initialize_install_dir/$file"
   done
-  for fil
 }
 export -f download_all_require_files
 
