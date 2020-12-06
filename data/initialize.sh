@@ -1,8 +1,9 @@
 #!/bin/bash
+export source_file="${BASH_SOURCE[0]}"
 
 function initialize_parameters()
 {
-  export source_file="${BASH_SOURCE[0]}"
+  export source_file="$1"
   export file_name="$(basename $source_file)"
   export data_dir="$(dirname $source_file)"
   export initialize_install_dir="$(dirname $data_dir)"
@@ -32,22 +33,18 @@ function redefine_initialize_data()
 
   export build_file="$build_dir/$project_name$extension"
 
+  #   "$build_dir_name/$project_name$extension"
   export file_list=(
-    "$initialize_dir_name/initializing_chef_repo.sh"
-    "$initialize_dir_name/git_clone_project.sh"
-    "$functions_dir_name/initialize.sh"
+    "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
     "$functions_dir_name/generals.sh"
     "$functions_dir_name/git.sh"
     "$functions_dir_name/chef.sh"
     "$data_dir_name/generals.sh"
     "$data_dir_name/git.sh"
     "$data_dir_name/chef.sh"
-    "$data_dir_name/initialize.sh"
+    "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
     "$data_dir_name/system.sh"
     "$data_dir_name/project.sh"
-    "$install_dir_name/source_project.sh"
-    "$install_dir_name/git_clone.sh"
-    "$build_dir_name/$project_name$extension"
   )
 
   if [ "$chef_repo_running" != "" ]
@@ -57,4 +54,13 @@ function redefine_initialize_data()
 }
 export -f redefine_initialize_data
 
+initialize_parameters "$source_file"
 redefine_initialize_data
+
+if [ $update_require -eq 1 ]
+then
+  update_require=0
+  download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
+  source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
+  run_project
+fi

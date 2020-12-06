@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to execute to initialize a fresh new chef repository
 
-current_dir="$(pwd)"
+initialize_install_dir="$(pwd)"
 
 project_name="$1"
 shift
@@ -11,29 +11,38 @@ initialize_script_name="initialize_chef_repo"
 git_org="jimbodragon"
 git_branch="master"
 data_dir_name="data"
-functions_dir_name="functions"
-data_dir="$data_dir_name"
-functions_dir="$functions_dir_name"
-initialize_install_dir="$current_dir"
+
+data_dir="$initialize_install_dir/$data_dir_name"
 
 function create_directory()
 {
-  if [ ! -d "$1" ]
+  folder_path=$1
+  echo "Create directory '$folder_path'"
+  if [ ! -d $folder_path ]
   then
-    mkdir -p "$1"
+    mkdir -p $folder_path
   fi
 }
+export -f create_directory
+
+function download()
+{
+  echo "Downloading: '$2' => '$1'"
+  wget --quiet --no-cache --no-cookies -O $1 $2
+}
+export -f download
 
 function download_github_raw()
 {
   file_to_download=$1
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master/"
-  wget --quiet --no-cache --no-cookies -O "$file_to_download" "$raw_url/$file_to_download"
+  local_path="$initialize_install_dir/$file_to_download"
+  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/$git_branch/$file_to_download"
+  echo "Downloading from github: '$raw_url' => '$local_path'"
+  create_directory $(dirname $local_path)
+  download "$local_path" "$raw_url"
 }
+export -f download_github_raw
 
-create_directory "$data_dir"
-create_directory "$functions_dir"
+update_require=1
 download_github_raw "$data_dir_name/initialize.sh"
-download_github_raw "$functions_dir_name/initialize.sh"
-
-source $functions_dir/initialize.sh
+source "$initialize_install_dir/$data_dir_name/initialize.sh"

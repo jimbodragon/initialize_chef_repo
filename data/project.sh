@@ -15,7 +15,7 @@ function redefine_project_data()
   export initial_role="zentyal_chef_infra"
   export initial_workstation_cookbook="chef_workstation_initialize"
 
-  export require_git_clone=0
+  export is_require_git_clone=0
 
   export jump_in_second=3
   export max_min=3

@@ -1,8 +1,7 @@
 #!/bin/bash##!/bin/bash#
 
-current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
-source $current_dir/git.sh
+source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
+source "$functions_dir/git.sh"
 
 function install_chef_workstation()
 {
@@ -121,34 +120,12 @@ function chef_update_submodule()
 }
 export -f chef_update_submodule
 
-function new_chef_infra()
+function generate_new_chef_repo()
 {
-  new_project_name="$1"
-  new_git_branch="$2"
-  new_environment="$3"
-  new_git_main_project_name="$4"
-  new_git_org="$5"
-  new_git_baseurl="$6"
-  new_git_user="$7"
-  new_http_git="$8/$git_org"
-  new_itialize_script_name="$9"
-  if [ "${10}" == "/" ]
-  then
-    new_chef_repo=${14}
-  else
-    new_chef_repo=${10}
-  fi
-  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
-  new_initial_role="${11}"
-  new_initial_workstation_cookbook="${12}"
-  new_initial_current_dir=${13}
-  new_default_chef_path=${14}
-  new_require_git_clone={15}
-
-  create_directory $new_chef_repo
-  cd $new_chef_repo
-  chef_generate repo -r --chef-license accept $new_project_name > /dev/null 2>&1
-  cd $new_project_name
+  create_directory $1
+  cd $1
+  chef_generate repo -r --chef-license accept $2 > /dev/null 2>&1
+  cd $2
 
   create_directory $(basename $scripts_dir)
   create_directory $(basename $libraries_path)
@@ -176,9 +153,38 @@ function new_chef_infra()
 
   git add *
   git commit -m 'Initializing repo' > /dev/null 2>&1
+}
+export -f generate_new_chef_repo
+
+function new_chef_infra()
+{
+  new_project_name="$1"
+  new_git_branch="$2"
+  new_environment="$3"
+  new_git_main_project_name="$4"
+  new_git_org="$5"
+  new_git_baseurl="$6"
+  new_git_user="$7"
+  new_http_git="$8/$git_org"
+  new_itialize_script_name="$9"
+  if [ "${10}" == "/" ]
+  then
+    new_chef_repo=${14}
+  else
+    new_chef_repo=${10}
+  fi
+  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  new_initial_role="${11}"
+  new_initial_workstation_cookbook="${12}"
+  new_initial_current_dir=${13}
+  new_default_chef_path=${14}
+  new_is_require_git_clone={15}
+
+  generate_new_chef_repo $new_chef_repo $new_project_name
 
   copy_project $new_install_path
   create_directory "$new_install_path/$(basename "$data_dir")"
+
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
   echo -e "\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n"
@@ -196,7 +202,7 @@ function new_chef_infra()
   echo "initial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
   echo "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
   echo "default_chef_path = $default_chef_path => $new_chef_repo"
-  echo "require_git_clone = $require_git_clone => $new_require_git_clone"
+  echo "is_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
   echo -e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
@@ -215,9 +221,10 @@ function new_chef_infra()
   sed -i "s|\$(pwd)|$new_initial_current_dir|g" $project_file
 
   sed -i "s|$chef_repo|$new_chef_repo|g" $project_file
+  sed -i "s|$default_chef_path|$new_chef_repo|g" $project_file
   sed -i "s|/usr/local/chef/repo|$new_chef_repo|g" $project_file
 
-  sed -i "s|export require_git_clone=0|export require_git_clone=$require_git_clone|g" $project_file
+  sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
 
   echo "$new_install_path/$(basename "$install_dir")/source_project.sh"
 }

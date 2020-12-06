@@ -1,8 +1,12 @@
 #!/bin/bash
 # Script to execute to initialize a fresh new chef repository
 
-current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
+source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
+
+if [ "$update_require" != "1" ]
+then
+  source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
+fi
 
 function create_directory()
 {
@@ -35,11 +39,10 @@ export -f download
 function download_github_raw()
 {
   file_to_download=$1
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/master"
-  if [ ! -f "$file_to_download" ]
-  then
-    download "$initialize_install_dir/$file_to_download" "$raw_url/$file_to_download"
-  fi
+  local_path="$initialize_install_dir/$file_to_download"
+  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/$git_branch/$file_to_download"
+  create_directory $(dirname $local_path)
+  download "$local_path" "$raw_url"
 }
 export -f download_github_raw
 
@@ -53,6 +56,22 @@ function download_project()
   done
 }
 export -f download_project
+
+function source_all_require_files()
+{
+  for file in ${file_list[@]}
+  do
+    source "$initialize_install_dir/$file"
+  done
+  for fil
+}
+export -f download_all_require_files
+
+function download_latest_files() {
+  download_project
+  source_all_require_files
+}
+export -f download_latest_files
 
 function wait_for_command()
 {
@@ -93,15 +112,25 @@ export -f wait_for_project_command
 function valide_chef_repo()
 {
   eval "$1=1"
-  if [ "$chef_path" == "/" ]
+  if [ "$chef_repo_path" == "/" ]
   then
     eval "$1=0"
   fi
 }
+export -f valide_chef_repo
+
+function validate_project()
+{
+  valide_chef_repo chef_repo_good
+  if [ $chef_repo_good -eq 1 ]
+  then
+    eval "$1=0"
+  fi
+}
+export -f validate_project
 
 function redefine_data()
 {
-  initialize_parameters
   redefine_initialize_data
   redefine_general_data
   redefine_chef_data
@@ -110,37 +139,36 @@ function redefine_data()
   redefine_system_data
   redefine_project_data
 }
+export -f redefine_data
 
 function prepare_project()
 {
-  if [ "$require_git_clone" != "" ] && [ $require_git_clone -eq 1 ]
+  initialize_parameters $source_file
+  redefine_initialize_data
+  if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
   then
     git_clone_main_project
     chef_import_submodule
   fi
-  download_project
-  source $data_dir/project.sh
-  source $data_dir/system.sh
-  source $functions_dir/generals.sh
+  download_latest_files
 
   redefine_data
 }
+export -f prepare_project
 
 function run_project()
 {
   prepare_project
-  valide_chef_repo is_good
+  validate_project is_good
 
-  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$default_chef_path" "$require_git_clone"
+  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$default_chef_path" "$is_require_git_clone"
 
   case $is_good in
     0 )
-      echo "Houston we got a problem"
-      chef_path="$default_chef_path"
-      chef_repo_path="$chef_path/$project_name"
+      echo "Houston we got a problem: installing on default path: $default_chef_path"
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
       redefine_data
-      source "$functions_dir/$(basename "${BASH_SOURCE[0]}")"
+      source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
       ;;
     1 )
       if [ $chef_repo_running -eq 0 ]
@@ -163,5 +191,3 @@ function copy_project()
   done
 }
 export -f copy_project
-
-run_project
