@@ -60,7 +60,7 @@ function get_valide_chef_repo()
   if [ "$chef_repo_path" == "/" ]
   then
     eval "$1=0"
-    default_install_dir="/usr/local/chef/repo"
+    default_install_dir="/usr/local/chef/repo/$project_name"
     chef_repo_path="$default_install_dir"
   fi
 }

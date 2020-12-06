@@ -170,7 +170,7 @@ function new_chef_infra()
 
   copy_project $new_install_path
   create_directory "$new_install_path/$(basename "$data_dir")"
-  project_file="$new_install_path/$(basename "$build_dir")/project.sh"
+  project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
