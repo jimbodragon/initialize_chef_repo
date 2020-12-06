@@ -61,7 +61,7 @@ function get_valide_chef_repo()
   then
     eval "$1=0"
     default_install_dir="/usr/local/chef/repo"
-    $chef_repo_path="$default_install_dir"
+    chef_repo_path="$default_install_dir"
   fi
 }
 
