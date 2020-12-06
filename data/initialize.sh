@@ -37,3 +37,8 @@ export file_list=(
   "$install_dir_name/source_project.sh"
   "$build_dir_name/$project_name$extension"
 )
+
+if [ "$chef_repo_running" != "" ]
+then
+  export chef_repo_running=0
+fi

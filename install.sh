@@ -37,5 +37,3 @@ download_github_raw "$data_dir_name/initialize.sh"
 download_github_raw "$functions_dir_name/initialize.sh"
 
 source $functions_dir/initialize.sh
-create_build_file $project_name
-. $build_file

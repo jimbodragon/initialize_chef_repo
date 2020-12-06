@@ -6,9 +6,9 @@ source $current_dir/chef.sh
 
 function create_build_file()
 {
-  new_build_file="$build_dir/$1$extension"
-  # if [ ! -f $new_build_file ]
-  # then
+  new_build_file="$1"
+  if [ ! -f $new_build_file ]
+  then
     cat << EOF  >$new_build_file
 current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "\$(dirname \$current_dir)/install/source_project.sh"
@@ -20,7 +20,7 @@ git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null
 convert_initialize_to_cookbook
 execute_chef_solo \$current_dir "\$project_name"
 EOF
-  # fi
+  fi
 }
 
 function convert_initialize_to_cookbook()

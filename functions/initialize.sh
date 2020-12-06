@@ -54,20 +54,48 @@ function download_project()
 }
 export -f download_project
 
+function get_valide_chef_repo()
+{
+  eval "$1=1"
+  if [ "$chef_repo_path" == "/" ]
+  then
+    eval "$1=0"
+    default_install_dir="/usr/local/chef/repo"
+    $chef_repo_path="$default_install_dir"
+  fi
+}
+
 function prepare_project()
 {
   download_project
   source $data_dir/project.sh
   source $data_dir/system.sh
   source $functions_dir/generals.sh
-
-  if [ "$chef_repo_path" == "/" ]
-  then
-    default_install_dir="/usr/local/chef/repo"
-    source "$(new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$default_install_dir" "$initial_role" "$initial_workstation_cookbook")"
-  fi
 }
-export -f prepare_project
+
+function run_project()
+{
+  prepare_project
+  get_valide_chef_repo is_good
+
+  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook"
+
+  case $is_good in
+    0 )
+      echo "Houston we got a problem"
+      source "$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name/$functions_dir_name/initialize.sh"
+      ;;
+    1 )
+      if [ $chef_repo_running -eq 0 ]
+      then
+          export chef_repo_running=1
+          create_build_file $build_file
+          . $build_file
+      fi
+      ;;
+  esac
+}
+export -f run_project
 
 function copy_project()
 {
@@ -79,4 +107,4 @@ function copy_project()
 }
 export -f copy_project
 
-prepare_project
+run_project
