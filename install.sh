@@ -45,4 +45,4 @@ export -f download_github_raw
 
 download_github_raw "$data_dir_name/initialize.sh"
 source "$initialize_install_dir/$data_dir_name/initialize.sh"
-run_project
+run_new_project

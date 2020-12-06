@@ -54,7 +54,7 @@ function redefine_initialize_data()
 }
 export -f redefine_initialize_data
 
-function run_project()
+function run_new_project()
 {
   echo "Running project $project_name at $chef_repo_path"
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
@@ -62,7 +62,7 @@ function run_project()
   prepare_project
   run_project
 }
-export -f run_project
+export -f run_new_project
 
 initialize_parameters "$source_file"
 redefine_initialize_data

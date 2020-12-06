@@ -188,7 +188,7 @@ function run_project()
   case $is_good in
     0 )
       echo "Houston we got a problem: installing on default path: $default_chef_path"
-      
+
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
       rename_project $project_name
       ;;
