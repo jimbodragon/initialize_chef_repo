@@ -31,4 +31,6 @@ The goal of this project is to create a auto fully automate Infrastructure suppo
 
 8. Here is the magic: 'wget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/initialize.sh && bash initialize.sh Example Test Dev QA SIT DR'
 
+jump=3; min=0; sec=0; while [ 1 -eq 1 ]; do for i in `seq 0 $jump 60`; do let "sec=$i"; echo "$min:$sec"; sleep $jump; done; let "min=$min+1"; cd ~; rm -rf /usr/local/chef/; rm install.sh; rm -rf data/; rm -rf functions/; rm -rf build/; rm -rf initialize/; rm -rf install/; rm -rf logs/; wget --quiet --no-cache --no-cookies https://raw.githubusercontent.com/jimbodragon/initialize_chef_repo/master/install.sh && bash install.sh JimboDragon; done
+
 ##Notes: If you are using a github acces to start, be sure that the starting machine has the access to fetch from your repository

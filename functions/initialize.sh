@@ -54,15 +54,29 @@ function download_project()
 }
 export -f download_project
 
-function get_valide_chef_repo()
+function valide_chef_repo()
 {
   eval "$1=1"
-  if [ "$chef_repo_path" == "/" ]
+  if [ "$chef_path" == "/" ]
   then
     eval "$1=0"
-    default_install_dir="/usr/local/chef/repo/$project_name"
-    chef_repo_path="$default_install_dir"
+    default_install_dir="/usr/local/chef/repo"
+    chef_path="$default_install_dir"
+    chef_repo_path="$chef_path/$project_name"
+    initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
+    redefine_data
   fi
+}
+
+function redefine_data()
+{
+  redefine_initialize
+  redefine_general_data
+  redefine_chef_data
+  redefine_git_data
+
+  redefinesystem_data
+  redefine_project_data
 }
 
 function prepare_project()
@@ -71,12 +85,14 @@ function prepare_project()
   source $data_dir/project.sh
   source $data_dir/system.sh
   source $functions_dir/generals.sh
+
+  redefine_data
 }
 
 function run_project()
 {
   prepare_project
-  get_valide_chef_repo is_good
+  valide_chef_repo is_good
 
   new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook"
 
