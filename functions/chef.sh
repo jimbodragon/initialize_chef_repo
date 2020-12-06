@@ -61,7 +61,7 @@ export -f initializing_cookbook
 function chef_command()
 {
   install_chef_workstation
-  echo "Executing chef command: chef $1 --chef-license accept $@"
+  echo "Executing chef command from $(pwd): chef $1 --chef-license accept $@"
   chef $1 --chef-license accept $@
 }
 export -f chef_command
