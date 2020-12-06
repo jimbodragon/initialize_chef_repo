@@ -58,6 +58,7 @@ export -f initializing_cookbook
 
 function chef_command()
 {
+  install_chef_workstation
   chef generate $1 --chef-license accept $@
 }
 export -f chef_command
