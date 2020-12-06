@@ -57,7 +57,7 @@ export -f redefine_initialize_data
 initialize_parameters "$source_file"
 redefine_initialize_data
 
-if [ $update_require -eq 1 ]
+if [ "$update_require" != "" ] && [ $update_require -eq 1 ]
 then
   update_require=0
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"

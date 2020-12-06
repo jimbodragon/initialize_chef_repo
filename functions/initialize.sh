@@ -3,11 +3,6 @@
 
 source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
 
-if [ "$update_require" != "1" ]
-then
-  source "$(dirname $current_dir)/data/$(basename "${BASH_SOURCE[0]}")"
-fi
-
 function create_directory()
 {
   folder_path=$1
@@ -171,7 +166,7 @@ function run_project()
       source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
       ;;
     1 )
-      if [ $chef_repo_running -eq 0 ]
+      if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
           export chef_repo_running=1
           create_build_file $build_file
