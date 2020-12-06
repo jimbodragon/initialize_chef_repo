@@ -18,13 +18,12 @@ function create_build_file()
   if [ ! -f $new_build_file ]
   then
     cat << EOF  > $new_build_file
+#!/bin/bash
 current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "\$(dirname \$current_dir)/install/source_project.sh"
 #new_chef_infra "\$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$initialize_script_name" "\$install_path" "\$initial_role" "\$initial_workstation_cookbook" "\$initial_current_dir" "\$default_chef_path" "\$is_require_git_clone" "\$install_file_name"
-new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$initialize_script_name" "\$install_path" "\$initial_current_dir" "\$initial_role" "\$initial_workstation_cookbook" "\$default_chef_path" "\$is_require_git_clone" "\$install_file_name"
-cd \$cookbook_path
-git clone git@github.com:jimbodragon/chef_workstation_initialize.git > /dev/null 2>&1
-convert_initialize_to_cookbook
+source \$(new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$initialize_script_name" "\$install_path" "\$initial_current_dir" "\$initial_role" "\$initial_workstation_cookbook" "\$default_chef_path" "\$is_require_git_clone" "\$install_file_name")
+chef_import_submodule
 execute_chef_solo \$current_dir "\$project_name"
 EOF
   fi
