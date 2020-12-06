@@ -59,7 +59,7 @@ function source_all_require_files()
     source "$initialize_install_dir/$file"
   done
 }
-export -f download_all_require_files
+export -f source_all_require_files
 
 function download_latest_files() {
   download_project
