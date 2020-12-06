@@ -132,7 +132,12 @@ function new_chef_infra()
   new_git_user="$7"
   new_http_git="$8/$git_org"
   new_itialize_script_name="$9"
-  new_install_path="${10}/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  if [ "${10}" == "/" ]
+  then
+    new_install_path="$default_chef_path/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  else
+    new_install_path="${10}/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  fi
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
   new_initial_current_dir=${13}
@@ -175,8 +180,8 @@ function new_chef_infra()
   create_directory "$new_install_path/$(basename "$data_dir")"
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
+  echo -e "\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n"
   echo "project_file = $project_file"
-
   echo "git_branch = $git_branch => $new_git_branch"
   echo "environment = $environment => $new_environment"
   echo "git_main_project_name = $git_main_project_name => $new_git_main_project_name"
@@ -191,6 +196,7 @@ function new_chef_infra()
   echo "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
   echo "default_chef_path = $default_chef_path => $new_default_chef_path"
   echo "require_git_clone = $require_git_clone => $new_require_git_clone"
+  echo -e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
