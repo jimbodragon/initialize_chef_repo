@@ -183,18 +183,14 @@ export -f prepare_project
 
 function run_project()
 {
-  prepare_project
   validate_project is_good
-
-  new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_repo_path" "$initial_role" "$initial_workstation_cookbook" "$initial_current_dir" "$default_chef_path" "$is_require_git_clone" "$install_file_name"
 
   case $is_good in
     0 )
       echo "Houston we got a problem: installing on default path: $default_chef_path"
-      clear_project
+      
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
-      prepare_project
-      source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
+      rename_project $project_name
       ;;
     1 )
       echo "chef_repo_running = $chef_repo_running"

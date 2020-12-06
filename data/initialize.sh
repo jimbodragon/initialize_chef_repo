@@ -62,5 +62,9 @@ then
   update_require=0
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
+  prepare_project
+fi
+if [ "$run_project_require" != "" ] && [ $run_project_require -eq 1 ]
+then
   run_project
 fi

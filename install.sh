@@ -46,3 +46,4 @@ export -f download_github_raw
 export update_require=1
 download_github_raw "$data_dir_name/initialize.sh"
 source "$initialize_install_dir/$data_dir_name/initialize.sh"
+rename_project $1
