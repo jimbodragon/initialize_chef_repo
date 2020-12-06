@@ -97,7 +97,7 @@ export -f wait_for_command
 
 function wait_for_project_command()
 {
-  wait_for_command $jump_in_second $max_min $max_hour "clear_project\ndownload_and_run_project"
+  wait_for_command $jump_in_second $max_min $max_hour "$1"
 }
 export -f wait_for_project_command
 
@@ -112,6 +112,13 @@ function clear_project()
   rm -rf $data_dir_name
   rm -rf $log_dir_name
   rm -rf $install_dir_name
+  validate_project is_good
+
+  case $is_good in
+    1 )
+      rm -rf $chef_repo_path
+      ;;
+  esac
 }
 export -f clear_project
 
@@ -161,7 +168,6 @@ export -f redefine_data
 
 function prepare_project()
 {
-  clear_project
   initialize_parameters $source_file
   redefine_initialize_data
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
@@ -185,16 +191,20 @@ function run_project()
   case $is_good in
     0 )
       echo "Houston we got a problem: installing on default path: $default_chef_path"
+      clear_project
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
-      redefine_data
+      prepare_project
       source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
       ;;
     1 )
+      echo "chef_repo_running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
+          echo "Running project $project_name"
           export chef_repo_running=1
           create_build_file $build_file
-          wait_for_project_command $build_file
+          wait_for_project_command ". $build_file"
+          # wait_for_project_command "clear_project\ndownload_and_run_project"
       fi
       ;;
   esac
