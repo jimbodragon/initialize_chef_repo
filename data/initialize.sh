@@ -54,17 +54,14 @@ function redefine_initialize_data()
 }
 export -f redefine_initialize_data
 
-initialize_parameters "$source_file"
-redefine_initialize_data
-
-if [ "$update_require" != "" ] && [ $update_require -eq 1 ]
-then
-  update_require=0
+function run_project()
+{
+  echo "Running project $project_name"
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   prepare_project
-fi
-if [ "$run_project_require" != "" ] && [ $run_project_require -eq 1 ]
-then
   run_project
-fi
+}
+
+initialize_parameters "$source_file"
+redefine_initialize_data
