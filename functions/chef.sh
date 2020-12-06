@@ -183,7 +183,7 @@ function new_chef_infra()
   sed -i "s|$initial_role|$new_initial_role|g" $project_file
   sed -i "s|$initial_workstation_cookbook|$new_initial_workstation_cookbook|g" $project_file
 
-  echo "$new_install_path/$(basename "$functions_dir")/initialize.sh"
+  echo "$new_install_path/$(basename "$install_dir")/source_project.sh"
 }
 export -f new_chef_infra
 
