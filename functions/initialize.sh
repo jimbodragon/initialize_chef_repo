@@ -112,10 +112,10 @@ function clear_project()
   rm -rf $data_dir_name
   rm -rf $log_dir_name
   rm -rf $install_dir_name
-  validate_project is_good
+  is_good=$(validate_project)
 
   case $is_good in
-    1 )
+    "1" )
       rm -rf $chef_repo_path
       ;;
   esac
@@ -136,21 +136,24 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  eval "$1=1"
+  is_good="1"
   if [ "$chef_repo_path" == "/" ]
   then
-    eval "$1=0"
+    is_good="0"
   fi
+  echo "$is_good"
 }
 export -f valide_chef_repo
 
 function validate_project()
 {
-  valide_chef_repo chef_repo_good
+  is_good="1"
+  chef_repo_good=$(valide_chef_repo)
   if [ $chef_repo_good -eq 1 ]
   then
-    eval "$1=0"
+    is_good="0"
   fi
+  echo "$is_good"
 }
 export -f validate_project
 
@@ -184,18 +187,18 @@ export -f prepare_project
 function run_project()
 {
   echo "Running project $project_name at $chef_repo_path"
-  validate_project is_good
+  is_good=$(validate_project)
   echo "is_good = $is_good"
 
   case $is_good in
-    0 )
+    "0" )
       echo "Houston we got a problem: installing on default path: $default_chef_path"
 
       initialize_install_dir="$chef_repo_path/$(basename $scripts_dir)/$initialize_script_name"
       rename_project $project_name
       run_project
       ;;
-    1 )
+    "1" )
       echo "chef_repo_running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
