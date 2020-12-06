@@ -153,7 +153,7 @@ function generate_new_chef_repo()
   create_directory $(basename $libraries_path)
   create_directory $(basename $resources_path)
 
-  sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\\n\\ncookbooks/example\\ndata_bags/example\\nenvironments/example\\nroles/example\\nlibraries/example\\nresources/example\\nroles/example\\ncookbooks/README.md\\ndata_bags/README.md\\nenvironments/README.md\\nroles/README.md\\nenvironments/example.json\\nroles/example.json\\nchecksums\\nbackup\\ncache\\nlogs|g' .gitignore
+  sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\n\ncookbooks/example\ndata_bags/example\nenvironments/example\nroles/example\nlibraries/example\nresources/example\nroles/example\ncookbooks/README.md\ndata_bags/README.md\nenvironments/README.md\nroles/README.md\nenvironments/example.json\nroles/example.json\nchecksums\nbackup\ncache\nlogs|g' .gitignore
 
   git add *
   git commit -m 'Initializing repo' > /dev/null 2>&1
