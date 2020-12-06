@@ -72,6 +72,40 @@ function get_relative_path()
 }
 export -f get_relative_path
 
+function get_futur_relative_path()
+{
+  parent_folder=$(dirname $1)
+  file_base="$(basename $1)"
+  case "$1" in
+    "" )
+      echo "Error to get relative path '$1': Argument empty" > /dev/stderr
+      exit 1
+      ;;
+    "/" )
+      echo "Error to get relative path '$1': reach system root (/)" > /dev/stderr
+      echo "$1"
+      ;;
+    * )
+      for project_folder in "$initialize_install_dir" "$functions_dir" "$build_dir" "$data_dir" "$log_dir" "$install_dir" "$chef_repo_path" "$cookbook_path" "$libraries_path" "$resources_path" "$data_bag_path" "$environment_path" "$role_path" "$scripts_dir"
+      do
+        if [ "$1" == "$project_folder" ]; then
+          relative_project_folder="${project_folder#"$chef_repo_path"}"
+          rel_path="$relative_project_folder/${1#"$project_folder"}"
+          break
+        fi
+      done
+
+      if [ "$rel_path" == "" ]
+      then
+        echo "$(get_relative_path $parent_folder)/$file_base"
+      else
+        echo "$2/$rel_path"
+      fi
+      ;;
+  esac
+}
+export -f get_futur_relative_path
+
 function create_build_file()
 {
   new_build_file="$build_dir/$1$extension"

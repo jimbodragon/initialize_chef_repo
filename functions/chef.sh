@@ -100,8 +100,6 @@ export -f executing_chef_clone
 
 function chef_import_submodule()
 {
-  load_git_repos
-
   for github_repo in "${git_repos[@]}"
   do
     cd $chef_repo
@@ -113,8 +111,6 @@ export -f chef_import_submodule
 
 function chef_update_submodule()
 {
-  load_git_repos
-
   for github_repo in "${git_repos[@]}"
   do
     cd $chef_repo
@@ -135,15 +131,45 @@ function new_chef_infra()
   new_git_baseurl="$6"
   new_git_user="$7"
   new_http_git="$8/$git_org"
-  new_install_path="$9/$new_project_name"
   new_itialize_script_name="${10}"
+  new_install_path="$9/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
 
-  project_file="$new_install_path/$(get_initialize_relative_path "$data_dir/project.sh")"
+  cd $9
+  chef_generate repo -r --chef-license accept $new_project_name
+  cd $new_project_name
+
+  create_directory $(basename $scripts_dir)
+  create_directory $(basename $libraries_path)
+  create_directory $(basename $resources_path)
+
+  sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation
+
+  cookbooks/example
+  data_bags/example
+  environments/example
+  roles/example
+  libraries/example
+  resources/example
+  roles/example
+  cookbooks/README.md
+  data_bags/README.md
+  environments/README.md
+  roles/README.md
+  environments/example.json
+  roles/example.json
+  checksums
+  backup
+  cache
+  logs|g' .gitignore
+
+  git add *
+  git commit -m 'Initializing repo'
 
   copy_project $new_install_path
-  create_directory "$new_install_path/$(get_initialize_relative_path "$data_dir")"
+  create_directory "$new_install_path/$(basename "$data_dir")"
+  project_file="$new_install_path/$(basename "$build_dir")/project.sh"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
@@ -157,8 +183,7 @@ function new_chef_infra()
   sed -i "s|$initial_role|$new_initial_role|g" $project_file
   sed -i "s|$initial_workstation_cookbook|$new_initial_workstation_cookbook|g" $project_file
 
-  echo "New Chef Infra at $new_install_path"
-  echo
+  echo "$new_install_path/$(basename "$functions_dir")/initialize.sh"
 }
 export -f new_chef_infra
 

@@ -189,7 +189,7 @@ function git_clone_main_project()
     if [ -d $git_main_project_name ]; then cd $git_main_project_name; fi
     if [ $(git remote -v 2>&1 | grep $git_main_url | wc -l) -eq 0 ] && [ $(git remote -v | grep origin | wc -l) -gt 0 ]
     then
-      git remote add second_origin $git_main_url
+      git remote add $project_name $git_main_url
     fi
     git submodule update --init --recursive .
   else

@@ -64,8 +64,7 @@ function prepare_project()
   if [ "$chef_repo_path" == "/" ]
   then
     default_install_dir="/usr/local/chef/repo"
-    new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$default_install_dir" "$initial_role" "$initial_workstation_cookbook"
-    source "/$default_install_dir/$project_name/$(basename $scripts_dir)/$initialize_script_name/$(basename $functions_dir)/initialize.sh"
+    source "$(new_chef_infra "$project_name" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$default_install_dir" "$initial_role" "$initial_workstation_cookbook")"
   fi
 }
 export -f prepare_project
