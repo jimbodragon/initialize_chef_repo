@@ -138,27 +138,29 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  is_good="1"
+  chef_repo_path_is_ok="1"
   if [ "$chef_repo_path" == "/" ]
   then
-    is_good="0"
+    chef_repo_path_is_ok="0"
+    echo "chef_repo_path cannot be '/'"
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
-    is_good="0"
+    echo "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    chef_repo_path_is_ok="0"
   fi
-  echo "$is_good"
+  echo "$chef_repo_path_is_ok"
 }
 export -f valide_chef_repo
 
 function validate_project()
 {
-  is_good="1"
+  project_is_good="1"
   chef_repo_good=$(valide_chef_repo)
   if [ $chef_repo_good -eq 1 ]
   then
-    is_good="0"
+    project_is_good="0"
   fi
-  echo "$is_good"
+  echo "$project_is_good"
 }
 export -f validate_project
 
