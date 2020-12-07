@@ -15,7 +15,7 @@ export -f create_directory
 
 function log()
 {
-  echo -e "$1" > /dev/stderr
+  echo -e "$1" > $log_path/initialize.log
 }
 export -f log
 
@@ -278,8 +278,11 @@ function copy_project()
 {
   for file in ${file_list[@]}
   do
-    create_directory "$(dirname $1/$file)"
-    cp $initialize_install_dir/$file $1/$file
+    if [ "$initialize_install_dir/$file" != "$1/$file" ]
+    then
+      create_directory "$(dirname $1/$file)"
+      cp $initialize_install_dir/$file $1/$file
+    fi
   done
 }
 export -f copy_project
