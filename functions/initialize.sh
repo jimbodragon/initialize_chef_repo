@@ -83,7 +83,7 @@ function repeat_command()
           for sec in `seq 0 $1 59`
           do
             echo "$hour h $min min $sec sec"
-            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min" == "000" ]
+            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min$sec" == "000$1" ]
             then
               eval $(echo -e "$5")
             else
