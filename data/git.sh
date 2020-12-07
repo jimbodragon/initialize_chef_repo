@@ -17,5 +17,6 @@ function redefine_git_data()
   'name=chef_generator type=generators'
   'name=JimboDragon type=scripts fork_from_public=git@github.com:jimbodragon/initialize_chef_repo.git'
   )
+  echo "Redefine git data: $chef_repo_path/$project_name"
 }
 export -f redefine_git_data

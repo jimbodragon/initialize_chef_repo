@@ -11,11 +11,13 @@ function initialize_parameters()
   export scripts_dir="$(dirname $initialize_install_dir)"
   export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
   export chef_path="$(dirname "$chef_repo_path")"
+  echo "Redefine initialize parameters: $chef_repo_path"
 }
 export -f initialize_parameters
 
 function redefine_initialize_data()
 {
+  echo "Redefine initialize data: $chef_repo_path/$project_name"
   export functions_dir_name="functions"
   export initialize_dir_name="initialize"
   export build_dir_name="build"
