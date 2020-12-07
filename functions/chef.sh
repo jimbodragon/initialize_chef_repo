@@ -144,6 +144,7 @@ export -f chef_update_submodule
 
 function generate_new_chef_repo()
 {
+  echo "Generating a new Chef repo at '$1' name '$2'"
   create_directory "$1"
   cd "$1"
   chef_generate_repo "$2"
