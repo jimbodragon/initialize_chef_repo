@@ -16,7 +16,8 @@ export -f create_directory
 function log()
 {
   create_directory "$log_path"
-  echo -e "$1" > $log_path/initialize.log
+  echo -e "$1" >> $log_path/initialize.log
+  echo -e "$1"
 }
 export -f log
 

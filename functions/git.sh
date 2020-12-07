@@ -30,7 +30,7 @@ function merging_from_fork()
   remote_project_name=$(git remote -v | grep "$git_fork_upstream_name" | awk '{print $1}' | head -n 1)
   actual_remote_project_url=$(git remote -v | grep "$git_fork_upstream_name" | awk '{print $2}' | head -n 1)
   cd $project_folder
-  if [ $remote_project_name == "" ]
+  if [ "$remote_project_name" == "" ]
   then
     git remote add $git_fork_upstream_name $remote_project_url
     git fetch $git_fork_upstream_name master

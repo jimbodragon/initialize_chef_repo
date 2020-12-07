@@ -193,10 +193,10 @@ function new_chef_infra()
   new_is_require_git_clone=${15}
   new_install_file_name=${16}
 
-  generate_new_chef_repo $new_chef_repo $new_project_name
+  log "$(generate_new_chef_repo $new_chef_repo $new_project_name)"
 
-  copy_project $new_install_path
-  create_directory "$new_install_path/$(basename "$data_dir")"
+  log "$(copy_project $new_install_path)"
+  log "$(create_directory "$new_install_path/$(basename "$data_dir")")"
 
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
@@ -242,7 +242,7 @@ function new_chef_infra()
   sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
   sed -i "s|$install_file_name|$new_install_file_name|g" $project_file
 
-  echo "$new_install_path/$(basename "$install_dir")/$(basename "$data_dir")/initialize.sh"
+  echo "$new_install_path/$(basename "$data_dir")/initialize.sh"
 }
 export -f new_chef_infra
 
@@ -347,7 +347,7 @@ EOS
 
   log_bold "Starting run list = $chef_run_list"
 
-  chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --logfile "$log_path/chef_solo_$project_name_$environment.log "
+  chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --logfile "$log_path/chef_solo_$project_name_$environment.log"
 
 }
 export -f execute_chef_solo
