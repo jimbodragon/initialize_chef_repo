@@ -156,8 +156,9 @@ export -f valide_chef_repo
 function validate_project()
 {
   project_is_good="1"
-  chef_repo_good=$(valide_chef_repo)
-  if [ $chef_repo_good == "1" ]
+  chef_repo_good="$(valide_chef_repo)"
+  echo "chef_repo_good? = $chef_repo_good"
+  if [ "$chef_repo_good" == "1" ]
   then
     project_is_good="0"
   fi

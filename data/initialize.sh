@@ -45,6 +45,8 @@ function redefine_initialize_data()
     "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
     "$data_dir_name/system.sh"
     "$data_dir_name/project.sh"
+    "$install_dir_name/git_clone.sh"
+    "$install_dir_name/source_project.sh"
   )
 
   if [ "$chef_repo_running" != "" ]
