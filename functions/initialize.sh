@@ -169,14 +169,14 @@ function valide_chef_repo()
   then
     chef_repo_path_is_ok="0"
     log "chef_repo_path cannot be '/'" > /dev/stderr
-    read -p "Press 'ENTER' to continue: "
+    read -p "Press 'ENTER' to continue: " > /dev/stderr
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     log "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
-    read -p "Press 'ENTER' to continue: "
+    read -p "Press 'ENTER' to continue: " > /dev/stderr
     chef_repo_path_is_ok="0"
   fi
-  log "$chef_repo_path_is_ok"
+  echo "$chef_repo_path_is_ok"
 }
 export -f valide_chef_repo
 
@@ -189,7 +189,7 @@ function validate_project()
   then
     project_is_good="0"
   fi
-  log "$project_is_good"
+  echo "$project_is_good"
 }
 export -f validate_project
 
