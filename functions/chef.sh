@@ -235,9 +235,12 @@ function change_parameter()
   new_value=$2
   file_path=$3
 
+  old_export_string="export $parameter_name=\"$(eval "echo \"\$$parameter_name\"")\""
   new_export_string="export $parameter_name=\"$new_value\""
 
-  sed -i "s|$old_value|$new_value|g" $file_path
+  log "Changing value from '$old_export_string' to '$new_export_string'"
+
+  sed -i "s|$old_export_string|$new_export_string|g" $file_path
 }
 export -f change_parameter
 
