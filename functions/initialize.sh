@@ -13,6 +13,7 @@ export -f create_directory
 
 function log()
 {
+  create_directory "$log_dir"
   echo -e "$1" >> $log_dir/initialize.log
   echo -e "$1" > /dev/stderr
 }
@@ -73,8 +74,12 @@ function download()
   elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ]
   then
     log_bold "File exist but not downloaded correctly: $1"
+    log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
+    wget --no-cache --no-cookies -O $1 $2
   else
     log_bold "File downloaded does not exist: $1"
+    log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
+    wget --no-cache --no-cookies -O $1 $2
   fi
 }
 export -f download
