@@ -249,13 +249,13 @@ export -f new_chef_infra
 
 function ensure_default_attributes
 {
-  echo "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
+  echo "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$install_dir\", \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
 function project_json
 {
-  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
+  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}}"
 }
 export -f project_json
 
