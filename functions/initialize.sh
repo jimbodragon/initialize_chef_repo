@@ -138,6 +138,7 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
+  echo "valide chef repo at '$chef_repo_path'"
   chef_repo_path_is_ok="1"
   if [ "$chef_repo_path" == "/" ]
   then
@@ -156,7 +157,7 @@ function validate_project()
 {
   project_is_good="1"
   chef_repo_good=$(valide_chef_repo)
-  if [ $chef_repo_good -eq 1 ]
+  if [ $chef_repo_good == "1" ]
   then
     project_is_good="0"
   fi
