@@ -211,6 +211,7 @@ function run_project()
       echo "Houston we got a problem: installing on default path: $default_chef_path"
       echo "----------------------------------------------------------------------------------------------"
       echo
+      read
 
       new_source_file="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
       echo "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
