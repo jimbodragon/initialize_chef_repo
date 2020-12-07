@@ -26,5 +26,3 @@ function redefine_chef_data()
   # export chef_run_list='recipe[infraClass::genericinfo]'
 }
 export -f redefine_chef_data
-
-redefine_chef_data

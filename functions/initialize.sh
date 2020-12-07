@@ -106,6 +106,7 @@ function source_all_require_files()
   do
     source "$initialize_install_dir/$file"
   done
+  redefine_data
 }
 export -f source_all_require_files
 
@@ -235,6 +236,7 @@ export -f redefine_data
 
 function prepare_project()
 {
+  log "Check if chef_repo_running before downloading = $chef_repo_running"
   if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
   then
     log "Preparing project for source_file '$source_file'"
@@ -245,22 +247,17 @@ function prepare_project()
       chef_import_submodule
       source_all_require_files
     else
-      log "Check if chef_repo_running before downloading = $chef_repo_running"
-      if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
-      then
+        create_directory_project
         download_latest_files
-      fi
     fi
   else
-    redefine_data
+    source_all_require_files
   fi
 }
 export -f prepare_project
 
 function run_project()
 {
-  source_all_require_files
-  create_directory_project
   prepare_project
 
   log_title "Running project $project_name at $chef_repo_path"
@@ -289,6 +286,7 @@ function run_project()
           create_build_file $build_file
           wait_for_project_command "execute_chef_solo "$project_name""
           # wait_for_project_command "clear_project\ndownload_and_run_project"
+          export chef_repo_running=0
       fi
       ;;
   esac
