@@ -6,11 +6,12 @@ source "$functions_dir/chef.sh"
 function rename_project()
 {
   log "Renaming project from $project_name to $1"
-  log "source $(new_chef_infra "$1" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_path" "$initial_role" "$initial_workstation_cookbook" "$initial_current_dir" "$default_chef_path" "$is_require_git_clone" "$install_file_name")"
+  log "source "
   clear_project
   export project_name=$1
-  prepare_project
-  source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
+  new_source="$(new_chef_infra "$1" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_path" "$initial_role" "$initial_workstation_cookbook" "$initial_current_dir" "$default_chef_path" "$is_require_git_clone" "$install_file_name")"
+  log "new_source = '$new_source'"
+  source "$new_source"
 }
 export -f rename_project
 
