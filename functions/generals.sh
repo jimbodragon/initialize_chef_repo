@@ -8,6 +8,7 @@ function rename_project()
   log "new_source = '$new_source'"
   source "$new_source"
   redefine_data
+  chef_import_submodule
 }
 export -f rename_project
 
