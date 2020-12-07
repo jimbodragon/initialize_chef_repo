@@ -138,15 +138,15 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  echo "valide chef repo at '$chef_repo_path'"
+  echo "valide chef repo at '$chef_repo_path'" > /dev/stderr
   chef_repo_path_is_ok="1"
   if [ "$chef_repo_path" == "/" ]
   then
     chef_repo_path_is_ok="0"
-    echo "chef_repo_path cannot be '/'"
+    echo "chef_repo_path cannot be '/'" > /dev/stderr
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
-    echo "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    echo "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
     chef_repo_path_is_ok="0"
   fi
   echo "$chef_repo_path_is_ok"
@@ -157,7 +157,7 @@ function validate_project()
 {
   project_is_good="1"
   chef_repo_good="$(valide_chef_repo)"
-  echo "chef_repo_good? = $chef_repo_good"
+  echo "chef_repo_good? = $chef_repo_good" > /dev/stderr
   if [ "$chef_repo_good" == "1" ]
   then
     project_is_good="0"
@@ -217,6 +217,7 @@ function run_project()
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
           echo "Running project $project_name"
+          read
           export chef_repo_running=1
           create_build_file $build_file
           wait_for_project_command ". $build_file"
