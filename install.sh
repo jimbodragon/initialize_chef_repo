@@ -17,6 +17,9 @@ export initialize_script_name="initialize_chef_repo"
 export git_org="jimbodragon"
 export git_branch="master"
 export data_dir_name="data"
+export http_git="https://raw.githubusercontent.com"
+
+export initialize_git_org="$git_org"
 
 export data_dir="$initialize_install_dir/$data_dir_name"
 
