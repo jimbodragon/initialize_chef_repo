@@ -302,8 +302,6 @@ export -f write_main_role_environment
 
 function execute_chef_solo()
 {
-  initialize_data_file="$1/$2/scripts/$initialize_script_name/data/initialize.sh"
-  source "$initialize_data_file"
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
