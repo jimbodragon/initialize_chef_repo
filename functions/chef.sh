@@ -249,7 +249,7 @@ export -f new_chef_infra
 
 function ensure_default_attributes
 {
-  echo "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
+  echo "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$install_dir\", \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
