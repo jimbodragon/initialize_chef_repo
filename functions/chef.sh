@@ -249,13 +249,13 @@ export -f new_chef_infra
 
 function ensure_default_attributes
 {
-  log "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
+  echo "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
 function project_json
 {
-  log "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
+  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
 }
 export -f project_json
 
@@ -283,13 +283,13 @@ export -f write_role_environment
 
 function write_main_role
 {
-  write_role_environment "$role_path" "$project_name" "$project_role_json"
+  write_role_environment "$role_path" "$project_name" "$(project_role_json)"
 }
 export -f write_main_role
 
 function write_main_environment
 {
-  write_role_environment "$environments_path" "$environment" "$project_environment_json"
+  write_role_environment "$environments_path" "$environment" "$(project_environment_json)"
 }
 export -f write_main_environment
 
