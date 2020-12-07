@@ -101,6 +101,7 @@ export -f download_latest_files
 function repeat_command()
 {
   log_bold "0 day 0 h 0 min 0 sec: Starting '$5'"
+  first_run=1
   while [ 1 -eq 1 ]
   do
     for day in {0..365}
@@ -112,9 +113,14 @@ function repeat_command()
           for sec in `seq 0 $1 59`
           do
             log "$hour h $min min $sec sec"
-            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min$sec" == "0000" ]
+            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
             then
               eval $(echo -e "$5")
+              first_run=0
+              day=0
+              hour=0
+              min=0
+              sec=0
             else
               sleep $1
             fi
