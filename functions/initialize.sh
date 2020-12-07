@@ -92,6 +92,7 @@ export -f download_latest_files
 
 function repeat_command()
 {
+  log_subtitle "0 day 0 h 0 min 0 sec: Starting '$5'"
   while [ 1 -eq 1 ]
   do
     for day in {0..365}
@@ -100,14 +101,12 @@ function repeat_command()
       do
         for min in {0..59}
         do
-          log_subtitle "$day day $hour h $min min $sec sec: Starting '$5'"
-
           for sec in `seq 0 $1 59`
           do
             log "$hour h $min min $sec sec"
-            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min$sec" == "000$1" ]
+            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min$sec" == "0000" ]
             then
-              eval $(log-e "$5")
+              eval $(echo -e "$5")
             else
               sleep $1
             fi
@@ -116,6 +115,8 @@ function repeat_command()
         done
       done
     done
+    log_subtitle "$day day $hour h $min min $sec sec: Stopping '$5'"
+    log_subtitle "$day day $hour h $min min $sec sec: Starting '$5'"
   done
 }
 export -f repeat_command
@@ -169,11 +170,9 @@ function valide_chef_repo()
   then
     chef_repo_path_is_ok="0"
     log "chef_repo_path cannot be '/'" > /dev/stderr
-    read -p "Press 'ENTER' to continue: " > /dev/stderr
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     log "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
-    read -p "Press 'ENTER' to continue: " > /dev/stderr
     chef_repo_path_is_ok="0"
   fi
   echo "$chef_repo_path_is_ok"
@@ -241,6 +240,7 @@ function run_project()
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
+      log_subtitle "Reexecuting the project"
       read -p "Press 'ENTER' to continue: "
       run_project
       ;;
@@ -248,7 +248,7 @@ function run_project()
       log "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
-          log "Running project $project_name"
+          log_title "Running project $project_name"
           read -p "Press 'ENTER' to continue: "
           export chef_repo_running=1
           create_build_file $build_file
