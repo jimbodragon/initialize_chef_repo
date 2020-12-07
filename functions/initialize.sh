@@ -13,7 +13,6 @@ export -f create_directory
 
 function log()
 {
-  create_directory "$log_path"
   echo -e "$1" >> $log_path/initialize.log
   echo -e "$1" > /dev/stderr
 }
@@ -61,13 +60,12 @@ function download()
   wget --quiet --no-cache --no-cookies -O $1 $2
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
-    log "File download correctly"
-  elif [ -f $1 ]
+    echo > /dev/null
+  elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ]
   then
-    log "File exit then download correctly"
-  elif [ "$(cat $1 | wc -l)" -gt "0" ]
-  then
-    log "File exist but not downloaded correctly"
+    log_bold "File exist but not downloaded correctly: $1"
+  else
+    log_bold "File downloaded does not exist: $1"
   fi
 }
 export -f download
@@ -103,7 +101,7 @@ function source_all_require_files()
 export -f source_all_require_files
 
 function download_latest_files() {
-  log "Downloading latest files $chef_repo_path | $project_name"
+  log_bold "Downloading latest files $chef_repo_path | $project_name"
   download_project
   source_all_require_files
 }
@@ -188,7 +186,6 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  log "valide chef repo at '$chef_repo_path'" > /dev/stderr
   chef_repo_path_is_ok="1"
   if [ "$chef_repo_path" == "/" ]
   then
@@ -207,7 +204,6 @@ function validate_project()
 {
   project_is_good="1"
   chef_repo_good="$(valide_chef_repo)"
-  log "chef_repo_good? = $chef_repo_good"
   if [ "$chef_repo_good" == "0" ]
   then
     project_is_good="0"
@@ -251,14 +247,14 @@ export -f prepare_project
 function run_project()
 {
   source_all_require_files
+  create_directory_project
+
   log_bold "Running project $project_name at $chef_repo_path"
   is_good=$(validate_project)
-  log "is_good = $is_good"
 
   case $is_good in
     "0" )
       log_title "Houston we got a problem: installing on default path: $default_chef_path"
-      read -p "Press 'ENTER' to continue: "
 
       new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
@@ -268,7 +264,6 @@ function run_project()
       redefine_data
       rename_project $project_name
       log_bold "Reexecuting the project"
-      read -p "Press 'ENTER' to continue: "
       run_project
       ;;
     "1" )
@@ -276,7 +271,6 @@ function run_project()
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
           log_title "Running project $project_name"
-          read -p "Press 'ENTER' to continue: "
           export chef_repo_running=1
           create_build_file $build_file
           wait_for_project_command "execute_chef_solo "$project_name""
