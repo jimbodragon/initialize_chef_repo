@@ -145,9 +145,11 @@ function valide_chef_repo()
   then
     chef_repo_path_is_ok="0"
     echo "chef_repo_path cannot be '/'" > /dev/stderr
+    read
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     echo "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
+    read
     chef_repo_path_is_ok="0"
   fi
   echo "$chef_repo_path_is_ok"
