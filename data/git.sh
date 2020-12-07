@@ -9,13 +9,12 @@
 function redefine_git_data()
 {
   export git_repos=(
-  'name=infraClass type=libraries'
-  'name=infra_chef type=cookbooks'
-  'name=virtualbox type=cookbooks'
-  'name=chef-ingredient type=cookbooks fork_from_public=git@github.com:chef-cookbooks/chef-ingredient.git'
-  'name=initialize_chef_repo type=scripts'
-  'name=chef_generator type=generators'
-  'name=JimboDragon type=scripts fork_from_public=git@github.com:jimbodragon/initialize_chef_repo.git'
+  "name=infraClass type=libraries git_url=git@github.com:jimbodragon/infraClass.git"
+  "name=infra_chef type=cookbooks git_url=git@github.com:jimbodragon/infra_chef.git"
+  "name=virtualbox type=cookbooks git_url=git@github.com:jimbodragon/virtualbox.git"
+  "name=chef-ingredient type=cookbooks git_url=git@github.com:chef-cookbooks/chef-ingredient.git"
+  "name=initialize_chef_repo type=scripts git_url=git@github.com:jimbodragon/initialize_chef_repo.git"
+  "name=chef_workstation_initialize type=cookbooks git_url=git@github.com:jimbodragon/chef_workstation_initialize.git"
   )
   log "Redefine git data: $chef_repo_path | $project_name"
 }

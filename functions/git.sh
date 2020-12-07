@@ -89,24 +89,6 @@ function initializing_git_submodule()
 }
 export -f initializing_git_submodule
 
-function initializing_project_submodule()
-{
-  repository_name=$1
-  fork_from_public=$2
-  git_url=$3
-  if [ "$git_url" == "" ]
-  then
-    initializing_git_submodule "$git_user@$git_baseurl:$git_org/$repository_name.git" "$repository_name"
-  else
-    initializing_git_submodule "$git_url" "$repository_name"
-  fi
-  if [ "$fork_from_public" != "" ]
-  then
-    merging_from_fork $repository_name $fork_from_public
-  fi
-}
-export -f initializing_project_submodule
-
 function git_push_for_fork()
 {
   fork_name=$1

@@ -34,29 +34,9 @@ function berks_vendor_repo()
     cd $cookbook_folder/$cookbook
     berks vendor $berks_vendor_folder > /dev/null
     cd $cookbook_folder
-    #cp -R $cookbook $2
   done
 }
 export -f berks_vendor_repo
-
-function initializing_cookbook()
-{
-  cookbook_name=$1
-  fork_from_public=$2
-  git_url=$3
-  if [ ! -d $cookbook_name/.git ]
-  then
-    initializing_project_submodule $cookbook_name $fork_from_public $git_url
-    if [ ! -f $cookbook_name/metadata.rb ]
-    then
-      chef_generate cookbook $cookbook_name
-      cd $cookbook_name
-      commit_and_push "Initializing cookbook $cookbook_name"
-      cd ..
-    fi
-  fi
-}
-export -f initializing_cookbook
 
 function chef_command()
 {
@@ -84,38 +64,63 @@ function chef_generate_repo()
 }
 export -f chef_generate_repo
 
+function initializing_project_submodule()
+{
+  repository_type=$1 # $1 = Repository type: [cookbooks. libraries, resources]
+  repository_path=$2 # $2 = Repository name
+  fork_from_public=$3
+  git_url=$4
+
+  repository_relative_path="$repository_type/$respository_name"
+
+  if [ "$git_url" == "" ]
+  then
+    if [ "$fork_from_public" == "" ]
+    then
+      initializing_git_submodule "$git_user@$git_baseurl:$git_org/$repository_name.git" "$repository_relative_path"
+    else
+      initializing_git_submodule "$fork_from_public" "$repository_relative_path"
+    fi
+  else
+    initializing_git_submodule "$git_url" "$repository_relative_path"
+    if [ "$fork_from_public" != "" ]
+    then
+      merging_from_fork "$repository_relative_path" "$fork_from_public"
+    fi
+  fi
+}
+export -f initializing_project_submodule
+
 function executing_chef_clone()
 {
   repository_type=$1 # $1 = Repository type: [cookbooks. libraries, resources]
   repository_name=$2 # $2 = Repository name
   fork_from_public=$3
   git_url=$4
-  if [ ! -d $repository_type ]
+
+  clone_repo="$chef_repo_path/$repository_type"
+
+  if [ ! -d "$clone_repo" ]
   then
-    create_directory $repository_type
+    create_directory "$clone_repo"
   fi
-  cd $repository_type
+  cd "$chef_repo_path"
+
   case $repository_type in
-    "cookbooks" | "libraries" | "resources" )
-      initializing_cookbook $repository_name $fork_from_public $4
-    ;;&
-    "libraries" )
-      cd $repository_name
-      chef_generate helpers $repository_name
-    ;;&
-    "resources" )
-      cd $repository_name
-      chef_generate resource $repository_name
-    ;;&
-    "libraries" | "resources" )
-      commit_and_push "Initializing $repository_type $repository_name"
-      cd ..
-    ;;
     "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" )
-      initializing_project_submodule $repository_name $fork_from_public $git_url
+      initializing_project_submodule "$repository_type" "$repository_type/$repository_name" "$fork_from_public" "$git_url"
+      cd "$clone_repo"
+    ;;&
+    "cookbooks" )
+      chef_generate cookbook $repository_name
+    ;;
+    "libraries" )
+      chef_generate helpers $repository_name
+    ;;
+    "resources" )
+      chef_generate resource $repository_name
     ;;
   esac
-  cd ..
 }
 export -f executing_chef_clone
 
@@ -156,6 +161,8 @@ function generate_new_chef_repo()
 
   sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\n\ncookbooks/example\ndata_bags/example\nenvironments/example\nroles/example\nlibraries/example\nresources/example\nroles/example\ncookbooks/README.md\ndata_bags/README.md\nenvironments/README.md\nroles/README.md\nenvironments/example.json\nroles/example.json\nchecksums\nbackup\ncache\nlogs|g' .gitignore
 
+  initialize_git "$git_branch"
+
   git add *
   git commit -m 'Initializing repo' > /dev/null 2>&1
 }
@@ -195,7 +202,7 @@ function new_chef_infra()
 
   log_string=""
 
-  log_string="$log_String\\nproject_file = $project_file"
+  log_string="project_file = $project_file"
   log_string="$log_String\\ngit_branch = $git_branch => $new_git_branch"
   log_string="$log_String\\nenvironment = $environment => $new_environment"
   log_string="$log_String\\ngit_main_project_name = $git_main_project_name => $new_git_main_project_name"
