@@ -88,7 +88,7 @@ function download_github_raw()
 {
   file_to_download=$1
   local_path="$initialize_install_dir/$file_to_download"
-  raw_url="https://raw.githubusercontent.com/$git_org/$initialize_script_name/$git_branch/$file_to_download"
+  raw_url="$http_git/$initialize_git_org/$initialize_script_name/$git_branch/$file_to_download"
   create_directory $(dirname $local_path)
   download "$local_path" "$raw_url"
 }

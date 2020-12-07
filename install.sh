@@ -3,6 +3,12 @@
 
 initialize_install_dir="$(pwd)"
 
+if [ "$1" == "" ]
+then
+  echo "Cannot continue without a project name"
+  exit
+fi
+
 export project_name="$1"
 shift
 export additionnal_environments=$@

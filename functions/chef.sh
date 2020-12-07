@@ -189,6 +189,7 @@ function new_chef_infra()
   new_default_chef_path=${14}
   new_is_require_git_clone=${15}
   new_install_file_name=${16}
+  new_initialize_git_org=${17}
 
   log "$(generate_new_chef_repo $new_chef_repo $new_project_name)"
 
@@ -217,7 +218,7 @@ function new_chef_infra()
 
   log_title "$log_string"
 
-  for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name"
+  for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name" "initialize_git_org"
   do
     change_project_parameter "$parameter" "$(eval "echo \"\$new_$parameter\"")" "$new_install_path"
   done
@@ -238,7 +239,7 @@ function change_parameter()
   old_export_string="export $parameter_name=\"$(eval "echo \"\$$parameter_name\"")\""
   new_export_string="export $parameter_name=\"$new_value\""
 
-  log "Changing value from '$old_export_string' to '$new_export_string'"
+  debug_log "Changing value from '$old_export_string' to '$new_export_string'"
 
   sed -i "s|$old_export_string|$new_export_string|g" $file_path
 }
