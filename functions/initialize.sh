@@ -62,7 +62,7 @@ function source_all_require_files()
 export -f source_all_require_files
 
 function download_latest_files() {
-  echo "Downloading latest files $chef_repo_path/$project_name"
+  echo "Downloading latest files $chef_repo_path | $project_name"
   download_project
   source_all_require_files
 }
@@ -106,6 +106,7 @@ export -f wait_for_project_command
 
 function clear_project()
 {
+  echo "Clear Project: $chef_repo_path | $project_name"
   cd $initial_current_dir
   rm -rf $default_chef_path
   rm install.sh*
@@ -119,6 +120,7 @@ function clear_project()
 
   case $is_good in
     "1" )
+      echo "Clear all chef_repo_path: $chef_repo_path | $project_name"
       rm -rf $chef_repo_path
       ;;
   esac
@@ -186,6 +188,7 @@ function prepare_project()
   echo "Preparing project for source_file '$source_file'"
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
   then
+    echo "Cloning the project"
     git_clone_main_project
     chef_import_submodule
   else
