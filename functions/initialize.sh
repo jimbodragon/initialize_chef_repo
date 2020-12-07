@@ -15,7 +15,7 @@ export -f create_directory
 
 function log()
 {
-  echo "$1" > /dev/stderr
+  echo -e "$1" > /dev/stderr
 }
 export -f log
 
