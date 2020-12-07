@@ -13,6 +13,28 @@ function create_directory()
 }
 export -f create_directory
 
+function log()
+{
+  echo "$1" > /dev/stderr
+}
+export -f log
+
+function log_subtitle()
+{
+  log "******************************   $1   ******************************"
+}
+export -f log_subtitle
+
+function log_title()
+{
+  log
+  log "----------------------------------------------------------------------------------------------"
+  log "$1"
+  log "----------------------------------------------------------------------------------------------"
+  log
+}
+export -f log_title
+
 function create_directory_project()
 {
   create_directory "$scripts_dir"
@@ -62,7 +84,7 @@ function source_all_require_files()
 export -f source_all_require_files
 
 function download_latest_files() {
-  echo "Downloading latest files $chef_repo_path | $project_name"
+  log "Downloading latest files $chef_repo_path | $project_name"
   download_project
   source_all_require_files
 }
@@ -78,19 +100,19 @@ function repeat_command()
       do
         for min in {0..59}
         do
-          echo "******************************   $day day $hour h $min min $sec sec: Starting '$5'   ******************************"
+          log_subtitle "$day day $hour h $min min $sec sec: Starting '$5'"
 
           for sec in `seq 0 $1 59`
           do
-            echo "$hour h $min min $sec sec"
+            log "$hour h $min min $sec sec"
             if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] || [ "$day$hour$min$sec" == "000$1" ]
             then
-              eval $(echo -e "$5")
+              eval $(log-e "$5")
             else
               sleep $1
             fi
           done
-          echo "******************************   $day day $hour h $min min $sec sec: Stopping '$5'   ******************************"
+          log_subtitle "$day day $hour h $min min $sec sec: Stopping '$5'"
         done
       done
     done
@@ -106,7 +128,7 @@ export -f wait_for_project_command
 
 function clear_project()
 {
-  echo "Clear Project: $chef_repo_path | $project_name"
+  log "Clear Project: $chef_repo_path | $project_name"
   cd $initial_current_dir
   rm -rf $default_chef_path
   rm install.sh*
@@ -120,7 +142,7 @@ function clear_project()
 
   case $is_good in
     "1" )
-      echo "Clear all chef_repo_path: $chef_repo_path | $project_name"
+      log "Clear all chef_repo_path: $chef_repo_path | $project_name"
       rm -rf $chef_repo_path
       ;;
   esac
@@ -141,20 +163,20 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  echo "valide chef repo at '$chef_repo_path'" > /dev/stderr
+  log "valide chef repo at '$chef_repo_path'" > /dev/stderr
   chef_repo_path_is_ok="1"
   if [ "$chef_repo_path" == "/" ]
   then
     chef_repo_path_is_ok="0"
-    echo "chef_repo_path cannot be '/'" > /dev/stderr
-    read
+    log "chef_repo_path cannot be '/'" > /dev/stderr
+    read -p "Press 'ENTER' to continue: "
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
-    echo "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
-    read
+    log "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
+    read -p "Press 'ENTER' to continue: "
     chef_repo_path_is_ok="0"
   fi
-  echo "$chef_repo_path_is_ok"
+  log "$chef_repo_path_is_ok"
 }
 export -f valide_chef_repo
 
@@ -162,12 +184,12 @@ function validate_project()
 {
   project_is_good="1"
   chef_repo_good="$(valide_chef_repo)"
-  echo "chef_repo_good? = $chef_repo_good" > /dev/stderr
+  log "chef_repo_good? = $chef_repo_good" > /dev/stderr
   if [ "$chef_repo_good" == "0" ]
   then
     project_is_good="0"
   fi
-  echo "$project_is_good"
+  log "$project_is_good"
 }
 export -f validate_project
 
@@ -185,14 +207,14 @@ export -f redefine_data
 
 function prepare_project()
 {
-  echo "Preparing project for source_file '$source_file'"
+  log "Preparing project for source_file '$source_file'"
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
   then
-    echo "Cloning the project"
+    log "Cloning the project"
     git_clone_main_project
     chef_import_submodule
   else
-    echo "Check if chef_repo_running before downloading = $chef_repo_running"
+    log "Check if chef_repo_running before downloading = $chef_repo_running"
     if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
     then
       download_latest_files
@@ -205,33 +227,29 @@ export -f prepare_project
 
 function run_project()
 {
-  echo "Running project $project_name at $chef_repo_path"
+  log "Running project $project_name at $chef_repo_path"
   is_good=$(validate_project)
-  echo "is_good = $is_good"
+  log "is_good = $is_good"
 
   case $is_good in
     "0" )
-      echo
-      echo "----------------------------------------------------------------------------------------------"
-      echo "Houston we got a problem: installing on default path: $default_chef_path"
-      echo "----------------------------------------------------------------------------------------------"
-      echo
-      read
+      log_title "Houston we got a problem: installing on default path: $default_chef_path"
+      read -p "Press 'ENTER' to continue: "
 
       new_source_file="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-      echo "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      log "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
-      read
+      read -p "Press 'ENTER' to continue: "
       run_project
       ;;
     "1" )
-      echo "Check if chef_repo_running before running = $chef_repo_running"
+      log "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
-          echo "Running project $project_name"
-          read
+          log "Running project $project_name"
+          read -p "Press 'ENTER' to continue: "
           export chef_repo_running=1
           create_build_file $build_file
           wait_for_project_command ". $build_file"

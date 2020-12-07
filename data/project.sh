@@ -6,7 +6,7 @@ fi
 
 function redefine_project_data()
 {
-  echo "Redefine project data: $chef_repo_path | $project_name"
+  log "Redefine project data: $chef_repo_path | $project_name"
   export git_branch="master"
   export environment="production"
   export git_main_project_name="installation_of_initialize_chef_repo"

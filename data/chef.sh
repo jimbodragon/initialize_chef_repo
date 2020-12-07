@@ -4,7 +4,7 @@ function redefine_chef_data()
 {
   export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
   export chef_path="$(dirname "$chef_repo_path")"
-  echo "Redefine Chef data: $chef_repo_path | $project_name"
+  log "Redefine Chef data: $chef_repo_path | $project_name"
 
   export chef_environment="$environment"
   export chef_run_list="role[$initial_role]"

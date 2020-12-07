@@ -39,9 +39,9 @@ function merging_from_fork()
     git push
   elif [ "$remote_project_url" == "$actual_remote_project_url" ]
   then
-    echo "Remote project '$remote_project_name' -> '$actual_remote_project_url' already exist"
+    log "Remote project '$remote_project_name' -> '$actual_remote_project_url' already exist"
   else
-    echo "Already have a remote project call '$git_fork_upstream_name' -> '$actual_remote_project_url'"
+    log "Already have a remote project call '$git_fork_upstream_name' -> '$actual_remote_project_url'"
   fi
   cd ..
 }
@@ -171,7 +171,7 @@ function git_push_submodule()
   do
     cd $chef_repo
     eval $github_repo
-    echo "Pushing $type $name $fork_from_public $git_url"
+    log "Pushing $type $name $fork_from_public $git_url"
     cd $type/$name
     commit_and_push "Push all $git_main_project_name project"
     echo

@@ -8,9 +8,9 @@ function install_chef_workstation()
   install_git
   if [ "$(which chef)" == "" ] || [ "$(chef -v | grep Workstation | cut -d ':' -f 2)" != " $chef_workstation_version" ]
   then
-    echo "Downloading Chef Workstation"
+    log "Downloading Chef Workstation"
     download $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
-    echo "Installing Chef Workstation"
+    log "Installing Chef Workstation"
     dpkg -i $downloaded_chef_file
   fi
 }
@@ -64,7 +64,7 @@ function chef_command()
   shift
   chef_options=$@
   install_chef_workstation
-  echo "Executing chef command from $(pwd): chef $chef_command --chef-license accept $chef_options"
+  log "Executing chef command from $(pwd): chef $chef_command --chef-license accept $chef_options"
   chef $chef_command --chef-license accept $chef_options
 }
 export -f chef_command
@@ -144,7 +144,7 @@ export -f chef_update_submodule
 
 function generate_new_chef_repo()
 {
-  echo "Generating a new Chef repo at '$1' name '$2'"
+  log "Generating a new Chef repo at '$1' name '$2'"
   create_directory "$1"
   cd "$1"
   chef_generate_repo "$2"
@@ -193,24 +193,24 @@ function new_chef_infra()
 
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
-  echo -e "\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n"
-  echo "project_file = $project_file"
-  echo "git_branch = $git_branch => $new_git_branch"
-  echo "environment = $environment => $new_environment"
-  echo "git_main_project_name = $git_main_project_name => $new_git_main_project_name"
-  echo "git_org = $git_org => $new_git_org"
-  echo "git_baseurl = $git_baseurl => $new_git_baseurl"
-  echo "git_user = $git_user => $new_git_user"
-  echo "project_name = $project_name => $new_project_name"
-  echo "http_git = $http_git => $new_http_git"
-  echo "initialize_script_name = $initialize_script_name => $new_itialize_script_name"
-  echo "initial_role = $initial_role => $new_initial_role"
-  echo "initial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
-  echo "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
-  echo "default_chef_path = $default_chef_path => $new_chef_repo"
-  echo "is_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
-  echo "install_file_name = $install_file_name => $new_install_file_name"
-  echo -e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
+  log-e "\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n"
+  log "project_file = $project_file"
+  log "git_branch = $git_branch => $new_git_branch"
+  log "environment = $environment => $new_environment"
+  log "git_main_project_name = $git_main_project_name => $new_git_main_project_name"
+  log "git_org = $git_org => $new_git_org"
+  log "git_baseurl = $git_baseurl => $new_git_baseurl"
+  log "git_user = $git_user => $new_git_user"
+  log "project_name = $project_name => $new_project_name"
+  log "http_git = $http_git => $new_http_git"
+  log "initialize_script_name = $initialize_script_name => $new_itialize_script_name"
+  log "initial_role = $initial_role => $new_initial_role"
+  log "initial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
+  log "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
+  log "default_chef_path = $default_chef_path => $new_chef_repo"
+  log "is_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
+  log "install_file_name = $install_file_name => $new_install_file_name"
+  log-e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
@@ -234,19 +234,19 @@ function new_chef_infra()
   sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
   sed -i "s|$install_file_name|$new_install_file_name|g" $project_file
 
-  echo "$new_install_path/$(basename "$install_dir")/source_project.sh"
+  log "$new_install_path/$(basename "$install_dir")/source_project.sh"
 }
 export -f new_chef_infra
 
 function ensure_default_attributes
 {
-  echo -e "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
+  log-e "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
 function project_json
 {
-  echo -e "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
+  log-e "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
 }
 export -f project_json
 
@@ -267,7 +267,7 @@ function write_role_environment
   json_file="$1/$2.json"
   if ! [ -f $json_file ]
   then
-    echo "$3" > $json_file
+    log "$3" > $json_file
   fi
 }
 export -f write_role_environment
@@ -339,7 +339,7 @@ EOS
 
   berks_vendor_all "$berks_vendor"
 
-  chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --logfile "$log_path/chef_solo_$project_name_$environment.log"
+  chef-solo --chef-license 'accept' --config $solo_file --override-runlist $chef_run_list --logfile "$log_path/chef_solo_$project_name_$environment.log "
 
 }
 export -f execute_chef_solo
