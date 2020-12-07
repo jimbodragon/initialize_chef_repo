@@ -17,7 +17,7 @@ function log()
 {
   create_directory "$log_path"
   echo -e "$1" >> $log_path/initialize.log
-  echo -e "$1"
+  echo -e "$1" > /dev/stderr
 }
 export -f log
 
@@ -242,7 +242,7 @@ export -f prepare_project
 
 function run_project()
 {
-  log "Running project $project_name at $chef_repo_path"
+  log_bold "Running project $project_name at $chef_repo_path"
   is_good=$(validate_project)
   log "is_good = $is_good"
 
