@@ -16,6 +16,6 @@ function redefine_git_data()
   "name=initialize_chef_repo type=scripts fork_from_public==git@github.com:jimbodragon/initialize_chef_repo.git git_url=git@github.com:jimbodragon/initialize_chef_repo.git"
   "name=chef_workstation_initialize type=cookbooks fork_from_public==git@github.com:jimbodragon/chef_workstation_initialize.git git_url=git@github.com:jimbodragon/chef_workstation_initialize.git"
   )
-  log "Redefine git data: $chef_repo_path | $project_name"
+  debug_log "Redefine git data: $chef_repo_path | $project_name"
 }
 export -f redefine_git_data

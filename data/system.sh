@@ -2,7 +2,7 @@
 
 function redefine_system_data()
 {
-  log "Redefine system data: $chef_repo_path | $project_name"
+  debug_log "Redefine system data: $chef_repo_path | $project_name"
   export os='ubuntu'
   export os_version='18.04'
   export chef_workstation_version='20.10.168'

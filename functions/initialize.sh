@@ -18,6 +18,15 @@ function log()
 }
 export -f log
 
+function debug_log()
+{
+  if [ "$DEBUG_LOG" != "" ] && [ $DEBUG_LOG -eq 1 ]
+  then
+    log "$1"
+  fi
+}
+export -f log
+
 function log_bold()
 {
   log "******************************   $1   ******************************"
