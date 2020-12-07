@@ -325,7 +325,7 @@ export -f ensure_default_attributes
 
 function project_json
 {
-  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\", \"recipe[$chef_workstation_initialize]\"]}"
+  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"recipe[$chef_workstation_initialize]\"]}"
 }
 export -f project_json
 
@@ -418,7 +418,7 @@ EOS
 
   log_bold "Starting run list = $chef_run_list"
 
-  chef-solo --chef-license 'accept' --config $solo_file --override-runlist "role[$project_name]" --logfile "$log_path/chef_solo_$project_name_$environment.log"
+  chef-solo --chef-license 'accept' --config $solo_file --override-runlist "$chef_run_list" --logfile "$log_path/chef_solo_$project_name_$environment.log"
 
 }
 export -f execute_chef_solo
