@@ -255,7 +255,7 @@ export -f ensure_default_attributes
 
 function project_json
 {
-  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
+  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}}"
 }
 export -f project_json
 
