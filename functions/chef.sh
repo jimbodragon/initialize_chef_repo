@@ -1,8 +1,5 @@
 #!/bin/bash##!/bin/bash#
 
-source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
-source "$functions_dir/git.sh"
-
 function install_chef_workstation()
 {
   install_git

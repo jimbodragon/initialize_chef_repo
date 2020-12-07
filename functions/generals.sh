@@ -1,8 +1,5 @@
 #!/bin/bash
 
-source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
-source "$functions_dir/chef.sh"
-
 function rename_project()
 {
   log_subtitle "Renaming project from $project_name to $1"
@@ -23,8 +20,7 @@ function create_build_file()
 #!/bin/bash
 current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "\$(dirname \$current_dir)/data/initialize.sh"
-#new_chef_infra "\$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "\$git_org" "\$git_baseurl" "\$git_user" "\$http_git" "\$initialize_script_name" "\$chef_path" "\$initial_role" "\$initial_workstation_cookbook" "\$initial_current_dir" "\$default_chef_path" "\$is_require_git_clone" "\$install_file_name"
-source \$(new_chef_infra "$project_name" "\$git_branch" "\$environment" "\$git_main_project_name" "$project_name" "\$git_baseurl" "\$git_user" "\$http_git" "\$initialize_script_name" "\$chef_path" "\$initial_current_dir" "$project_name" "\$initial_workstation_cookbook" "\$default_chef_path" "\$is_require_git_clone" "\$install_file_name")
+source "\$functions_dir/initialize.sh"
 run_project
 EOF
   fi

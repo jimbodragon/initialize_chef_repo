@@ -1,8 +1,6 @@
 #!/bin/bash
 # Script to execute to initialize a fresh new chef repository
 
-source "$data_dir/$(basename "${BASH_SOURCE[0]}")"
-
 function create_directory()
 {
   folder_path=$1
@@ -243,15 +241,16 @@ function prepare_project()
     if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
     then
       download_latest_files
+    else
+      redefine_data
     fi
   fi
-
-  redefine_data
 }
 export -f prepare_project
 
 function run_project()
 {
+  source_all_require_files
   log_bold "Running project $project_name at $chef_repo_path"
   is_good=$(validate_project)
   log "is_good = $is_good"

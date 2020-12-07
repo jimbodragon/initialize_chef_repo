@@ -36,15 +36,15 @@ function redefine_initialize_data()
   #   "$build_dir_name/$project_name$extension"
   export file_list=(
     "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
-    "$functions_dir_name/generals.sh"
-    "$functions_dir_name/git.sh"
-    "$functions_dir_name/chef.sh"
+    "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+    "$data_dir_name/project.sh"
+    "$data_dir_name/system.sh"
     "$data_dir_name/generals.sh"
     "$data_dir_name/git.sh"
     "$data_dir_name/chef.sh"
-    "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-    "$data_dir_name/system.sh"
-    "$data_dir_name/project.sh"
+    "$functions_dir_name/generals.sh"
+    "$functions_dir_name/git.sh"
+    "$functions_dir_name/chef.sh"
   )
 
   if [ "$chef_repo_running" != "" ]
