@@ -60,11 +60,17 @@ export -f create_directory_project
 
 function download()
 {
-  if [ -f $1 ]
-  then
-    rm -f $1
-  fi
   wget --quiet --no-cache --no-cookies -O $1 $2
+  if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
+  then
+    log "File download correctly"
+  elif [ -f $1 ]
+  then
+    log "File exit then download correctly"
+  elif [ "$(cat $1 | wc -l)" -gt "0" ]
+  then
+    log "File exist but not downloaded correctly"
+  fi
 }
 export -f download
 
@@ -272,7 +278,7 @@ function run_project()
           read -p "Press 'ENTER' to continue: "
           export chef_repo_running=1
           create_build_file $build_file
-          wait_for_project_command ". $build_file"
+          wait_for_project_command "execute_chef_solo "$project_name""
           # wait_for_project_command "clear_project\ndownload_and_run_project"
       fi
       ;;
@@ -287,7 +293,7 @@ function copy_project()
     if [ "$initialize_install_dir/$file" != "$1/$file" ]
     then
       create_directory "$(dirname $1/$file)"
-      cp $initialize_install_dir/$file $1/$file
+      cp -f $initialize_install_dir/$file $1/$file
     fi
   done
 }

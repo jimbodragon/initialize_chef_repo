@@ -220,7 +220,7 @@ function new_chef_infra()
 
   log_title "$log_string"
 
-  for parameter in ("git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name")
+  for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name"
   do
     change_project_parameter "$parameter" "$(eval "echo \"\$new_$parameter\"")" "$new_install_path"
   done
