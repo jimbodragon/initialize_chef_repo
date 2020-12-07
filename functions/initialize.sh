@@ -33,15 +33,16 @@ function log_subtitle()
   log "----------------------------------------------------------------------------------------------"
   log
 }
-export -f log_title
+export -f log_subtitle
 
 function log_title()
 {
   log '\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n'
-  log $1
+  log "$1"
   log '\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n'
 
 }
+export -f log_title
 
 function create_directory_project()
 {
@@ -182,10 +183,10 @@ function valide_chef_repo()
   if [ "$chef_repo_path" == "/" ]
   then
     chef_repo_path_is_ok="0"
-    log "chef_repo_path cannot be '/'" > /dev/stderr
+    log_bold "chef_repo_path cannot be '/'" > /dev/stderr
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
-    log "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
+    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'" > /dev/stderr
     chef_repo_path_is_ok="0"
   fi
   echo "$chef_repo_path_is_ok"
@@ -196,7 +197,7 @@ function validate_project()
 {
   project_is_good="1"
   chef_repo_good="$(valide_chef_repo)"
-  log "chef_repo_good? = $chef_repo_good" > /dev/stderr
+  log "chef_repo_good? = $chef_repo_good"
   if [ "$chef_repo_good" == "0" ]
   then
     project_is_good="0"
