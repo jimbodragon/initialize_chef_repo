@@ -19,13 +19,13 @@ function log()
 }
 export -f log
 
-function log_subtitle()
+function log_bold()
 {
   log "******************************   $1   ******************************"
 }
-export -f log_subtitle
+export -f log_bold
 
-function log_title()
+function log_subtitle()
 {
   log
   log "----------------------------------------------------------------------------------------------"
@@ -34,6 +34,14 @@ function log_title()
   log
 }
 export -f log_title
+
+function log_title()
+{
+  log '\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n'
+  log $1
+  log '\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n'
+
+}
 
 function create_directory_project()
 {
@@ -92,7 +100,7 @@ export -f download_latest_files
 
 function repeat_command()
 {
-  log_subtitle "0 day 0 h 0 min 0 sec: Starting '$5'"
+  log_bold "0 day 0 h 0 min 0 sec: Starting '$5'"
   while [ 1 -eq 1 ]
   do
     for day in {0..365}
@@ -111,12 +119,11 @@ function repeat_command()
               sleep $1
             fi
           done
-          log_subtitle "$day day $hour h $min min $sec sec: Stopping '$5'"
         done
       done
     done
-    log_subtitle "$day day $hour h $min min $sec sec: Stopping '$5'"
-    log_subtitle "$day day $hour h $min min $sec sec: Starting '$5'"
+    log_bold "$day day $hour h $min min $sec sec: Stopping '$5'"
+    log_bold "$day day $hour h $min min $sec sec: Starting '$5'"
   done
 }
 export -f repeat_command
@@ -240,7 +247,7 @@ function run_project()
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
-      log_subtitle "Reexecuting the project"
+      log_bold "Reexecuting the project"
       read -p "Press 'ENTER' to continue: "
       run_project
       ;;

@@ -193,24 +193,26 @@ function new_chef_infra()
 
   project_file="$new_install_path/$(basename "$data_dir")/project.sh"
 
-  log-e "\n\n\n\n\n\n\n\n--------------------------------------------------------------------------------------------------------\n\n"
-  log "project_file = $project_file"
-  log "git_branch = $git_branch => $new_git_branch"
-  log "environment = $environment => $new_environment"
-  log "git_main_project_name = $git_main_project_name => $new_git_main_project_name"
-  log "git_org = $git_org => $new_git_org"
-  log "git_baseurl = $git_baseurl => $new_git_baseurl"
-  log "git_user = $git_user => $new_git_user"
-  log "project_name = $project_name => $new_project_name"
-  log "http_git = $http_git => $new_http_git"
-  log "initialize_script_name = $initialize_script_name => $new_itialize_script_name"
-  log "initial_role = $initial_role => $new_initial_role"
-  log "initial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
-  log "initial_current_dir = $initial_current_dir => $new_initial_current_dir"
-  log "default_chef_path = $default_chef_path => $new_chef_repo"
-  log "is_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
-  log "install_file_name = $install_file_name => $new_install_file_name"
-  log-e "\n\n--------------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n"
+  log_string=""
+
+  log_string="$log_String\\nproject_file = $project_file"
+  log_string="$log_String\\ngit_branch = $git_branch => $new_git_branch"
+  log_string="$log_String\\nenvironment = $environment => $new_environment"
+  log_string="$log_String\\ngit_main_project_name = $git_main_project_name => $new_git_main_project_name"
+  log_string="$log_String\\ngit_org = $git_org => $new_git_org"
+  log_string="$log_String\\ngit_baseurl = $git_baseurl => $new_git_baseurl"
+  log_string="$log_String\\ngit_user = $git_user => $new_git_user"
+  log_string="$log_String\\nproject_name = $project_name => $new_project_name"
+  log_string="$log_String\\nhttp_git = $http_git => $new_http_git"
+  log_string="$log_String\\ninitialize_script_name = $initialize_script_name => $new_itialize_script_name"
+  log_string="$log_String\\ninitial_role = $initial_role => $new_initial_role"
+  log_string="$log_String\\ninitial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
+  log_string="$log_String\\ninitial_current_dir = $initial_current_dir => $new_initial_current_dir"
+  log_string="$log_String\\ndefault_chef_path = $default_chef_path => $new_chef_repo"
+  log_string="$log_String\\nis_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
+  log_string="$log_String\\ninstall_file_name = $install_file_name => $new_install_file_name"
+
+  log_title "$log_string"
 
   sed -i "s|$git_branch|$new_git_branch|g" $project_file
   sed -i "s|$environment|$new_environment|g" $project_file
@@ -234,19 +236,19 @@ function new_chef_infra()
   sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
   sed -i "s|$install_file_name|$new_install_file_name|g" $project_file
 
-  log "$new_install_path/$(basename "$install_dir")/source_project.sh"
+  echo "$new_install_path/$(basename "$install_dir")/$(basename "$data_dir")/initialize.sh"
 }
 export -f new_chef_infra
 
 function ensure_default_attributes
 {
-  log-e "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
+  log "\"default_attributes\": {\"chef_workstation_initialize\": {\"project_name\": $project_name, \"environments\": [$chef_environment], \"install_dir\": $install_dir, \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
 function project_json
 {
-  log-e "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
+  log "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",${ensure_default_attributes}, \"override_attributes\": {},\"run_list\": [\"$chef_run_list\"]}"
 }
 export -f project_json
 
