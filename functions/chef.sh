@@ -276,7 +276,7 @@ function write_role_environment
   json_file="$1/$2.json"
   if ! [ -f $json_file ]
   then
-    log "$3" > $json_file
+    echo -e "$3" > $json_file
   fi
 }
 export -f write_role_environment

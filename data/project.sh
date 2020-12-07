@@ -16,7 +16,7 @@ function redefine_project_data()
   export http_git="https://raw.githubusercontent.com"
 
   export initialize_script_name="initialize_chef_repo"
-  export initial_role="zentyal_chef_infra"
+  export initial_role="installation_of_initialize_chef_repo"
   export initial_workstation_cookbook="chef_workstation_initialize"
 
   export is_require_git_clone=0
