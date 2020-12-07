@@ -60,6 +60,10 @@ export -f create_directory_project
 
 function download()
 {
+  if [ -f $1 ]
+  then
+    rm -f $1
+  fi
   wget --quiet --no-cache --no-cookies -O $1 $2
 }
 export -f download

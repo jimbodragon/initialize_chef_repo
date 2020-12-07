@@ -210,7 +210,7 @@ function new_chef_infra()
   log_string="$log_String\ngit_baseurl = $git_baseurl => $new_git_baseurl"
   log_string="$log_String\ngit_user = $git_user => $new_git_user"
   log_string="$log_String\nproject_name = $project_name => $new_project_name"
-  log_string="$log_String\\ninitialize_script_name = $initialize_script_name => $new_itialize_script_name"
+  log_string="$log_String\ninitialize_script_name = $initialize_script_name => $new_itialize_script_name"
   log_string="$log_String\ninitial_role = $initial_role => $new_initial_role"
   log_string="$log_String\ninitial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
   log_string="$log_String\ninitial_current_dir = $initial_current_dir => $new_initial_current_dir"
@@ -220,31 +220,101 @@ function new_chef_infra()
 
   log_title "$log_string"
 
-  sed -i "s|$git_branch|$new_git_branch|g" $project_file
-  sed -i "s|$environment|$new_environment|g" $project_file
-  sed -i "s|$git_main_project_name|$new_git_main_project_name|g" $project_file
-  sed -i "s|$git_org|$new_git_org|g" $project_file
-  sed -i "s|$git_baseurl|$new_git_baseurl|g" $project_file
-  sed -i "s|$git_user|$new_git_user|g" $project_file
-  sed -i "s|$project_name|$new_project_name|g" $project_file
-  sed -i "s|$http_git|$new_http_git|g" $project_file
-  sed -i "s|$initialize_script_name|$new_itialize_script_name|g" $project_file
-  sed -i "s|$initial_role|$new_initial_role|g" $project_file
-  sed -i "s|$initial_workstation_cookbook|$new_initial_workstation_cookbook|g" $project_file
+  for parameter in ("git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name")
+  do
+    change_project_parameter "$parameter" "$(eval "echo \"\$new_$parameter\"")" "$new_install_path"
+  done
 
-  sed -i "s|$initial_current_dir|$new_initial_current_dir|g" $project_file
-  sed -i "s|\$(pwd)|$new_initial_current_dir|g" $project_file
-
-  sed -i "s|$chef_repo|$new_chef_repo|g" $project_file
-  sed -i "s|$default_chef_path|$new_chef_repo|g" $project_file
-  sed -i "s|/usr/local/chef/repo|$new_chef_repo|g" $project_file
-
-  sed -i "s|export is_require_git_clone=0|export is_require_git_clone=$new_is_require_git_clone|g" $project_file
-  sed -i "s|$install_file_name|$new_install_file_name|g" $project_file
+  change_chef_parameter "chef_repo" "$new_chef_repo" "$new_install_path"
+  change_chef_parameter "default_chef_path" "$new_chef_repo" "$new_install_path"
 
   echo "$new_install_path/$(basename "$data_dir")/initialize.sh"
 }
 export -f new_chef_infra
+
+function change_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  file_path=$3
+
+  new_export_string="export $parameter_name=\"$new_value\""
+
+  sed -i "s|$old_value|$new_value|g" $file_path
+}
+export -f change_parameter
+
+function change_project_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/project.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_project_parameter
+
+function change_system_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/system.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_system_parameter
+
+function change_initialize_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/initialize.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_initialize_parameter
+
+function change_git_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/git.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_git_parameter
+
+function change_general_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/general.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_general_parameter
+
+function change_chef_parameter()
+{
+  parameter_name=$1
+  new_value=$2
+  new_install_path=$3
+
+  project_file="$new_install_path/$(basename "$data_dir")/chef.sh"
+
+  change_parameter "$1" "$2" "$project_file"
+}
+export -f change_chef_parameter
 
 function ensure_default_attributes
 {
