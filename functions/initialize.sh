@@ -235,20 +235,24 @@ export -f redefine_data
 
 function prepare_project()
 {
-  log "Preparing project for source_file '$source_file'"
-  if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
+  if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
   then
-    log "Cloning the project"
-    git_clone_main_project
-    chef_import_submodule
-  else
-    log "Check if chef_repo_running before downloading = $chef_repo_running"
-    if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
+    log "Preparing project for source_file '$source_file'"
+    if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
     then
-      download_latest_files
+      log "Cloning the project"
+      git_clone_main_project
+      chef_import_submodule
+      source_all_require_files
     else
-      redefine_data
+      log "Check if chef_repo_running before downloading = $chef_repo_running"
+      if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
+      then
+        download_latest_files
+      fi
     fi
+  else
+    redefine_data
   fi
 }
 export -f prepare_project
@@ -257,8 +261,9 @@ function run_project()
 {
   source_all_require_files
   create_directory_project
+  prepare_project
 
-  log_bold "Running project $project_name at $chef_repo_path"
+  log_title "Running project $project_name at $chef_repo_path"
   is_good=$(validate_project)
 
   case $is_good in
@@ -267,7 +272,7 @@ function run_project()
 
       new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-      log "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
       copy_project "$new_project_folder"
       initialize_parameters "$new_source_file"
       redefine_data
@@ -279,7 +284,7 @@ function run_project()
       log "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
-          log_title "Running project $project_name"
+          log_title "Running chef $project_name"
           export chef_repo_running=1
           create_build_file $build_file
           wait_for_project_command "execute_chef_solo "$project_name""

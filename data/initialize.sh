@@ -63,7 +63,6 @@ function run_new_project()
   echo
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
-  prepare_project
   run_project
 }
 export -f run_new_project
