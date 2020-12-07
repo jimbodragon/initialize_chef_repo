@@ -62,6 +62,7 @@ function source_all_require_files()
 export -f source_all_require_files
 
 function download_latest_files() {
+  echo "Downloading latest files $chef_repo_path/$project_name"
   download_project
   source_all_require_files
 }
@@ -158,7 +159,7 @@ function validate_project()
   project_is_good="1"
   chef_repo_good="$(valide_chef_repo)"
   echo "chef_repo_good? = $chef_repo_good" > /dev/stderr
-  if [ "$chef_repo_good" == "1" ]
+  if [ "$chef_repo_good" == "0" ]
   then
     project_is_good="0"
   fi
@@ -181,14 +182,16 @@ export -f redefine_data
 function prepare_project()
 {
   echo "Preparing project for source_file '$source_file'"
-  initialize_parameters $source_file
-  redefine_initialize_data
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
   then
     git_clone_main_project
     chef_import_submodule
   else
-    download_latest_files
+    echo "Check if chef_repo_running before downloading = $chef_repo_running"
+    if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
+    then
+      download_latest_files
+    fi
   fi
 
   redefine_data
@@ -214,7 +217,7 @@ function run_project()
       run_project
       ;;
     "1" )
-      echo "chef_repo_running = $chef_repo_running"
+      echo "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
           echo "Running project $project_name"
