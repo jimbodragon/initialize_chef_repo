@@ -1,6 +1,4 @@
 #!/bin/bash
-export source_file="${BASH_SOURCE[0]}"
-
 function initialize_parameters()
 {
   export source_file="$1"
@@ -68,5 +66,5 @@ function run_new_project()
 }
 export -f run_new_project
 
-initialize_parameters "$source_file"
+initialize_parameters "${BASH_SOURCE[0]}"
 redefine_initialize_data
