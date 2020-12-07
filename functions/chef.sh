@@ -289,7 +289,7 @@ export -f write_main_role
 
 function write_main_environment
 {
-  write_role_environment "$environments_path" "$environment" "$(project_environment_json)"
+  write_role_environment "$environment_path" "$environment" "$(project_environment_json)"
 }
 export -f write_main_environment
 
