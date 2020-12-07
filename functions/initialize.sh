@@ -261,8 +261,10 @@ function run_project()
       log_title "Houston we got a problem: installing on default path: $default_chef_path"
       read -p "Press 'ENTER' to continue: "
 
-      new_source_file="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+      new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
+      new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
       log "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      copy_project "$new_project_folder"
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
