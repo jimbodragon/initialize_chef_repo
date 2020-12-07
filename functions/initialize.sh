@@ -13,7 +13,7 @@ export -f create_directory
 
 function log()
 {
-  echo -e "$1" >> $log_path/initialize.log
+  echo -e "$1" >> $log_dir/initialize.log
   echo -e "$1" > /dev/stderr
 }
 export -f log
