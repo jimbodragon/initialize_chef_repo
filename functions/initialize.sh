@@ -180,6 +180,7 @@ export -f redefine_data
 
 function prepare_project()
 {
+  echo "Preparing project for source_file '$source_file'"
   initialize_parameters $source_file
   redefine_initialize_data
   if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
