@@ -74,11 +74,14 @@ function initializing_project_submodule()
   then
     if [ "$fork_from_public" == "" ]
     then
+      log "initializing_git_submodule from Git Organisation $git_org"
       initializing_git_submodule "$git_user@$git_baseurl:$git_org/$repository_name.git" "$repository_relative_path"
     else
+      log "initializing_git_submodule from fork $fork_from_public"
       initializing_git_submodule "$fork_from_public" "$repository_relative_path"
     fi
   else
+    log "initializing_git_submodule from git $git_url"
     initializing_git_submodule "$git_url" "$repository_relative_path"
     if [ "$fork_from_public" != "" ]
     then
@@ -127,6 +130,7 @@ function chef_import_submodule()
   do
     cd $chef_repo
     eval $github_repo
+    log "Importing submodule $name of type $type => fork_from_public = $fork_from_public, git_url = $git_url"
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
   done
 }
