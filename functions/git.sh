@@ -80,8 +80,9 @@ export -f merge_2_branches
 
 function initializing_git_submodule()
 {
-  folder_relative_path=$1
-  git_url=$2
+  git_url=$1
+  folder_relative_path=$2
+  
   log "From $(pwd), initializing $folder_relative_path with $git_url"
   git submodule add $git_url $folder_relative_path
   git submodule update --init $git_url $folder_relative_path
@@ -185,7 +186,7 @@ function take_ownership()
 {
   cd $chef_repo_path
   $type=$1
-  initializing_git_submodule "$1/$2" "$3"
+  initializing_git_submodule "$3" "$1/$2"
   cd "$1/$2"
   git remote rename origin $git_fork_upstream_name
   cd $chef_repo_path
