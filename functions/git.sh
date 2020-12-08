@@ -82,6 +82,7 @@ function initializing_git_submodule()
 {
   folder_relative_path=$1
   git_url=$2
+  log "From $(pwd), initializing $folder_relative_path with $git_url"
   git submodule add $git_url $folder_relative_path
   git submodule update --init $git_url $folder_relative_path
 }
