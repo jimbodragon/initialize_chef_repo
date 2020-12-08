@@ -46,13 +46,31 @@ function convert_initialize_to_cookbook()
 }
 export -f convert_initialize_to_cookbook
 
+function get_github_netrc()
+{
+  if [ "$(grep "machine github.com" ~/.netrc)" == "" ]
+  then
+    read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
+    read -sp "Insert password: " "github_password"
+
+    if [ "$github_password" != "" ]
+    then
+      cat << EOF > ~/.netrc
+machine github.com
+login $github_user
+password $github_password
+EOF
+    fi
+  fi
+}
+
 function yes_no_question()
 {
   message=$1
   return_variable_as_same_as_the_question_on_recursive_method=$2
   command_to_execute_if_yes=$3
   command_to_execute_if_no=$4
-	read -p "$folder_path" "$variable_to_put_answer_to"
+	read -p "$message" "$variable_to_put_answer_to"
 	eval "input=\$$2"
 	case $input in
 		"Y" | "y" | "Yes" | "yes" )

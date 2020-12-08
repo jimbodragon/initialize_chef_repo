@@ -6,6 +6,7 @@ function install_git()
   then
     #apt-get -y update && sudo apt-get -y upgrade
     apt-get -y install git
+    get_github_netrc
   fi
 }
 export -f install_git
@@ -82,7 +83,7 @@ function initializing_git_submodule()
 {
   git_url=$1
   folder_relative_path=$2
-  
+
   log "From $(pwd), initializing $folder_relative_path with $git_url"
   git submodule add $git_url $folder_relative_path
   git submodule update --init $git_url $folder_relative_path
