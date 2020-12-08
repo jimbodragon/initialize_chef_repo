@@ -213,12 +213,6 @@ export -f valide_chef_repo
 function validate_project()
 {
   project_is_good="OK"
-  chef_repo_good="$(valide_chef_repo)"
-  if [ "$chef_repo_good" == "0" ]
-  then
-    project_is_good="bad_chef_repo_path"
-  fi
-
   if [ ! -f "$chef_repo_path/Berksfile" ]
   then
     log_bold "No Berksfile in : '$chef_repo_path'"
@@ -229,6 +223,12 @@ function validate_project()
   then
     log_bold "No '$solo_file' in : '$chef_repo_path'"
     project_is_good="no_solo_file"
+  fi
+  
+  chef_repo_good="$(valide_chef_repo)"
+  if [ "$chef_repo_good" == "0" ]
+  then
+    project_is_good="bad_chef_repo_path"
   fi
 
   echo "$project_is_good"
