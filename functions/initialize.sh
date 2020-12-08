@@ -224,7 +224,7 @@ function validate_project()
     log_bold "No '$solo_file' in : '$chef_repo_path'"
     project_is_good="no_solo_file"
   fi
-  
+
   chef_repo_good="$(valide_chef_repo)"
   if [ "$chef_repo_good" == "0" ]
   then
@@ -296,7 +296,7 @@ function run_project()
       fi
     ;;
     * )
-      log_title "Houston we got a problem: installing on default path: $default_chef_path"
+      log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
 
       new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
