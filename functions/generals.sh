@@ -83,7 +83,7 @@ function yes_no_question()
   return_variable_as_same_as_the_question_on_recursive_method=$2
   command_to_execute_if_yes=$3
   command_to_execute_if_no=$4
-	read -p "$message" "$variable_to_put_answer_to"
+	read -p "$message" "$2"
 	eval "input=\$$2"
 	case $input in
 		"Y" | "y" | "Yes" | "yes" )
