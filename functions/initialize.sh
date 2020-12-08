@@ -120,45 +120,42 @@ function download_latest_files() {
 }
 export -f download_latest_files
 
-function repeat_command()
+function wait_for_command()
+{
+  for day in {0..365}
+  do
+    for hour in {0..24}
+    do
+      for min in {0..59}
+      do
+        for sec in `seq 0 $1 59`
+        do
+          log "$day day $hour h $min min $sec sec"
+          if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
+          then
+            eval $(echo -e "$5")
+            first_run=0
+            return
+          else
+            sleep $1
+          fi
+        done
+      done
+    done
+  done
+  log_bold "$day day $hour h $min min $sec sec: Stopping '$5'"
+  log_bold "$day day $hour h $min min $sec sec: Starting '$5'"
+}
+export -f wait_for_command
+
+function wait_for_project_command()
 {
   log_bold "0 day 0 h 0 min 0 sec: Starting '$5'"
   first_run=1
   while [ 1 -eq 1 ]
   do
-    for day in {0..365}
-    do
-      for hour in {0..24}
-      do
-        for min in {0..59}
-        do
-          for sec in `seq 0 $1 59`
-          do
-            log "$hour h $min min $sec sec"
-            if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
-            then
-              eval $(echo -e "$5")
-              first_run=0
-              day=0
-              hour=0
-              min=0
-              sec=0
-            else
-              sleep $1
-            fi
-          done
-        done
-      done
-    done
-    log_bold "$day day $hour h $min min $sec sec: Stopping '$5'"
-    log_bold "$day day $hour h $min min $sec sec: Starting '$5'"
+    wait_for_command $jump_in_second $max_min $max_hour $max_day "$1"
   done
-}
-export -f repeat_command
-
-function wait_for_project_command()
-{
-  repeat_command $jump_in_second $max_min $max_hour $max_day "$1"
 }
 export -f wait_for_project_command
 
@@ -287,6 +284,7 @@ function run_project()
           log_title "Running chef $project_name"
           export chef_repo_running=1
           create_build_file $build_file
+
           wait_for_project_command "execute_chef_solo "$project_name""
           # wait_for_project_command "clear_project\ndownload_and_run_project"
           export chef_repo_running=0
