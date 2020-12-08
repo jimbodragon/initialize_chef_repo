@@ -63,12 +63,9 @@ export -f chef_generate_repo
 
 function initializing_project_submodule()
 {
-  repository_type=$1 # $1 = Repository type: [cookbooks. libraries, resources]
-  repository_path=$2 # $2 = Repository name
-  fork_from_public=$3
-  git_url=$4
-
-  repository_relative_path="$repository_type/$respository_name"
+  repository_relative_path=$1 # $2 = Repository name
+  fork_from_public=$2
+  git_url=$3
 
   if [ "$git_url" == "" ]
   then
@@ -108,8 +105,7 @@ function executing_chef_clone()
 
   case $repository_type in
     "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" | "cookbooks" | "libraries" | "resources" )
-      cd "$clone_repo"
-      initializing_project_submodule "$repository_type" "$repository_type/$repository_name" "$fork_from_public" "$git_url"
+      initializing_project_submodule "$repository_type/$repository_name" "$fork_from_public" "$git_url"
     ;;&
     "cookbooks" )
       chef_generate cookbook $repository_name
