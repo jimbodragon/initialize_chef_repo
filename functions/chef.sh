@@ -28,8 +28,11 @@ function berks_vendor_repo()
 
   for cookbook in $(ls $cookbook_folder)
   do
-    cd $cookbook_folder/$cookbook
-    debug_log "$(berks vendor $berks_vendor_folder)"
+    if [ -d "$cookbook_folder/$cookbook" ]
+    then
+      cd $cookbook_folder/$cookbook
+      debug_log "$(berks vendor $berks_vendor_folder 2>&1)"
+    fi
   done
 }
 export -f berks_vendor_repo
@@ -105,6 +108,7 @@ function executing_chef_clone()
   case $repository_type in
     "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" | "cookbooks" | "libraries" | "resources" )
       initializing_project_submodule "$repository_type/$repository_name" "$fork_from_public" "$git_url"
+      read -p "Press 'ENTER' ro continue"
     ;;&
     "cookbooks" | "libraries" | "libraries" )
       chef_generate cookbook $repository_name

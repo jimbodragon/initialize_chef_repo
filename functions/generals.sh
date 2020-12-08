@@ -51,7 +51,7 @@ function yes_no_question()
   message=$1
   return_variable_as_same_as_the_question_on_recursive_method=$2
   command_to_execute_if_yes=$3
-  command_to_execute_if_no=$3
+  command_to_execute_if_no=$4
 	read -p "$folder_path" "$variable_to_put_answer_to"
 	eval "input=\$$2"
 	case $input in
@@ -73,6 +73,6 @@ export -f yes_no_question
 
 function validate_git_repo()
 {
-	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " validate_git_repo "" "exit 1"
+	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " "validate_git_repo" "" "exit 1"
 }
 export -f validate_git_repo
