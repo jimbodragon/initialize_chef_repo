@@ -15,6 +15,8 @@ export -f install_chef_workstation
 
 function berks_vendor()
 {
+  install_chef_workstation
+  
   cd $1
   log "Berks vendoring $(basename $1)"
   # debug_log "$(berks vendor $2 2>&1)"
@@ -388,7 +390,6 @@ export -f write_main_role_environment
 
 function execute_chef_solo()
 {
-  install_chef_workstation
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
@@ -402,11 +403,15 @@ function execute_chef_solo()
   create_directory $log_path
   create_directory $berks_vendor
 
-  cat << EOS > $solo_file
+  write_main_role_environment
+
+  if [ ! -f "$solo_file" ]
+  then
+    cat << EOS > $solo_file
 checksum_path '$checksum_path'
 cookbook_path [
-                '$berks_vendor'
-              ]
+              '$berks_vendor'
+            ]
 data_bag_path '$data_bag_path'
 environment '$chef_environment'
 environment_path '$environment_path'
@@ -426,8 +431,7 @@ syntax_check_cache_path
 umask 0022
 #verbose_logging nil
 EOS
-
-  write_main_role_environment
+  fi
 
   rm -rf "$berks_vendor"
 
