@@ -13,8 +13,27 @@ function install_chef_workstation()
 }
 export -f install_chef_workstation
 
+function berks_vendor()
+{
+  cd $1
+  log "Berks vendoring $(basename $1)"
+  debug_log "$(berks vendor $2 2>&1)"
+}
+export -f berks_vendor
+
 function berks_vendor_all()
 {
+  cd $chef_repo_path
+  cat << EOF > "Berksfile"
+source 'https://supermarket.chef.io'
+cookbook 'chef_workstation_initialize', '~> 0.1.0', github: "jimbodragon/chef_workstation_initialize"
+cookbook 'chef-git-server', '~> 1.0.0', github: "jimbodragon/chef-git-server"
+cookbook 'infra_chef', '~> 0.1.0', github: "jimbodragon/infra_chef"
+cookbook 'infraClass', '~> 0.1.0', github: "jimbodragon/infraClass"
+cookbook 'virtualbox', '~> 4.0.0', github: "jimbodragon/virtualbox"
+EOF
+  berks_vendor "$chef_repo_path" "$1"
+
   berks_vendor_repo "$cookbook_path" "$1"
   berks_vendor_repo "$libraries_path" "$1"
   berks_vendor_repo "$resources_path" "$1"
@@ -30,8 +49,7 @@ function berks_vendor_repo()
   do
     if [ -d "$cookbook_folder/$cookbook" ]
     then
-      cd $cookbook_folder/$cookbook
-      debug_log "$(berks vendor $berks_vendor_folder 2>&1)"
+      berks_vendor "$cookbook_folder/$cookbook" "$berks_vendor_folder"
     fi
   done
 }
