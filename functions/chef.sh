@@ -388,6 +388,7 @@ export -f write_main_role_environment
 
 function execute_chef_solo()
 {
+  install_chef_workstation
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
