@@ -53,7 +53,7 @@ function include_bashrc()
 
   if [ "$(grep "source $data_dir/initialize.sh" ~/.bashrc)" == "" ]
   then
-    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo \"source $data_dir/initialize.sh\" > ~/.bashrc" ""
+    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo \"source $data_dir/initialize.sh\" >> ~/.bashrc" ""
   fi
 }
 export -f include_bashrc
@@ -87,10 +87,10 @@ function yes_no_question()
 	eval "input=\$$2"
 	case $input in
 		"Y" | "y" | "Yes" | "yes" )
-			$command_to_execute_if_yes
+			eval "$command_to_execute_if_yes"
 		;;
 		"N" | "n" | "No" | "no" )
-			$command_to_execute_if_no
+			eval "$command_to_execute_if_no"
 		;;
 
 		* )
