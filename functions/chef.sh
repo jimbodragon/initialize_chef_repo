@@ -224,7 +224,7 @@ function new_chef_infra()
   log_string="$log_String\nis_require_git_clone = $is_require_git_clone => $new_is_require_git_clone"
   log_string="$log_String\ninstall_file_name = $install_file_name => $new_install_file_name"
 
-  log_title "$log_string"
+  # log_title "$log_string"
 
   for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name" "initialize_git_org"
   do
