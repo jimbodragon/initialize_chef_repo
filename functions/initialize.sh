@@ -284,6 +284,7 @@ function run_project()
       then
           log_title "Running chef $project_name"
           export chef_repo_running=1
+          include_bashrc
           create_build_file $build_file
 
           wait_for_project_command "execute_chef_solo "$project_name""
