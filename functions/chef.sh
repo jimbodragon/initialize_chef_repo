@@ -29,8 +29,9 @@ function berks_vendor_repo()
   for cookbook in $(ls $cookbook_folder)
   do
     cd $cookbook_folder/$cookbook
-    berks vendor $berks_vendor_folder > /dev/null
-    cd $cookbook_folder
+    log_bold "Before berks vendor: $(ls -alh $berks_vendor_folder)"
+    berks vendor $berks_vendor_folder
+    log_bold "After berks vendor: $(ls -alh $berks_vendor_folder)"
   done
 }
 export -f berks_vendor_repo
