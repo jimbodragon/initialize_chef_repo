@@ -85,5 +85,12 @@ redefine_initialize_data
 
 if [ "$(type source_all_require_files 2>&1 | grep "is a function")" == "source_all_require_files is a function" ]
 then
-  source_all_require_files
+  for file in ${file_list[@]}
+  do
+    if [ "$initialize_install_dir/$file" != "$initialize_install_dir/$data_dir_name/$(basename ${BASH_SOURCE[0]})" ]
+    then
+      source "$initialize_install_dir/$file"
+    fi
+  done
+  redefine_data
 fi
