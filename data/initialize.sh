@@ -9,12 +9,26 @@ function initialize_parameters()
   export scripts_dir="$(dirname $initialize_install_dir)"
   export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
   export chef_path="$(dirname "$chef_repo_path")"
-  debug_log "Redefine initialize parameters from file '$1': $chef_repo_path | $project_name"
+  
+  redefine_message="Redefine initialize parameters from file '$1': $chef_repo_path | $project_name"
+  if [ "$(type debug_log | grep "is a function")" == "debug_log is a function" ]
+  then
+    debug_log "$redefine_message"
+  else
+    echo "$redefine_message"
+  fi
 }
 export -f initialize_parameters
 
 function redefine_initialize_data()
 {
+  redefine_message="Redefine initialize data: $chef_repo_path | $project_name"
+  if [ "$(type debug_log | grep "is a function")" == "debug_log is a function" ]
+  then
+    debug_log "$redefine_message"
+  else
+    echo "$redefine_message"
+  fi
   debug_log "Redefine initialize data: $chef_repo_path | $project_name"
   export functions_dir_name="functions"
   export initialize_dir_name="initialize"
@@ -69,3 +83,8 @@ export -f run_new_project
 
 initialize_parameters "${BASH_SOURCE[0]}"
 redefine_initialize_data
+
+if [ "$(type source_all_require_files | grep "is a function")" == "source_all_require_files is a function" ]
+then
+  source_all_require_files
+fi
