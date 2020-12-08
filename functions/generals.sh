@@ -51,7 +51,7 @@ function include_bashrc()
   log "grep from bashrc: $(grep "source $data_dir/initialize.sh" ~/.bashrc)"
   log "grep from netrc: $(grep "machine github.com" ~/.netrc)"
 
-  if [ $(grep "source $data_dir/initialize.sh" ~/.bashrc | wc -l) -eq 0 ]
+  if [ "$(grep "source $data_dir/initialize.sh" ~/.bashrc | wc -l)" == "0" ]
   then
     yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo \"source $data_dir/initialize.sh\" > ~/.bashrc" ""
   fi
@@ -61,7 +61,7 @@ export -f include_bashrc
 function get_github_netrc()
 {
   log "grep from netrc: $(grep "machine github.com" ~/.netrc | wc -l)"
-  if [ ! -f ~/.netrc ] || [ $(grep "machine github.com" ~/.netrc) -eq 0 ]
+  if [ ! -f ~/.netrc ] || [ "$(grep "machine github.com" ~/.netrc)" == "0" ]
   then
     read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
     read -sp "Insert password: " "github_password"
