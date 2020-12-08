@@ -212,11 +212,23 @@ export -f valide_chef_repo
 
 function validate_project()
 {
-  project_is_good="1"
+  project_is_good="OK"
   chef_repo_good="$(valide_chef_repo)"
   if [ "$chef_repo_good" == "0" ]
   then
-    project_is_good="0"
+    project_is_good="bad_chef_repo_path"
+  fi
+
+  if [ ! -f "$chef_repo_path/Berksfile" ]
+  then
+    log_bold "No Berksfile in : '$chef_repo_path'"
+    project_is_good="no_berksfile"
+  fi
+
+  if [ ! -f "$solo_file" ]
+  then
+    log_bold "No '$solo_file' in : '$chef_repo_path'"
+    project_is_good="no_solo_file"
   fi
 
   echo "$project_is_good"
@@ -262,23 +274,14 @@ function run_project()
   prepare_project
 
   log_title "Running project $project_name at $chef_repo_path"
-  is_good=$(validate_project)
+  state=$(validate_project)
 
-  case $is_good in
-    "0" )
+  case $state in
+    "no_solo_file" | "no_berksfile" )
       log_title "Houston we got a problem: installing on default path: $default_chef_path"
-
-      new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
-      new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-      log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
-      copy_project "$new_project_folder"
-      initialize_parameters "$new_source_file"
-      redefine_data
-      rename_project $project_name
-      log_bold "Reexecuting the project"
-      run_project
-      ;;
-    "1" )
+      prepare_chef_repo
+    ;;
+    "OK" )
       log "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
@@ -291,7 +294,21 @@ function run_project()
           # wait_for_project_command "clear_project\ndownload_and_run_project"
           export chef_repo_running=0
       fi
-      ;;
+    ;;
+    * )
+      log_title "Houston we got a problem: installing on default path: $default_chef_path"
+
+      new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
+      new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+      log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      copy_project "$new_project_folder"
+      initialize_parameters "$new_source_file"
+      redefine_data
+      rename_project $project_name
+      log_bold "Reexecuting the project"
+      prepare_chef_repo
+      run_project
+    ;;
   esac
 }
 export -f run_project

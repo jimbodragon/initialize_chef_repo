@@ -26,15 +26,6 @@ export -f berks_vendor
 function berks_vendor_all()
 {
   cd $chef_repo_path
-  cat << EOF > "Berksfile"
-source 'https://supermarket.chef.io'
-cookbook 'chef_workstation_initialize', '~> 0.1.0', github: "jimbodragon/chef_workstation_initialize"
-cookbook 'chef-git-server', '~> 1.0.0', github: "jimbodragon/chef-git-server"
-cookbook 'infra_chef', '~> 0.1.0', github: "jimbodragon/infra_chef"
-cookbook 'infraClass', '~> 0.1.0', github: "jimbodragon/infraClass"
-cookbook 'virtualbox', '~> 4.0.0', github: "jimbodragon/virtualbox"
-EOF
-  berks_vendor "$chef_repo_path" "$1"
 
   berks_vendor_repo "$cookbook_path" "$1"
   berks_vendor_repo "$libraries_path" "$1"
@@ -387,8 +378,9 @@ function write_main_role_environment
 }
 export -f write_main_role_environment
 
-function execute_chef_solo()
+function prepare_chef_repo()
 {
+  cd "$chef_repo_path"
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
@@ -434,11 +426,23 @@ EOS
 
   rm -rf "$berks_vendor"
 
-  berks_vendor_all "$berks_vendor"
+  cat << EOF > "$chef_repo_path/Berksfile"
+source 'https://supermarket.chef.io'
+cookbook 'chef_workstation_initialize', '~> 0.1.0', github: "jimbodragon/chef_workstation_initialize"
+cookbook 'chef-git-server', '~> 1.0.0', github: "jimbodragon/chef-git-server"
+cookbook 'infra_chef', '~> 0.1.0', github: "jimbodragon/infra_chef"
+cookbook 'infraClass', '~> 0.1.0', github: "jimbodragon/infraClass"
+cookbook 'virtualbox', '~> 4.0.0', github: "jimbodragon/virtualbox"
+EOF
+  berks_vendor "$chef_repo_path" "$berks_vendor"
 
+  berks_vendor_all "$berks_vendor"
+}
+
+function execute_chef_solo()
+{
   log_bold "Starting run list = $chef_run_list"
 
   chef-solo --chef-license 'accept' --config $solo_file --override-runlist "$chef_run_list" --logfile "$log_path/chef_solo_$project_name_$environment.log"
-
 }
 export -f execute_chef_solo
