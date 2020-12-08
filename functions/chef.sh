@@ -16,11 +16,10 @@ export -f install_chef_workstation
 function berks_vendor()
 {
   install_chef_workstation
-  
+
   cd $1
   log "Berks vendoring $(basename $1)"
-  # debug_log "$(berks vendor $2 2>&1)"
-  log "$(berks vendor $2 2>&1)"
+  debug_log "$(berks vendor $2 2>&1)"
 }
 export -f berks_vendor
 
