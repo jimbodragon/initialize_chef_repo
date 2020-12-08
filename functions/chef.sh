@@ -316,7 +316,7 @@ export -f change_chef_parameter
 
 function ensure_default_attributes
 {
-  echo "\"default_attributes\": {\"$chef_workstation_initialize]\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$initialize_install_dir\", \"gitinfo\": {}, \"chef_initialized\": true}}"
+  echo "\"default_attributes\": {\"$initial_workstation_cookbook\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$initialize_install_dir\", \"gitinfo\": {}, \"chef_initialized\": true}}"
 }
 export -f ensure_default_attributes
 
