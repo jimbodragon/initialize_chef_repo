@@ -48,7 +48,7 @@ export -f convert_initialize_to_cookbook
 
 function include_bashrc()
 {
-  if [ "$(grep "source $data_dir/initialize.sh" "~/.bashrc")" == "" ]
+  if [ "$(cat ~/.bashrc | grep "source $data_dir/initialize.sh")" == "" ]
   then
     yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo \"source $data_dir/initialize.sh\" > ~/.bashrc" ""
   fi
@@ -57,7 +57,7 @@ export -f include_bashrc
 
 function get_github_netrc()
 {
-  if [ ! -f ~/.netrc ] || [ "$(grep "machine github.com" "~/.netrc")" == "" ]
+  if [ ! -f ~/.netrc ] || [ "$(cat ~/.netrc | grep "machine github.com")" == "" ]
   then
     read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
     read -sp "Insert password: " "github_password"
