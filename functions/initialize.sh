@@ -279,7 +279,7 @@ function run_project()
 
   case $state in
     "no_solo_file" | "no_berksfile" )
-      log_title "Houston we got a problem: installing on default path: $default_chef_path"
+      log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_chef_repo
     ;;
     "OK" )
@@ -302,13 +302,21 @@ function run_project()
       new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
       log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+      log "initialize_script_name (1) = $initialize_script_name"
       copy_project "$new_project_folder"
+      log "initialize_script_name (2) = $initialize_script_name"
       initialize_parameters "$new_source_file"
+      log "initialize_script_name (3) = $initialize_script_name"
       redefine_data
+      log "initialize_script_name (4) = $initialize_script_name"
       rename_project $project_name
+      log "initialize_script_name (5) = $initialize_script_name"
       log_bold "Reexecuting the project"
+      log "initialize_script_name (6) = $initialize_script_name"
       prepare_chef_repo
+      log "initialize_script_name (7) = $initialize_script_name"
       run_project
+      log "initialize_script_name (8) = $initialize_script_name"
     ;;
   esac
 }
