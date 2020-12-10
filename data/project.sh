@@ -16,9 +16,7 @@ function redefine_project_data()
   export http_git="https://raw.githubusercontent.com"
 
   export initialize_git_org="jimbodragon"
-  log "before initialize_script_name (1) = $initialize_script_name"
   export initialize_script_name="initialize_chef_repo"
-  log "after initialize_script_name (2) = $initialize_script_name"
   export initial_role="$project_name"
   export initial_workstation_cookbook="chef_workstation_initialize"
 
@@ -33,4 +31,3 @@ function redefine_project_data()
   export install_file_name="install.sh"
 }
 export -f redefine_project_data
-log "initialize_script_name (3) = $initialize_script_name"
