@@ -183,14 +183,14 @@ function new_chef_infra()
   new_git_baseurl="$6"
   new_git_user="$7"
   new_http_git="$8"
-  new_itialize_script_name="$9"
+  new_initialize_script_name="$9"
   if [ "${10}" == "/" ]
   then
     new_chef_repo=${14}
   else
     new_chef_repo=${10}
   fi
-  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_itialize_script_name"
+  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_initialize_script_name"
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
   new_initial_current_dir=${13}
@@ -216,7 +216,7 @@ function new_chef_infra()
   log_string="$log_String\ngit_baseurl = $git_baseurl => $new_git_baseurl"
   log_string="$log_String\ngit_user = $git_user => $new_git_user"
   log_string="$log_String\nproject_name = $project_name => $new_project_name"
-  log_string="$log_String\ninitialize_script_name = $initialize_script_name => $new_itialize_script_name"
+  log_string="$log_String\ninitialize_script_name = $initialize_script_name => $new_initialize_script_name"
   log_string="$log_String\ninitial_role = $initial_role => $new_initial_role"
   log_string="$log_String\ninitial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
   log_string="$log_String\ninitial_current_dir = $initial_current_dir => $new_initial_current_dir"

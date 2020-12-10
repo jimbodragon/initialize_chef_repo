@@ -4,16 +4,11 @@ function rename_project()
 {
   log_subtitle "Renaming project from $project_name to $1"
   export project_name=$1
-  log "initialize_script_name (1) = $initialize_script_name"
   new_source="$(new_chef_infra "$1" "$git_branch" "$environment" "$git_main_project_name" "$git_org" "$git_baseurl" "$git_user" "$http_git" "$initialize_script_name" "$chef_path" "$initial_role" "$initial_workstation_cookbook" "$initial_current_dir" "$default_chef_path" "$is_require_git_clone" "$install_file_name" "$initialize_git_org")"
-  log "initialize_script_name (2) = $initialize_script_name"
   log "new_source = '$new_source'"
   source "$new_source"
-  log "initialize_script_name (3) = $initialize_script_name"
   redefine_data
-  log "initialize_script_name (4) = $initialize_script_name"
   chef_import_submodule
-  log "initialize_script_name (5) = $initialize_script_name"
 }
 export -f rename_project
 
