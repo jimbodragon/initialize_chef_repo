@@ -134,7 +134,7 @@ function wait_for_command()
           if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
           then
             debug_log "executing $(echo "$5" | tr ';' '\n')"
-            eval "$5"
+            log_title "$(eval "$5")"
             first_run=0
             return
           else
