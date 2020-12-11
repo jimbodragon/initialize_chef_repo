@@ -427,6 +427,7 @@ EOS
   fi
 
   rm -rf "$berks_vendor"
+  rm -rf "$chef_repo_path/Berksfile.lock"
 
   cat << EOF > "$chef_repo_path/Berksfile"
 source 'https://supermarket.chef.io'
