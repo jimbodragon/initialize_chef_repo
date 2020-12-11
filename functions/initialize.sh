@@ -132,11 +132,13 @@ function wait_for_command()
         for sec in `seq 0 $1 59`
         do
           log "$day day $hour h $min min $sec sec"
-          if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
+          if [ $day -eq 0 ] && [ $hour -eq 0 ] && [ $min -eq 0 ] && [ $sec -eq 0 ]
           then
-            debug_log "executing $(echo "$5" | tr ';' '\n')"
+            log_bold "$day day $hour h $min min $sec sec: Starting '$(echo "$1" | tr ';' '\n')'"
             log_title "$(eval "$5")"
-            first_run=0
+            log_bold "$day day $hour h $min min $sec sec: Stopping '$(echo "$1" | tr ';' '\n')'"
+          elif [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ]
+          then
             return
           else
             sleep $1
@@ -145,22 +147,13 @@ function wait_for_command()
       done
     done
   done
-  log_bold "$day day $hour h $min min $sec sec: Stopping '$5'"
-  log_bold "$day day $hour h $min min $sec sec: Starting '$5'"
 }
 export -f wait_for_command
 
 function wait_for_project_command()
 {
-  log_bold "0 day 0 h 0 min 0 sec: Starting '$(echo "$1" | tr ';' '\n')'"
-  first_run=1
-  num_exec=0
-  while [ 1 -eq 1 ]
-  do
-    let "num_exec = $num_exec + 1"
-    debug_log "Executing again $num_exec"
-    wait_for_command $jump_in_second $max_min $max_hour $max_day "$1"
-  done
+  debug_log "Executing again $num_exec"
+  wait_for_command $jump_in_second $max_min $max_hour $max_day "$1"
 }
 export -f wait_for_project_command
 
@@ -274,21 +267,25 @@ function run_internal_project()
   log_title "Running chef $project_name"
   check_and_install procmail
 
-  cd $initialize_install_dir
-  debug_log "run project from $(pwd)"
-  download_github_raw install.sh
-  ls -alh install.sh
 
-  if lockfile -r 0 $lockfile
+  if [ ! -f $lockfile ]
   then
-    log_title "Install $project_name as fresh with environments $additionnal_environments"
-    bash install.sh $project_name $additionnal_environments
-    rm -f $lockfile
-  else
+    touch $lockfile
+
     log_title "Fetching latest source for project $project_name"
     prepare_project
+    prepare_chef_repo
+
+    cd $initialize_install_dir
+    download_github_raw install.sh
+
+    log_title "Install $project_name as fresh with environments $additionnal_environments"
+    wait_for_project_command "bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments"
+  else
+    execute_chef_solo "$project_name"
+    rm -f $lockfile
+    run_internal_project
   fi
-  execute_chef_solo "$project_name"
   log "Here the loaded source files: ${BASH_SOURCE[@]}"
 }
 export -f run_internal_project
@@ -309,7 +306,7 @@ function run_project()
       log "Check if chef_repo_running before running = $chef_repo_running"
       include_bashrc
       create_build_file $build_file
-      wait_for_project_command "run_internal_project"
+      run_internal_project
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
