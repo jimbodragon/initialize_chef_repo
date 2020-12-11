@@ -254,35 +254,39 @@ export -f redefine_data
 
 function prepare_project()
 {
-  log "Check if chef_repo_running before downloading = $chef_repo_running"
-  if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
+  log "Preparing project for source_file '$source_file'"
+  if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
   then
-    log "Preparing project for source_file '$source_file'"
-    if [ "$is_require_git_clone" != "" ] && [ $is_require_git_clone -eq 1 ]
-    then
-      log "Cloning the project"
-      git_clone_main_project
-      chef_import_submodule
-      source_all_require_files
-    else
-        create_directory_project
-        download_latest_files
-    fi
-  else
+    log "Cloning the project"
+    git_clone_main_project
+    chef_import_submodule
     source_all_require_files
+  else
+    create_directory_project
+    download_latest_files
   fi
+  redefine_data
 }
 export -f prepare_project
 
 function run_internal_project()
 {
   log_title "Running chef $project_name"
+  check_and_install procmail
 
   cd $initialize_install_dir
   debug_log "run project from $(pwd)"
   download_github_raw install.sh
   ls -alh install.sh
-  bash install.sh $project_name $additionnal_environments
+
+  if lockfile -r 0 $lockfile
+  then
+    bash install.sh $project_name $additionnal_environments
+    rm -f $lockfile
+  else
+    download_latest_files
+    prepare_project
+  fi
   execute_chef_solo "$project_name"
   log "Here the loaded source files: ${BASH_SOURCE[@]}"
 }
@@ -302,16 +306,9 @@ function run_project()
     ;;
     "OK" )
       log "Check if chef_repo_running before running = $chef_repo_running"
-      if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
-      then
-        export chef_repo_running=1
-        include_bashrc
-        create_build_file $build_file
-        wait_for_project_command "run_internal_project"
-        export chef_repo_running=0
-      else
-        download_latest_files
-      fi
+      include_bashrc
+      create_build_file $build_file
+      wait_for_project_command "run_internal_project"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"

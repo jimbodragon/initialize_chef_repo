@@ -12,6 +12,16 @@ function rename_project()
 }
 export -f rename_project
 
+function check_and_install()
+{
+  if [ "$(for package in $(sudo apt-cache madison $1 | cut -d '|' -f 2); do sudo dpkg -l | grep $1 | grep $package; done | head -n 1 | awk '{print $1}')" != "ii" ]
+  then
+    log "Installing $1"
+    apt-get install $1
+  fi
+}
+export -f install_chef_workstation
+
 function create_build_file()
 {
   new_build_file="$1"
