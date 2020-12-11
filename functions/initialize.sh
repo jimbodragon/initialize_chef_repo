@@ -133,8 +133,8 @@ function wait_for_command()
           log "$day day $hour h $min min $sec sec"
           if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
           then
-            debug_log "executing $5"
-            eval "echo -e $(echo "$5")"
+            debug_log "executing $(echo "$5" | tr ';' '\n')"
+            eval "$5"
             first_run=0
             return
           else
@@ -151,7 +151,7 @@ export -f wait_for_command
 
 function wait_for_project_command()
 {
-  log_bold "0 day 0 h 0 min 0 sec: Starting '$1'"
+  log_bold "0 day 0 h 0 min 0 sec: Starting '$(echo "$1" | tr ';' '\n')'"
   first_run=1
   while [ 1 -eq 1 ]
   do
@@ -291,7 +291,7 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        wait_for_project_command "download_github_raw install.sh\n$initialize_install_dir/install.sh $project_name $additionnal_environments\nexecute_chef_solo \"$project_name\"\nlog \"Here the loaded source files: \${BASH_SOURCE[@]}\""
+        wait_for_project_command " download_github_raw install.sh; $initialize_install_dir/install.sh $project_name $additionnal_environments; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
         export chef_repo_running=0
       else
