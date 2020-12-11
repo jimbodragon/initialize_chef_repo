@@ -14,8 +14,8 @@ export -f create_directory
 function log()
 {
   create_directory "$log_dir"
-  echo -e "$@" >> $log_dir/initialize.log
-  echo -e "$@" > /dev/stderr
+  echo "$@" >> $log_dir/initialize.log
+  echo "$@" > /dev/stderr
 }
 export -f log
 
