@@ -283,6 +283,7 @@ function run_internal_project()
     prepare_chef_repo
     wait_for_project_command "execute_chef_solo \"\$project_name\""
     rm -f $lockfile
+    log_title "Able to change run_internal_project function dynamically: $project_name"
     run_internal_project
   fi
   log "Here the loaded source files: ${BASH_SOURCE[@]}"
