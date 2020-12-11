@@ -65,6 +65,7 @@ export -f create_directory_project
 
 function download()
 {
+  debug_log "Downloading file $2 => $1"
   wget --quiet --no-cache --no-cookies -O $1 $2
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
@@ -291,7 +292,7 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        run_command="cd $initialize_install_dir; download_github_raw install.sh"
+        run_command="cd $initialize_install_dir; log \$(pwd); download_github_raw install.sh; log \$(pwd); ls -alh install.sh"
         wait_for_project_command "$run_command"
         # wait_for_project_command " download_github_raw install.sh; log 'initialize_install_dir (3) = $initialize_install_dir'; log \"initialize_install_dir (4) = \$initialize_install_dir\"; bash $initialize_install_dir/install.sh $project_name $additionnal_environments; log \"initialize_install_dir (5) = \$initialize_install_dir\"; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
