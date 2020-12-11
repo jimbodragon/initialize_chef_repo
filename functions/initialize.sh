@@ -278,7 +278,6 @@ function run_internal_project()
   cd $initialize_install_dir
   debug_log "run project from $(pwd)"
   download_github_raw install.sh
-  log \$(pwd)
   ls -alh install.sh
   bash install.sh $project_name $additionnal_environments
   execute_chef_solo "$project_name"
