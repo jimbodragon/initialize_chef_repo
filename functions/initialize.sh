@@ -23,21 +23,21 @@ function debug_log()
 {
   if [ "$DEBUG_LOG" != "" ] && [ $DEBUG_LOG -eq 1 ]
   then
-    log "DEBUG:: $1"
+    log "::DEBUG:: $@ ::DEBUG::"
   fi
 }
 export -f log
 
 function log_bold()
 {
-  log "******************************   $1   ******************************"
+  log "******************************   $@   ******************************"
 }
 export -f log_bold
 
 function log_subtitle()
 {
   log "\n----------------------------------------------------------------------------------------------"
-  log "$1"
+  log "$@"
   log "----------------------------------------------------------------------------------------------\n"
 }
 export -f log_subtitle
@@ -45,7 +45,7 @@ export -f log_subtitle
 function log_title()
 {
   log '\n\n--------------------------------------------------------------------------------------------------------\n'
-  log "$1"
+  log "$@"
   log '\n--------------------------------------------------------------------------------------------------------\n\n'
 
 }
@@ -271,6 +271,21 @@ function prepare_project()
 }
 export -f prepare_project
 
+function run_internal_project()
+{
+  log_title "Running chef $project_name"
+
+  cd $initialize_install_dir
+  debug_log "run project from $(pwd)"
+  download_github_raw install.sh
+  log \$(pwd)
+  ls -alh install.sh
+  bash install.sh $project_name $additionnal_environments
+  execute_chef_solo "$project_name"
+  log "Here the loaded source files: ${BASH_SOURCE[@]}"
+}
+export -f run_internal_project
+
 function run_project()
 {
   prepare_project
@@ -281,26 +296,16 @@ function run_project()
   case $state in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
-      prepare_chef_repo
+      wait_for_project_command prepare_chef_repo
     ;;
     "OK" )
       log "Check if chef_repo_running before running = $chef_repo_running"
       if [ "$chef_repo_running" == "" ] || [ $chef_repo_running -eq 0 ]
       then
-        log_title "Running chef $project_name"
         export chef_repo_running=1
         include_bashrc
         create_build_file $build_file
-
-        run_command="cd $initialize_install_dir; log \$(pwd)"
-        run_command="$run_command; download_github_raw install.sh"
-        run_command="$run_command; log \$(pwd); ls -alh install.sh"
-        run_command="$run_command; bash install.sh $project_name $additionnal_environments;"
-        run_command="$run_command; execute_chef_solo \"$project_name\""
-        run_command="$run_command; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
-        wait_for_project_command "$run_command"
-        # wait_for_project_command " download_github_raw install.sh; log 'initialize_install_dir (3) = $initialize_install_dir'; log \"initialize_install_dir (4) = \$initialize_install_dir\"; bash $initialize_install_dir/install.sh $project_name $additionnal_environments; log \"initialize_install_dir (5) = \$initialize_install_dir\"; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
-        # wait_for_project_command "clear_project\ndownload_and_run_project"
+        wait_for_project_command "run_internal_project"
         export chef_repo_running=0
       else
         download_latest_files
