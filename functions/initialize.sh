@@ -150,7 +150,7 @@ export -f wait_for_command
 
 function wait_for_project_command()
 {
-  log_bold "0 day 0 h 0 min 0 sec: Starting '$5'"
+  log_bold "0 day 0 h 0 min 0 sec: Starting '$1'"
   first_run=1
   while [ 1 -eq 1 ]
   do
@@ -290,7 +290,7 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        wait_for_project_command "download_github_raw install.sh\n$project_name $additionnal_environments\nexecute_chef_solo \"$project_name\"\nlog \"Here the loaded source files: \${BASH_SOURCE[@]}\""
+        wait_for_project_command "download_github_raw install.sh\n$initialize_install_dir/install.sh $project_name $additionnal_environments\nexecute_chef_solo \"$project_name\"\nlog \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
         export chef_repo_running=0
       else
