@@ -48,9 +48,6 @@ export -f convert_initialize_to_cookbook
 
 function include_bashrc()
 {
-  log "grep from bashrc: $(grep "source $data_dir/initialize.sh" ~/.bashrc | wc -l)"
-  log "grep from netrc: $(grep "machine github.com" ~/.netrc | wc -l)"
-
   if [ "$(grep "source $data_dir/initialize.sh" ~/.bashrc)" == "" ]
   then
     yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo -e \"source $functions_dir/initialize.sh\\nsource $data_dir/initialize.sh\" >> ~/.bashrc" ""
