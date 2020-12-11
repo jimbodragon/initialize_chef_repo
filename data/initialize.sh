@@ -1,4 +1,7 @@
 #!/bin/bash
+
+export initial_paramater=$@
+
 function initialize_parameters()
 {
   export source_file="$1"

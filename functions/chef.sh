@@ -198,6 +198,7 @@ function new_chef_infra()
   new_is_require_git_clone=${15}
   new_install_file_name=${16}
   new_initialize_git_org=${17}
+  new_additionnal_environments=${18}
 
   log "$(generate_new_chef_repo $new_chef_repo $new_project_name)"
 
@@ -217,6 +218,7 @@ function new_chef_infra()
   log_string="$log_String\ngit_user = $git_user => $new_git_user"
   log_string="$log_String\nproject_name = $project_name => $new_project_name"
   log_string="$log_String\ninitialize_script_name = $initialize_script_name => $new_initialize_script_name"
+  log_string="$log_String\additionnal_environments = $additionnal_environments => $new_additionnal_environments"
   log_string="$log_String\ninitial_role = $initial_role => $new_initial_role"
   log_string="$log_String\ninitial_workstation_cookbook = $initial_workstation_cookbook => $new_initial_workstation_cookbook"
   log_string="$log_String\ninitial_current_dir = $initial_current_dir => $new_initial_current_dir"
@@ -226,7 +228,7 @@ function new_chef_infra()
 
   # log_title "$log_string"
 
-  for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name" "initialize_git_org"
+  for parameter in "git_branch" "environment" "git_main_project_name" "git_org" "git_baseurl" "git_user" "project_name" "http_git" "initialize_script_name" "initial_role" "initial_workstation_cookbook" "initial_current_dir" "is_require_git_clone" "install_file_name" "initialize_git_org additionnal_environments"
   do
     change_project_parameter "$parameter" "$(eval "echo \"\$new_$parameter\"")" "$new_install_path"
   done
