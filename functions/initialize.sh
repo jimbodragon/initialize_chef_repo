@@ -133,6 +133,7 @@ function wait_for_command()
           log "$day day $hour h $min min $sec sec"
           if [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ] || [ "$first_run$day$hour$min$sec" == "10000" ]
           then
+            log "executing $5"
             eval $(echo -e "$5")
             first_run=0
             return
