@@ -29,6 +29,7 @@ function redefine_initialize_data()
   if [ "$(type debug_log 2>&1 | grep "is a function")" == "debug_log is a function" ]
   then
     debug_log "$redefine_message"
+    debug_log "initialize_install_dir (0)= $initialize_install_dir"
   else
     echo "$redefine_message"
   fi

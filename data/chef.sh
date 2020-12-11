@@ -3,6 +3,7 @@
 function redefine_chef_data()
 {
   export chef_repo_path="$(dirname $(dirname $initialize_install_dir))"
+  debug_log "initialize_install_dir (1)= $initialize_install_dir"
   export chef_path="$(dirname "$chef_repo_path")"
   debug_log "Redefine Chef data: $chef_repo_path | $project_name"
 

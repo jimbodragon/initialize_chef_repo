@@ -291,7 +291,7 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        wait_for_project_command " download_github_raw install.sh; bash $initialize_install_dir/install.sh $project_name $additionnal_environments; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
+        wait_for_project_command " download_github_raw install.sh; log 'initialize_install_dir (3) = $initialize_install_dir'; log \"initialize_install_dir (4) = \$initialize_install_dir\"; bash $initialize_install_dir/install.sh $project_name $additionnal_environments; log \"initialize_install_dir (5) = \$initialize_install_dir\"; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
         export chef_repo_running=0
       else
