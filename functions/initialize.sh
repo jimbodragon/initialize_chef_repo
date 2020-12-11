@@ -284,7 +284,6 @@ function run_internal_project()
     bash install.sh $project_name $additionnal_environments
     rm -f $lockfile
   else
-    download_latest_files
     prepare_project
   fi
   execute_chef_solo "$project_name"
