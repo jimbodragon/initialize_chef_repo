@@ -154,8 +154,11 @@ function wait_for_project_command()
 {
   log_bold "0 day 0 h 0 min 0 sec: Starting '$(echo "$1" | tr ';' '\n')'"
   first_run=1
+  num_exec=0
   while [ 1 -eq 1 ]
   do
+    let "num_exec = $num_exec + 1"
+    debug_log "Executing again $num_exec"
     wait_for_command $jump_in_second $max_min $max_hour $max_day "$1"
   done
 }
