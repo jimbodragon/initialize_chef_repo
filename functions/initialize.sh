@@ -23,7 +23,7 @@ function debug_log()
 {
   if [ "$DEBUG_LOG" != "" ] && [ $DEBUG_LOG -eq 1 ]
   then
-    log "$1"
+    log "DEBUG:: $1"
   fi
 }
 export -f log
