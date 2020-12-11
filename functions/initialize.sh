@@ -290,8 +290,7 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        wait_for_project_command "execute_chef_solo "$project_name"\n$initialize_install_dir/install.sh $@"
-        log "Here the loaded source files: ${BASH_SOURCE[@]}"
+        wait_for_project_command "$initialize_install_dir/install.sh $project_name $additionnal_environments\nexecute_chef_solo \"$project_name\"\nlog \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
         export chef_repo_running=0
       else
