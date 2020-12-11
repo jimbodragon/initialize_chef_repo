@@ -281,9 +281,11 @@ function run_internal_project()
 
   if lockfile -r 0 $lockfile
   then
+    log_title "Install $project_name as fresh with environments $additionnal_environments"
     bash install.sh $project_name $additionnal_environments
     rm -f $lockfile
   else
+    log_title "Fetching latest source for project $project_name"
     prepare_project
   fi
   execute_chef_solo "$project_name"
