@@ -134,9 +134,9 @@ function wait_for_command()
           log "$day day $hour h $min min $sec sec"
           if [ $day -eq 0 ] && [ $hour -eq 0 ] && [ $min -eq 0 ] && [ $sec -eq 0 ]
           then
-            log_bold "$day day $hour h $min min $sec sec: Starting '$(echo "$1" | tr ';' '\n')'"
+            log_bold "$day day $hour h $min min $sec sec: Starting '$(echo "$5" | tr ';' '\n')'"
             log_title "$(eval "$5")"
-            log_bold "$day day $hour h $min min $sec sec: Stopping '$(echo "$1" | tr ';' '\n')'"
+            log_bold "$day day $hour h $min min $sec sec: Stopping '$(echo "$5" | tr ';' '\n')'"
           elif [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ]
           then
             return
@@ -272,17 +272,16 @@ function run_internal_project()
   then
     touch $lockfile
 
-    log_title "Fetching latest source for project $project_name"
-    prepare_project
-    prepare_chef_repo
-
     cd $initialize_install_dir
     download_github_raw install.sh
 
     log_title "Install $project_name as fresh with environments $additionnal_environments"
-    wait_for_project_command "bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments"
+    bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments
   else
-    execute_chef_solo "$project_name"
+    log_title "Fetching latest source for project $project_name"
+    prepare_project
+    prepare_chef_repo
+    wait_for_project_command "execute_chef_solo \"\$project_name\""
     rm -f $lockfile
     run_internal_project
   fi
