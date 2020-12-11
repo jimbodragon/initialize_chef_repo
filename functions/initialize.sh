@@ -14,8 +14,8 @@ export -f create_directory
 function log()
 {
   create_directory "$log_dir"
-  echo -e "$1" >> $log_dir/initialize.log
-  echo -e "$1" > /dev/stderr
+  echo -e "$@" >> $log_dir/initialize.log
+  echo -e "$@" > /dev/stderr
 }
 export -f log
 
@@ -292,7 +292,12 @@ function run_project()
         include_bashrc
         create_build_file $build_file
 
-        run_command="cd $initialize_install_dir; log \$(pwd); download_github_raw install.sh; log \$(pwd); ls -alh install.sh"
+        run_command="cd $initialize_install_dir; log \$(pwd)"
+        run_command="$run_command; download_github_raw install.sh"
+        run_command="$run_command; log \$(pwd); ls -alh install.sh"
+        run_command="$run_command; bash install.sh $project_name $additionnal_environments;"
+        run_command="$run_command; execute_chef_solo \"$project_name\""
+        run_command="$run_command; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         wait_for_project_command "$run_command"
         # wait_for_project_command " download_github_raw install.sh; log 'initialize_install_dir (3) = $initialize_install_dir'; log \"initialize_install_dir (4) = \$initialize_install_dir\"; bash $initialize_install_dir/install.sh $project_name $additionnal_environments; log \"initialize_install_dir (5) = \$initialize_install_dir\"; execute_chef_solo \"$project_name\"; log \"Here the loaded source files: \${BASH_SOURCE[@]}\""
         # wait_for_project_command "clear_project\ndownload_and_run_project"
