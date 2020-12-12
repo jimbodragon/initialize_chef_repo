@@ -273,7 +273,7 @@ function run_internal_project()
     touch $lockfile
 
     cd $initialize_install_dir
-    rm -f install.sh
+    rm -f install.sh*
     download_github_raw install.sh
 
     log_title "Install $project_name as fresh with environments $additionnal_environments"

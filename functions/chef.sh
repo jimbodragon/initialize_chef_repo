@@ -398,6 +398,13 @@ function prepare_chef_repo()
 
   write_main_role_environment
 
+  log_level="info"
+  if [ "$DEBUG_LOG" != "" ] && [ $DEBUG_LOG -eq 1 ]
+  then
+    log_level="debug"
+  fi
+
+
   if [ ! -f "$solo_file" ]
   then
     cat << EOS > $solo_file
@@ -412,7 +419,7 @@ file_backup_path '$file_backup_path'
 file_cache_path '$file_cache_path'
 #json_attribs nil
 lockfile '$chef_repo_path/chef-solo.lock'
-log_level :info
+log_level :$log_level
 log_location STDOUT
 node_name 'install_chef_infra'
 #recipe_url 'http://path/to/remote/cookbook'
