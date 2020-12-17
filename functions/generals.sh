@@ -69,8 +69,10 @@ function get_github_netrc()
 {
   if [ ! -f ~/.netrc ] || [ "$(grep "machine github.com" ~/.netrc)" == "" ]
   then
+    echo
     read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
     read -sp "Insert password: " "github_password"
+    echo
 
     if [ "$github_password" != "" ]
     then
