@@ -65,8 +65,11 @@ export -f create_directory_project
 
 function download()
 {
-  debug_log "Downloading file $2 => $1"
-  wget --quiet --no-cache --no-cookies -O $1 $2
+  if [ ! -f $1 ]
+  then
+    debug_log "Downloading file $2 => $1"
+    wget --quiet --no-cache --no-cookies -O $1 $2
+  fi
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
     echo > /dev/null
@@ -264,7 +267,7 @@ export -f prepare_project
 
 function run_internal_project()
 {
-  log_title "Running chef $project_name"
+  log_title "log_title Running chef $project_name"
   check_and_install procmail
 
 
@@ -301,7 +304,8 @@ function run_project()
   case $state in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
-      wait_for_project_command prepare_chef_repo
+      prepare_chef_repo
+      run_project
     ;;
     "OK" )
       log "Check if chef_repo_running before running = $chef_repo_running"

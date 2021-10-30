@@ -36,8 +36,11 @@ export -f create_directory
 
 function download()
 {
-  echo "Downloading: '$2' => '$1'"
-  wget --quiet --no-cache --no-cookies -O $1 $2
+  if [ ! -f $1 ]
+  then
+    echo "Downloading: '$2' => '$1'"
+    wget --quiet --no-cache --no-cookies -O $1 $2
+  fi
 }
 export -f download
 
