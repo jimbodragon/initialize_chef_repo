@@ -35,6 +35,6 @@ logs|g' .gitignore
 git add *
 git commit -m 'Initializing repo'
 
-current_dir/git_clone_project.sh
+$current_dir/git_clone_project.sh
 cd $chef_repo
 commit_and_push "Adding submodules"

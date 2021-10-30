@@ -18,7 +18,8 @@ function redefine_project_data()
   export initialize_git_org="jimbodragon"
   export initialize_script_name="initialize_chef_repo"
   export initial_role="$project_name"
-  export initial_workstation_cookbook="chef_workstation_initialize"
+  export initial_workstation_cookbook="infra_chef"
+  export initial_recipe="ubuntu"
   export additionnal_environments=""
 
   export is_require_git_clone=0
