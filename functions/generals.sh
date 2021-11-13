@@ -20,7 +20,7 @@ function check_and_install()
     apt-get install $1
   fi
 }
-export -f install_chef_workstation
+export -f check_and_install
 
 function create_build_file()
 {

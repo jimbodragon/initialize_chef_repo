@@ -92,6 +92,7 @@ function git_push_for_fork()
   git push origin master --tags
   git push $fork_name
 }
+export -f git_push_for_fork
 
 function commit_and_push()
 {
