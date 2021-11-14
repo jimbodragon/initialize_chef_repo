@@ -18,7 +18,7 @@ function check_and_install()
   then
     log "Installing $1"
     echo "Test before installing $1"
-    apt-get install $1
+    apt-get -y install $1
   fi
 }
 export -f check_and_install

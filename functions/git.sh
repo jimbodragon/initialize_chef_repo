@@ -12,7 +12,7 @@ function install_jq()
   if [ "$(for git in $(sudo apt-cache madison jq | cut -d '|' -f 2); do sudo dpkg -l | grep jq | grep $git; done | head -n 1 | awk '{print $1}')" != "ii" ]
   then
     #apt-get -y update && sudo apt-get -y upgrade
-    apt-get -y install jq
+    check_and_install jq
   fi
 }
 export -f install_jq
