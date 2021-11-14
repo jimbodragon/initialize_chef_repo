@@ -9,11 +9,7 @@ export -f install_git
 
 function install_jq()
 {
-  if [ "$(for git in $(sudo apt-cache madison jq | cut -d '|' -f 2); do sudo dpkg -l | grep jq | grep $git; done | head -n 1 | awk '{print $1}')" != "ii" ]
-  then
-    #apt-get -y update && sudo apt-get -y upgrade
-    check_and_install jq
-  fi
+  check_and_install jq
 }
 export -f install_jq
 
@@ -162,6 +158,8 @@ export -f git_push_submodule
 
 function git_clone_main_project()
 {
+  log "Cloning main project"
+  install_git
   git_main_url="$git_user@$git_baseurl:$git_org/$git_main_project_name.git"
   if [ -d $git_main_project_name ] || [ "$(basename $(pwd))" == "$git_main_project_name" ]
   then
