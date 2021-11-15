@@ -447,11 +447,11 @@ EOS
 
   cat << EOF > "$chef_repo_path/Berksfile"
 source 'https://supermarket.chef.io'
-cookbook 'chef-git-server', '~> 1.0.0', github: "jimbodragon/"chef-git-server"
-cookbook 'infra_chef', '~> 0.1.0', github: "jimbodragon/"infra_chef"
-cookbook 'infraClass', '~> 0.1.0', github: "jimbodragon/"infraClass"
-cookbook 'virtualbox', '~> 4.0.0', github: "jimbodragon/"virtualbox"
-cookbook 'chef_workstation_initialize', '~> 0.1.0', github: "jimbodragon/"chef_workstation_initialize"
+cookbook 'chef-git-server', '~> 1.0.0', github: "jimbodragon/chef-git-server"
+cookbook 'infra_chef', '~> 0.1.0', github: "jimbodragon/infra_chef"
+cookbook 'infraClass', '~> 0.1.0', github: "jimbodragon/infraClass"
+cookbook 'virtualbox', '~> 4.0.0', github: "jimbodragon/virtualbox"
+cookbook 'chef_workstation_initialize', '~> 0.1.0', github: "jimbodragon/chef_workstation_initialize"
 
 # cookbook 'chef-git-server', '~> 1.0.0', git: "git@github.com:jimbodragon/chef-git-server.git"
 # cookbook 'infra_chef', '~> 0.1.0', git: "git@github.com:jimbodragon/infra_chef.git"
