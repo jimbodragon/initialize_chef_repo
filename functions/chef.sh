@@ -344,19 +344,19 @@ export -f ensure_default_attributes
 
 function project_json
 {
-  echo "{\"name\": \"$project_name\",\"description\": \"$project_description\",\"chef_type\": \"${1,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"recipe[$initial_workstation_cookbook]\"]}"
+  echo "{\"name\": \"$1\",\"description\": \"$project_description\",\"chef_type\": \"${2,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"recipe[$initial_workstation_cookbook]\"]}"
 }
 export -f project_json
 
 function project_role_json()
 {
-  project_json "Role"
+  project_json $1 "Role"
 }
 export -f project_role_json
 
 function project_environment_json
 {
-  project_json "Environment"
+  project_json $1 "Environment"
 }
 export -f project_environment_json
 
@@ -372,13 +372,13 @@ export -f write_role_environment
 
 function write_main_role
 {
-  write_role_environment "$role_path" "$project_name" "$(project_role_json)"
+  write_role_environment "$role_path" "$project_name" "$(project_role_json $project_name)"
 }
 export -f write_main_role
 
 function write_main_environment
 {
-  write_role_environment "$environment_path" "$environment" "$(project_environment_json)"
+  write_role_environment "$environment_path" "$chef_environment" "$(project_environment_json $chef_environment)"
 }
 export -f write_main_environment
 
