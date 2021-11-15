@@ -3,7 +3,7 @@
 function install_git()
 {
   check_and_install git
-  get_github_netrc
+  #get_github_netrc
 }
 export -f install_git
 
