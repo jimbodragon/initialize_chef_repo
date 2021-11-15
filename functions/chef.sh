@@ -124,6 +124,7 @@ function executing_chef_clone()
   case $repository_type in
     "scripts" | "databag" | "environment" | "roles" | "nodes" | "generators" | "cookbooks" | "libraries" | "resources" )
       initializing_project_submodule "$repository_type/$repository_name" "$fork_from_public" "$git_url"
+      log "Initializing project_submodule '$repository_type/$repository_name' '$fork_from_public' '$git_url'"
       read -p "Press 'ENTER' ro continue"
     ;;&
     "cookbooks" | "libraries" | "libraries" )
