@@ -68,13 +68,14 @@ export -f include_bashrc
 
 function get_github_netrc()
 {
-  log "checking ~/.netrc"
+  debug_log "checking ~/.netrc"
   if [ ! -f ~/.netrc ] || [ "$(grep "machine github.com" ~/.netrc)" == "" ]
   then
     log "creating ~/.netrc"
     echo
     read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
     read -sp "Insert password: " "github_password"
+    echo
     echo
 
     if [ "$github_password" != "" ]
