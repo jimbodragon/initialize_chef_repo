@@ -61,7 +61,7 @@ function include_bashrc()
 {
   if [ ! -f ~/.bashrc ] ||[ "$(grep "source $data_dir/initialize.sh" ~/.bashrc)" == "" ]
   then
-    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo -e \"source $functions_dir/initialize.sh\\nsource $data_dir/initialize.sh\" >> ~/.bashrc" ""
+    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo -e \"source $functions_dir/initialize.sh\\nsource $data_dir/initialize.sh\" >> ~/.bashrc" "echo -e \"#source $functions_dir/initialize.sh\\n#source $data_dir/initialize.sh\" >> ~/.bashrc"
   fi
 }
 export -f include_bashrc
@@ -96,7 +96,7 @@ function yes_no_question()
   return_variable_as_same_as_the_question_on_recursive_method=$2
   command_to_execute_if_yes=$3
   command_to_execute_if_no=$4
-  log "reading info for message = '$message' return_variable_as_same_as_the_question_on_recursive_method = '$return_variable_as_same_as_the_question_on_recursive_method' command_to_execute_if_yes = '$command_to_execute_if_yes' command_to_execute_if_no = '$command_to_execute_if_no'"
+  debug_log "reading info for message = '$message' return_variable_as_same_as_the_question_on_recursive_method = '$return_variable_as_same_as_the_question_on_recursive_method' command_to_execute_if_yes = '$command_to_execute_if_yes' command_to_execute_if_no = '$command_to_execute_if_no'"
 	read -p "$message" "$2"
 	eval "input=\$$2"
 	case $input in
