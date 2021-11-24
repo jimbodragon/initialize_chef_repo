@@ -429,7 +429,7 @@ file_cache_path '$file_cache_path'
 #json_attribs nil
 lockfile '$chef_repo_path/chef-solo.lock'
 log_level :$log_level
-log_location STDOUT
+# log_location STDOUT
 node_name 'install_chef_infra'
 #recipe_url 'http://path/to/remote/cookbook'
 rest_timeout 300
@@ -465,6 +465,271 @@ cookbook 'chef_workstation_initialize', '~> 0.1.0', git: "git@github.com:jimbodr
 # cookbook 'virtualbox', '~> 4.0.0', path: "/usr/local/chef/repo/Example/cookbooks/virtualbox"
 # cookbook 'chef_workstation_initialize', '~> 0.1.0', path: "/usr/local/chef/repo/Example/cookbooks/chef_workstation_initialize.git"
 EOF
+
+cat << EOF > "$chef_repo_path/.kitchen.yml"
+kitchen file for chef repo at $chef_repo_path
+EOF
+
+cat << EOF > "$chef_repo_path/.chef/knife.rb"
+current_dir = File.dirname(__FILE__)
+
+# log_level                :info
+# log_location             STDOUT
+# node_name                '$project_name'
+# secret			 '28MgvGOtbXRQkQQ6lw22'
+#
+# #api_version   1
+# #validation_client_name   'devops'
+# #validation_key           '#{current_dir}/devops.pem'
+#
+# knife[:chef_repo_path] = '/home/jproven3/GitProject/jimbo_local/JimboDragon'
+# knife[:vsphere_user] = "domain\\username"
+# knife[:vsphere_pass] = ""
+#
+# knife[:data_bags_path] = "#{knife[:chef_repo_path]}/data_bags/"
+# knife[:data_path] = "#{knife[:chef_repo_path]}/data/"
+# knife[:env_path] = "#{knife[:chef_repo_path]}/environments/"
+# knife[:role_path] = "#{knife[:chef_repo_path]}/roles/"
+#
+# syntax_check_cache_path  "#{current_dir}/syntax_check_cache"
+# #cookbook_path            ["#{current_dir}/../chefRepo/cookbooks", "#{current_dir}/../GitProject/yp_chefProject/cookbooks", "#{current_dir}/../chefRepo/supermarket_cookbooks", "#{current_dir}/../GitProject/github_project", "/home/jproven3/GitProject/yp_chefProject/cookbooks"]
+# cookbook_path		  ["#{knife[:chef_repo_path]}/cookbooks", "#{knife[:chef_repo_path]}/libraries", "#{knife[:chef_repo_path]}/resources",]
+#
+# puts "chef_repo_path = #{knife[:chef_repo_path]}"
+# knife[:editor]="/bin/nano"
+#
+# puts "PROGRAM_NAME = #{$PROGRAM_NAME}"
+# puts "ARGV = #{$ARGV}"
+# if File.basename($PROGRAM_NAME).eql?('chef-cli') || File.basename($PROGRAM_NAME).eql?('knife')
+#   case ARGV[0].to_s
+#   when 'generate'
+#     puts "Usind own generator"
+#     chefcli.generator_cookbook "#{knife[:chef_repo_path]}/generators/jimbo_generator"
+#     chefcli.generator.copyright_holder "Jimbo Dragon"
+#     chefcli.generator.license   "mit"
+#     chefcli.generator.email     "jimbo_dragon@hotmail.com"
+#   when 'supermarket'
+#     puts "Editing supermarket"
+#     node_name 'jprovencher'
+#     client_key File.join(knife[:chef_repo_path], '.chef/jprovencher.pem')
+#   end
+# end
+#
+# #knife[:authentication_protocol_version] = '1.3'
+#
+# #knife[:vault_mode] = 'client'
+# #knife[:vault_admins] = [ 'xxxxx', 'yyyyy', 'zzzzz']
+#
+#
+# #chef_server_url     'https://chef.dev.ypg.com/organizations/devops'
+# #client_key    '/home/jproven3/.chef/jproven3.pem'
+#
+# puts "Finish loading knife.rb on #{current_dir}"
+
+
+
+
+
+# acl_path:                             /root/acls
+# allowed_automatic_attributes:
+# allowed_default_attributes:
+# allowed_normal_attributes:
+# allowed_override_attributes:
+# always_dump_stacktrace:               false
+# authentication_protocol_version:      1.1
+# automatic_attribute_blacklist:
+# automatic_attribute_whitelist:
+# blocked_automatic_attributes:
+# blocked_default_attributes:
+# blocked_normal_attributes:
+# blocked_override_attributes:
+# cache_options:
+#   path: /root/.chef/syntaxcache
+# cache_path:                           /root/.chef/local-mode-cache
+# checksum_path:                        /root/.chef/local-mode-cache/checksums
+# chef_guid:
+# chef_guid_path:                       /root/.chef/chef_guid
+# chef_repo_path:                       /root
+# chef_server_root:                     chefzero://localhost:1
+# chef_server_url:                      chefzero://localhost:1
+# chef_zero:
+#   enabled:    true
+#   host:       localhost
+#   osc_compat: false
+#   port:       #<Enumerator:0x000000000136d318>
+#   single_org: chef
+# chefcli:
+# chefdk:
+# clear_gem_sources:
+# client_d_dir:                         /root/.chef/client.d
+# client_fork:
+# client_key:
+# client_key_contents:
+# client_key_path:                      /root/client_keys
+# client_path:                          /root/clients
+# client_registration_retries:          5
+# color:                                true
+# config_d_dir:                         /root/.chef/config.d
+# config_dir:                           /root/.chef/
+# config_file:
+# container_path:                       /root/containers
+# cookbook_artifact_path:               /root/cookbook_artifacts
+# cookbook_path:
+#   /usr/local/chef/repo/Jimbodragon/cookbooks
+#   /usr/local/chef/repo/Jimbodragon/libraries
+#   /usr/local/chef/repo/Jimbodragon/resources
+# cookbook_sync_threads:                10
+# count_log_resource_updates:           false
+# data_bag_decrypt_minimum_version:     0
+# data_bag_encrypt_version:             3
+# data_bag_path:                        /root/data_bags
+# data_collector:
+#   mode:             both
+#   organization:     chef_solo
+#   raise_on_failure: false
+#   server_url:
+#   token:
+# default_attribute_blacklist:
+# default_attribute_whitelist:
+# deployment_group:
+# diff_disabled:                        false
+# diff_filesize_threshold:              10000000
+# diff_output_threshold:                1000000
+# disable_event_loggers:                false
+# download_progress_interval:           10
+# enable_reporting:                     true
+# enable_reporting_url_fatals:          false
+# enable_selinux_file_permission_fixup: true
+# encrypted_data_bag_secret:
+# enforce_default_paths:                false
+# enforce_path_sanity:                  false
+# environment_path:                     /root/environments
+# event_handlers:
+# event_loggers:
+# exception_handlers:
+# ez:                                   false
+# file_atomic_update:                   true
+# file_backup_path:                     /root/.chef/local-mode-cache/backup
+# file_cache_path:                      /root/.chef/local-mode-cache/cache
+# file_staging_uses_destdir:            auto
+# fips:                                 false
+# follow_client_key_symlink:            false
+# force_formatter:                      false
+# force_logger:                         false
+# formatter:                            null
+# formatters:
+# group:
+# group_path:                           /root/groups
+# group_valid_regex:                    (?-mix:^[^-+~:,\t\r\n\f\0]+[^:,\t\r\n\f\0]*$)
+# http_disable_auth_on_redirect:        true
+# http_retry_count:                     5
+# http_retry_delay:                     5
+# internal_locale:                      C.UTF-8
+# interval:
+# json_attribs:
+# knife:
+#   hints:
+#
+# listen:                               false
+# local_key_generation:                 true
+# local_mode:                           true
+# lockfile:                             /root/.chef/local-mode-cache/cache/chef-client-running.pid
+# log_level:                            info
+# log_location:                         STDERR
+# minimal_ohai:                         false
+# named_run_list:
+# no_lazy_load:                         true
+# node_name:                            root
+# node_path:                            /root/nodes
+# normal_attribute_blacklist:
+# normal_attribute_whitelist:
+# ohai:
+#   critical_plugins:
+#   disabled_plugins:
+#   hints_path:       /etc/chef/ohai/hints
+#   log_level:        auto
+#   log_location:     #<IO:0x000000000097b7d8>
+#   optional_plugins:
+#   plugin:
+#   plugin_path:
+#     /opt/chef-workstation/embedded/lib/ruby/gems/2.7.0/gems/ohai-16.6.5/lib/ohai/plugins
+#     /etc/chef/ohai/plugins
+#   run_all_plugins:  false
+#   shellout_timeout: 30
+# ohai_segment_plugin_path:             /root/.chef/ohai/cookbook_plugins
+# once:
+# override_attribute_blacklist:
+# override_attribute_whitelist:
+# pid_file:
+# policy_document_native_api:           true
+# policy_group:
+# policy_group_path:                    /root/policy_groups
+# policy_name:
+# policy_path:                          /root/policies
+# profile:
+# recipe_url:
+# repo_mode:                            hosted_everything
+# report_handlers:
+# resource_unified_mode_default:        false
+# rest_timeout:                         300
+# role_path:                            /root/roles
+# ruby_encoding:                        UTF-8
+# rubygems_cache_enabled:               false
+# rubygems_url:
+# run_lock_timeout:
+# script_path:
+# show_download_progress:               false
+# silence_deprecation_warnings:
+# solo:                                 false
+# solo_d_dir:                           /root/.chef/solo.d
+# solo_legacy_mode:                     false
+# splay:
+# ssh_agent_signing:                    false
+# ssl_ca_file:
+# ssl_ca_path:
+# ssl_client_cert:
+# ssl_client_key:
+# ssl_verify_mode:                      verify_peer
+# start_handlers:
+# stream_execute_output:                false
+# syntax_check_cache_path:              /root/.chef/syntaxcache
+# target_mode:
+#   enabled:  false
+#   protocol: ssh
+# treat_deprecation_warnings_as_errors: false
+# trusted_certs_dir:                    /root/.chef/trusted_certs
+# umask:                                18
+# user:
+# user_home:                            /root
+# user_path:                            /root/users
+# user_valid_regex:                     (?-mix:^[^-+~:,\t\r\n\f\0]+[^:,\t\r\n\f\0]*$)
+# validation_client_name:               chef-validator
+# validation_key:
+# validation_key_contents:
+# verbose_logging:                      true
+# verify_api_cert:                      true
+# why_run:                              false
+# windows_service:
+#   watchdog_timeout: 7200
+# zypper_check_gpg:                     true
+
+
+chef_repo_path                       $chef_repo_path
+cookbook_path [
+  "$cookbook_path",
+  "$libraries_path",
+  "$resources_path"
+]
+data_bag_path                        $data_bag_path
+environment_path                     $environment_path
+log_level                            $log_level
+node_name                            $project_name
+node_path                            $nodes_dir
+policy_group_path                    $policy_group_dir
+policy_path                          $policy_dir
+role_path                            $role_path
+EOF
+
   berks_vendor "$chef_repo_path" "$berks_vendor"
 
   berks_vendor_all "$berks_vendor"
