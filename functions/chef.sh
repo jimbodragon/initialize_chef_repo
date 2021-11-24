@@ -714,20 +714,20 @@ current_dir = File.dirname(__FILE__)
 # zypper_check_gpg:                     true
 
 
-chef_repo_path                       $chef_repo_path
+chef_repo_path                       "$chef_repo_path"
 cookbook_path [
   "$cookbook_path",
   "$libraries_path",
   "$resources_path"
 ]
-data_bag_path                        $data_bag_path
-environment_path                     $environment_path
-log_level                            $log_level
-node_name                            $project_name
-node_path                            $nodes_dir
-policy_group_path                    $policy_group_dir
-policy_path                          $policy_dir
-role_path                            $role_path
+data_bag_path                        "$data_bag_path"
+environment_path                     "$environment_path"
+log_level                            "$log_level"
+node_name                            "$project_name"
+node_path                            "$nodes_dir"
+policy_group_path                    "$policy_group_dir"
+policy_path                          "$policy_dir"
+role_path                            "$role_path"
 EOF
 
   berks_vendor "$chef_repo_path" "$berks_vendor"
