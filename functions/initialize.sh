@@ -285,6 +285,7 @@ function run_internal_project()
     log_title "Fetching latest source for project $project_name"
     prepare_project
     prepare_chef_repo
+    cd $chef_repo_path
     wait_for_project_command "knife config show --all"
     wait_for_project_command "execute_chef_solo \"\$project_name\""
     rm -f $lockfile
