@@ -470,7 +470,7 @@ cat << EOF > "$chef_repo_path/.kitchen.yml"
 kitchen file for chef repo at $chef_repo_path
 EOF
 
-cat << EOF > "$chef_repo_path/.chef/knife.rb"
+cat << EOF > "$chef_repo_path/knife.rb"
 current_dir = File.dirname(__FILE__)
 
 # log_level                :info
