@@ -54,15 +54,15 @@ function redefine_initialize_data()
   export file_list=(
     "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
     "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-    "$data_dir_name/project.$extension"
-    "$data_dir_name/system.$extension"
-    "$data_dir_name/generals.$extension"
-    "$data_dir_name/git.$extension"
-    "$data_dir_name/chef.$extension"
-    "$functions_dir_name/generals.$extension"
-    "$functions_dir_name/git.$extension"
-    "$functions_dir_name/chef.$extension"
-    "$functions_dir_name/knife.$extension"
+    "$data_dir_name/project$extension"
+    "$data_dir_name/system$extension"
+    "$data_dir_name/generals$extension"
+    "$data_dir_name/git$extension"
+    "$data_dir_name/chef$extension"
+    "$functions_dir_name/generals$extension"
+    "$functions_dir_name/git$extension"
+    "$functions_dir_name/chef$extension"
+    "$functions_dir_name/knife$extension"
   )
 
   if [ "$chef_repo_running" != "" ]
