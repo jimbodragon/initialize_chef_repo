@@ -18,12 +18,9 @@ export -f create_directory
 function delete_directory()
 {
   folder_path=$1
-  if [ ! -d $folder_path ]
+  if [ -d $folder_path ]
   then
-    if [ "$folder_path" != "$log_dir" ]
-    then
-      log "Deleting folder $folder_path"
-    fi
+    log "Deleting folder $folder_path"
     rm -rf $folder_path
   fi
 }
@@ -369,6 +366,7 @@ function copy_project()
 {
   for file in ${file_list[@]}
   do
+    log "Copying '$initialize_install_dir/$file' to '$1/$file'"
     if [ "$initialize_install_dir/$file" != "$1/$file" ]
     then
       create_directory "$(dirname $1/$file)"
