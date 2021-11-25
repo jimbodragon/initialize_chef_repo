@@ -760,6 +760,9 @@ echo "{\"id\": \"www-data\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1
 
 EOF
 
+  chmod 775 /tmp/password_www-data.sh
+
+  log "Creating encrypted data bag at current dir $(pwd)"
   knife data bag create password www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json | jq .secret | cut -d '"' -f 2)" --local-mode --editor /tmp/password_www-data.sh
 
   berks_vendor "$chef_repo_path" "$berks_vendor"

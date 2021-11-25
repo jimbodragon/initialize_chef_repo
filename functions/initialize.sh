@@ -93,7 +93,7 @@ function delete_directory_project()
   delete_directory "$log_dir"
   delete_directory "$install_dir"
 }
-export -f create_directory_project
+export -f delete_directory_project
 
 function download()
 {
