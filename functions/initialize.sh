@@ -193,15 +193,12 @@ export -f wait_for_project_command
 function clear_project()
 {
   log "Clear Project: $chef_repo_path | $project_name"
-  cd $initial_current_dir
-  delete_directory $default_chef_path
-  rm install.sh*
-  delete_directory $functions_dir_name
-  delete_directory $initialize_dir_name
-  delete_directory $build_dir_name
-  delete_directory $data_dir_name
-  delete_directory $log_dir_name
-  delete_directory $install_dir_name
+  for file in ${file_list[@]}
+  do
+    log "Removing file $initialize_install_dir/$file"
+    rm -f "$initialize_install_dir/$file"
+  done
+  delete_directory_project
   is_good=$(validate_project)
 
   case $is_good in
@@ -352,7 +349,7 @@ function run_project()
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
       log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
       copy_project "$new_project_folder"
-      delete_directory_project
+      clear_project
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
