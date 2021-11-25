@@ -11,9 +11,13 @@ function create_directory()
     then
       log "Creating folder $1"
     fi
-    mkdir -p $1
-    log "Folder $1 fully created"
-    ls -alh $1
+    if [ -f $1 ]
+    then
+      log "Try to create a folder when it's a file that exit at $1"
+    else
+      mkdir -p $1
+      log "Folder $1 fully created"
+    fi
   fi
 }
 export -f create_directory
