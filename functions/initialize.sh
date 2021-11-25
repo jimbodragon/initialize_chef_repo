@@ -3,8 +3,6 @@
 
 function create_directory()
 {
-  # declare -l folder_path=$1
-  # folder_path=$1
   if [ ! -d $1 ]
   then
     if [ "$1" != "$log_dir" ]
@@ -374,7 +372,6 @@ function copy_project()
     if [ "$initialize_install_dir/$file" != "$1/$file" ]
     then
       create_directory "$(dirname $1/$file)"
-      ls -alh "$(dirname $1/$file)"
       cp -f $initialize_install_dir/$file $1/$file
     fi
   done

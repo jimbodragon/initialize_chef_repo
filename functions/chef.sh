@@ -391,6 +391,7 @@ export -f write_main_role_environment
 
 function prepare_chef_repo()
 {
+  log "Preparing chef repo $chef_repo_path"
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
@@ -405,6 +406,8 @@ function prepare_chef_repo()
   create_directory $berks_vendor
   create_directory "$data_bags_path/cookbook_secret_keys"
   create_directory "$data_bags_path/passwords"
+
+  log "Directory created as result $(ls -alh $chef_repo_path)"
 
   cd "$chef_repo_path"
 
