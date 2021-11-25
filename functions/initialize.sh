@@ -6,7 +6,7 @@ function create_directory()
   folder_path=$1
   if [ ! -d $folder_path ]
   then
-    if ["$folder_path" != "$log_dir"]
+    if [ "$folder_path" != "$log_dir" ]
     then
       log "Creating folder $folder_path"
     fi
