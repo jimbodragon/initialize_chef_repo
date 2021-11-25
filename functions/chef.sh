@@ -391,7 +391,6 @@ export -f write_main_role_environment
 
 function prepare_chef_repo()
 {
-  cd "$chef_repo_path"
   create_directory $chef_repo_path
   create_directory $cookbook_path
   create_directory $libraries_path
@@ -404,6 +403,10 @@ function prepare_chef_repo()
   create_directory $file_cache_path
   create_directory $log_path
   create_directory $berks_vendor
+  create_directory "$data_bags_path/cookbook_secret_keys"
+  create_directory "$data_bags_path/passwords"
+
+  cd "$chef_repo_path"
 
   write_main_role_environment
 
@@ -729,6 +732,32 @@ policy_group_path                    "$policy_group_dir"
 policy_path                          "$policy_dir"
 role_path                            "$role_path"
 EOF
+
+# cat << EOF > "$data_bags_path/passwords/www-data.json"
+# {
+#   "id": "www-data",
+#   "password": "TestStrongPassword",
+#   "rawpassword": "TestRawStringPassword",
+#   "sha512_encrypted_password": "\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0"
+# }
+# EOF
+
+cat << EOF > "$data_bags_path/cookbook_secret_keys/virtualbox.json"
+{
+  "id": "virtualbox",
+  "secret": "$(openssl rand -base64 512 | tr -d '\r\n')"
+}
+EOF
+
+cat << EOF > "/tmp/password_www-data.sh"
+#!/bin/bash
+echo "password parameter are \$@" > $log_path/password_www-data.log
+
+echo "{\"id\": \"www-data\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
+
+EOF
+
+  knife data bag create password www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json | jq .secret | cut -d '"' -f 2)" --local-mode --editor /tmp/password_www-data.sh
 
   berks_vendor "$chef_repo_path" "$berks_vendor"
 
