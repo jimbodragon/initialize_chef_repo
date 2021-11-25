@@ -370,6 +370,7 @@ function copy_project()
     if [ "$initialize_install_dir/$file" != "$1/$file" ]
     then
       create_directory "$(dirname $1/$file)"
+      ls -alh "$(dirname $1/$file)"
       cp -f $initialize_install_dir/$file $1/$file
     fi
   done
