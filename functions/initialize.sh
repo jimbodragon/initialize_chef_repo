@@ -11,6 +11,8 @@ function create_directory()
       log "Creating folder $folder_path"
     fi
     mkdir -p $folder_path
+    log "Folder $folder_path fully created"
+    ls -alh $folder_path
   fi
 }
 export -f create_directory
