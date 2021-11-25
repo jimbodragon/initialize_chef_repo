@@ -763,7 +763,7 @@ echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d
 EOF
 
   chmod 775 /tmp/password_www-data.sh
-  chmod 775 /tmp/cookbook_virtual-data.sh
+  chmod 775 /tmp/cookbook_virtual.sh
 
   log "Creating encrypted data bag at current dir $(pwd)"
   knife data bag create cookbook_secret_keys virtualbox --local-mode --editor /tmp/cookbook_virtual.sh
