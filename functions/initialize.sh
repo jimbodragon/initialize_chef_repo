@@ -3,7 +3,7 @@
 
 function create_directory()
 {
-  folder_path=$1
+  dedclare -l folder_path=$1
   if [ ! -d $folder_path ]
   then
     if [ "$folder_path" != "$log_dir" ]
