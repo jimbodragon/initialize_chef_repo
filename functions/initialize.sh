@@ -3,27 +3,28 @@
 
 function create_directory()
 {
-  declare -l folder_path=$1
-  if [ ! -d $folder_path ]
+  # declare -l folder_path=$1
+  # folder_path=$1
+  if [ ! -d $1 ]
   then
-    if [ "$folder_path" != "$log_dir" ]
+    if [ "$1" != "$log_dir" ]
     then
-      log "Creating folder $folder_path"
+      log "Creating folder $1"
     fi
-    mkdir -p $folder_path
-    log "Folder $folder_path fully created"
-    ls -alh $folder_path
+    mkdir -p $1
+    log "Folder $1 fully created"
+    ls -alh $1
   fi
 }
 export -f create_directory
 
 function delete_directory()
 {
-  folder_path=$1
-  if [ -d $folder_path ]
+  # folder_path=$1
+  if [ -d $1 ]
   then
-    log "Deleting folder $folder_path"
-    rm -rf $folder_path
+    log "Deleting folder $1"
+    rm -rf $1
   fi
 }
 export -f delete_directory
@@ -351,7 +352,7 @@ function run_project()
       new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
       log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
       copy_project "$new_project_folder"
-      # delete_directory_project
+      delete_directory_project
       initialize_parameters "$new_source_file"
       redefine_data
       rename_project $project_name
