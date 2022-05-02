@@ -25,11 +25,19 @@ export data_dir="$initialize_install_dir/$data_dir_name"
 
 function create_directory()
 {
-  folder_path=$1
-  echo "Create directory '$folder_path'"
-  if [ ! -d $folder_path ]
+  if [ ! -d $1 ]
   then
-    mkdir -p $folder_path
+    if [ "$1" != "$log_dir" ]
+    then
+      log "Creating folder $1"
+    fi
+    if [ -f $1 ]
+    then
+      log "Try to create a folder when it's a file that exit at $1"
+    else
+      mkdir -p $1
+      log "Folder $1 fully created"
+    fi
   fi
 }
 export -f create_directory

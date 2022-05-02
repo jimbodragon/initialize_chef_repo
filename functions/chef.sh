@@ -22,7 +22,7 @@ function berks_vendor()
   if [ ! -d $2 ]
   then
     log "Creating berks_vendor for $1 at $2 from $(pwd)"
-    mkdir -p $2
+    create_directory -p $2
   fi
   log "$(berks vendor $2 2>&1)"
 }
