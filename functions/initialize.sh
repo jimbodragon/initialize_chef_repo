@@ -249,28 +249,19 @@ function validate_project()
   if [ ! -f "$chef_repo_path/Berksfile" ]
   then
     log_bold "No Berksfile in : '$chef_repo_path'"
-    project_is_good="$project_is_good: no_berksfile"
+    project_is_good="no_berksfile"
   fi
 
   if [ ! -f "$solo_file" ]
   then
     log_bold "No '$solo_file' in : '$chef_repo_path'"
-    project_is_good="$project_is_good: no_solo_file"
+    project_is_good="no_solo_file"
   fi
 
   chef_repo_good="$(valide_chef_repo)"
-  case $chef_repo_good in
-    "root" )
-      project_is_good="$project_is_good: bad_chef_repo_path =­­­­­> $chef_repo_good"
-      ;;
-    "no_project_name" )
-      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'"
-      chef_repo_path="$chef_repo_path/$project_name"
-      ;;
-  esac
   if [ "$chef_repo_good" != "OK" ]
   then
-    project_is_good="bad_chef_repo_path =­­­­­> $chef_repo_good"
+    project_is_good="­­­$chef_repo_good"
   fi
 
   echo "$project_is_good"
@@ -337,8 +328,25 @@ function run_internal_project()
 }
 export -f run_internal_project
 
+function switch_project() {
+  new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
+  new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+  switch_for_type=$2
+  log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+  copy_project "$new_project_folder"
+  clear_project
+  initialize_parameters "$new_source_file"
+  redefine_data
+  rename_project $project_name
+  log_bold "Reexecuting the project"
+  prepare_chef_repo
+  run_project "$switch_for_type"
+  log_title "Project $project_name finished to run"
+}
+
 function run_project()
 {
+  run_for_type=$1
   prepare_project
 
   log_title "Running project $project_name at $chef_repo_path"
@@ -348,34 +356,24 @@ function run_project()
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_chef_repo
-      run_project
+      run_project "$run_for_type"
     ;;
     "OK" )
       log "Check if chef_repo_running before running = $chef_repo_running"
       include_bashrc
       create_build_file $build_file
-      if [ "$1" !=  "Desktop" ]
+      if [ "$run_for_type" !=  "Desktop" ]
       then
         run_internal_project
-      else
-        run_internal_project
       fi
+      log_title "Project $project_name finished to run"
+    ;;
+    "no_project_name" )
+      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
-
-      new_project_folder="$default_chef_path/$project_name/$(basename $scripts_dir)/$initialize_script_name"
-      new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-      log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
-      copy_project "$new_project_folder"
-      clear_project
-      initialize_parameters "$new_source_file"
-      redefine_data
-      rename_project $project_name
-      log_bold "Reexecuting the project"
-      prepare_chef_repo
-      run_project
-      log_title "Project $project_name finished to run"
+      switch_project "$default_chef_path" "$run_for_type"
     ;;
   esac
 }
