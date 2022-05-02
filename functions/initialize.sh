@@ -350,9 +350,9 @@ function run_project()
   prepare_project
 
   log_title "Running project $project_name at $chef_repo_path"
-  state=$(validate_project)
+  state="$(validate_project)"
 
-  case $(echo "$state" | tr -d '[:blank:]') in
+  case $state in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_chef_repo
@@ -373,10 +373,8 @@ function run_project()
       switch_project "$chef_repo_path/$project_name" "$run_for_type"
     ;;
     * )
-      log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
-      read
-      switch_project "$default_chef_path" "$run_for_type"
-      read
+      log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path: Press 'ENTER' to continue"
+      yes_no_question "Could not validate project, fo you want to continue with default value?" use_default "switch_project '$default_chef_path' '$run_for_type'" "exit 10"
     ;;
   esac
 }
