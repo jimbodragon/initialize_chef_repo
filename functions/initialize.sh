@@ -373,7 +373,9 @@ function run_project()
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
+      exit 110
       switch_project "$default_chef_path" "$run_for_type"
+      exit 112
     ;;
   esac
 }
