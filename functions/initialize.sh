@@ -261,7 +261,7 @@ function validate_project()
   chef_repo_good="$(valide_chef_repo)"
   if [ "$chef_repo_good" != "OK" ]
   then
-    project_is_good="bad_chef_repo_path"
+    project_is_good="bad_chef_repo_path =­­­­­> $chef_repo_good"
   fi
 
   echo "$project_is_good"
