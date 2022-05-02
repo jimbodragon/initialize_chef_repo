@@ -74,6 +74,8 @@ export -f redefine_initialize_data
 
 function run_new_project()
 {
+  declare -l install_type="$1"
+
   echo
   echo "--------------------------------------------------------------"
   echo "Running new project $project_name at $chef_repo_path"
@@ -81,7 +83,7 @@ function run_new_project()
   echo
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
-  run_project
+  run_project $install_type
 }
 export -f run_new_project
 

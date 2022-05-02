@@ -342,7 +342,12 @@ function run_project()
       log "Check if chef_repo_running before running = $chef_repo_running"
       include_bashrc
       create_build_file $build_file
-      run_internal_project
+      if [ "$1" !=  "Desktop" ]
+      then
+        run_internal_project
+      else
+        run_internal_project
+      fi
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"

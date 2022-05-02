@@ -15,7 +15,7 @@ function redefine_project_data()
   export git_user='git'
   export http_git="https://raw.githubusercontent.com"
 
-  export initialize_git_org="jimbodragon"
+  export initialize_git_org="JimboDragonGit"
   export initialize_script_name="initialize_chef_repo"
   export initial_role="$project_name"
   export initial_workstation_cookbook="infra_chef"
