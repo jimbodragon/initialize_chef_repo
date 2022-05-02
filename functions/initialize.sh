@@ -261,6 +261,7 @@ function validate_project()
   chef_repo_good="$(valide_chef_repo)"
   if [ "$chef_repo_good" != "OK" ]
   then
+    log_bold "chef_repo_path is not in a desire path '$chef_repo_good'"
     project_is_good="­­­$chef_repo_good"
   fi
 
@@ -373,9 +374,9 @@ function run_project()
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
-      exit 110
+      read
       switch_project "$default_chef_path" "$run_for_type"
-      exit 112
+      read
     ;;
   esac
 }
