@@ -204,9 +204,12 @@ function clear_project()
   is_good=$(validate_project)
 
   case $is_good in
-    "1" )
+    "OK" )
       log "Clear all chef_repo_path: $chef_repo_path | $project_name"
       rm -rf $chef_repo_path
+      ;;
+    * )
+      log "Cannot clear the project at $chef_repo_path"
       ;;
   esac
 }
@@ -226,15 +229,15 @@ export -f download_and_run_project
 
 function valide_chef_repo()
 {
-  chef_repo_path_is_ok="1"
+  chef_repo_path_is_ok="OK"
   if [ "$chef_repo_path" == "/" ]
   then
-    chef_repo_path_is_ok="0"
+    chef_repo_path_is_ok="root"
     log_bold "chef_repo_path cannot be '/'"
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
-    chef_repo_path_is_ok="0"
+    chef_repo_path_is_ok="no_project_name"
   fi
   echo "$chef_repo_path_is_ok"
 }
@@ -256,7 +259,7 @@ function validate_project()
   fi
 
   chef_repo_good="$(valide_chef_repo)"
-  if [ "$chef_repo_good" == "0" ]
+  if [ "$chef_repo_good" != "OK" ]
   then
     project_is_good="bad_chef_repo_path"
   fi
