@@ -249,16 +249,25 @@ function validate_project()
   if [ ! -f "$chef_repo_path/Berksfile" ]
   then
     log_bold "No Berksfile in : '$chef_repo_path'"
-    project_is_good="no_berksfile"
+    project_is_good="$project_is_good: no_berksfile"
   fi
 
   if [ ! -f "$solo_file" ]
   then
     log_bold "No '$solo_file' in : '$chef_repo_path'"
-    project_is_good="no_solo_file"
+    project_is_good="$project_is_good: no_solo_file"
   fi
 
   chef_repo_good="$(valide_chef_repo)"
+  case $chef_repo_good in
+    "root" )
+      project_is_good="$project_is_good: bad_chef_repo_path =­­­­­> $chef_repo_good"
+      ;;
+    "no_project_name" )
+      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'
+      chef_repo_path="$chef_repo_path/$project_name"
+      ;;
+  esac
   if [ "$chef_repo_good" != "OK" ]
   then
     project_is_good="bad_chef_repo_path =­­­­­> $chef_repo_good"
