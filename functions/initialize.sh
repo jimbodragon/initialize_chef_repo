@@ -239,7 +239,7 @@ function valide_chef_repo()
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     chef_repo_path_is_ok="no_project_name"
   fi
-  echo "$chef_repo_path_is_ok"
+  echo -n "$chef_repo_path_is_ok"
 }
 export -f valide_chef_repo
 
@@ -264,7 +264,7 @@ function validate_project()
     project_is_good="­­­$chef_repo_good"
   fi
 
-  echo "$project_is_good"
+  echo -n "$project_is_good"
 }
 export -f validate_project
 
@@ -301,7 +301,6 @@ function run_internal_project()
 {
   log_title "log_title Running chef $project_name"
   check_and_install procmail
-
 
   if [ ! -f $lockfile ]
   then
@@ -370,6 +369,7 @@ function run_project()
     ;;
     "no_project_name" )
       log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'"
+      switch_project "$chef_repo_path/$project_name" "$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
