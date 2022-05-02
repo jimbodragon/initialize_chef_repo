@@ -351,7 +351,7 @@ function run_project()
   log_title "Running project $project_name at $chef_repo_path"
   state=$(validate_project)
 
-  case $state in
+  case $($state | tr -d '[:blank:]') in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_chef_repo
