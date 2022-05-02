@@ -264,7 +264,7 @@ function validate_project()
       project_is_good="$project_is_good: bad_chef_repo_path =­­­­­> $chef_repo_good"
       ;;
     "no_project_name" )
-      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'
+      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'"
       chef_repo_path="$chef_repo_path/$project_name"
       ;;
   esac
