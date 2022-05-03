@@ -268,7 +268,7 @@ function validate_project()
   then
     log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good' and the project was '$project_is_good' state"
     log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
-    project_is_good="­­­$(echo $chef_repo_is_good | tr -d '[:blank:]')"
+    project_is_good="$chef_repo_is_good"
     for (( i=0; i<${#project_is_good}; i++ )); do
       log "$i char of project_is_good = $(ord "${project_is_good:$i:1}")"
     done
