@@ -258,12 +258,13 @@ function validate_project()
     project_is_good="no_solo_file"
   fi
 
-  chef_repo_good="$(valide_chef_repo)"
-  if [ "$chef_repo_good" != "OK" ]
+  chef_repo_is_good="$(valide_chef_repo)"
+  if [ "$chef_repo_is_good" != "OK" ]
   then
-    log_bold "chef_repo_path is not in a desire path '$chef_repo_good'"
-    project_is_good="­­­$chef_repo_good"
-    log "project_is_good state is '$project_is_good' with chef_repo_good '$chef_repo_good'"
+    log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good' and the project was '$project_is_good' state"
+    project_is_good=""
+    project_is_good="­­­$chef_repo_is_good"
+    log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
   fi
 
   log "project_is_good state is '$project_is_good'"
