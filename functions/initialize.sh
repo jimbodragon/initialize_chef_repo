@@ -263,8 +263,10 @@ function validate_project()
   then
     log_bold "chef_repo_path is not in a desire path '$chef_repo_good'"
     project_is_good="­­­$chef_repo_good"
+    log "project_is_good state is '$project_is_good'"
   fi
 
+  log "project_is_good state is '$project_is_good'"
   echo -n "$project_is_good"
 }
 export -f validate_project
