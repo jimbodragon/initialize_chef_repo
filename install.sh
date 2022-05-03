@@ -29,14 +29,14 @@ function create_directory()
   then
     if [ "$1" != "$log_dir" ]
     then
-      log "Creating folder $1"
+      echo "Creating folder $1"
     fi
     if [ -f $1 ]
     then
-      log "Try to create a folder when it's a file that exit at $1"
+      echo "Try to create a folder when it's a file that exit at $1"
     else
       mkdir -p $1
-      log "Folder $1 fully created"
+      echo "Folder $1 fully created"
     fi
   fi
 }
