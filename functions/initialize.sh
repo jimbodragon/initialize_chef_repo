@@ -243,6 +243,11 @@ function valide_chef_repo()
 }
 export -f valide_chef_repo
 
+function ord() {
+  LC_CTYPE=C printf '%d' "'$1"
+}
+export -f ord
+
 function validate_project()
 {
   project_is_good="OK"
@@ -264,6 +269,9 @@ function validate_project()
     log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good' and the project was '$project_is_good' state"
     log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
     project_is_good="­­­$(echo $chef_repo_is_good | tr -d '[:blank:]')"
+    for (( i=0; i<${#project_is_good}; i++ )); do
+      log "$i char of project_is_good = $(ord "${project_is_good:$i:1}")"
+    done
     log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
   fi
 
