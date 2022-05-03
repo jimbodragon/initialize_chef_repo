@@ -264,7 +264,7 @@ function validate_project()
     log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good' and the project was '$project_is_good' state"
     project_is_good=""
     log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
-    project_is_good="­­­$chef_repo_is_good"
+    project_is_good="­­­$(echo $chef_repo_is_good | tr -d '[:blank:]')"
     log "project_is_good state is '$project_is_good' with chef_repo_is_good '$chef_repo_is_good'"
   fi
 
