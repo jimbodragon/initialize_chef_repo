@@ -100,7 +100,7 @@ function download()
   if [ ! -f $1 ]
   then
     debug_log "Downloading file $2 => $1"
-    wget --quiet --no-cache --no-cookies -O $1 $2
+    wget --no-clobber --quiet --no-cache --no-cookies -O $1 $2
   fi
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
@@ -109,11 +109,11 @@ function download()
   then
     log_bold "File exist but not downloaded correctly: $1"
     log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
-    wget --no-cache --no-cookies -O $1 $2
+    wget--no-clobber --no-cache --no-cookies -O $1 $2
   else
     log_bold "File downloaded does not exist: $1"
     log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
-    wget --no-cache --no-cookies -O $1 $2
+    wget --no-clobber --no-cache --no-cookies -O $1 $2
   fi
 }
 export -f download
