@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to execute to initialize a fresh new chef repository
 
-initialize_install_dir="$(pwd)"
+export initialize_install_dir="$(pwd)"
 
 if [ "$1" == "" ]
 then
@@ -14,9 +14,9 @@ shift
 export additionnal_environments=$@
 
 export initialize_script_name="initialize_chef_repo"
+export data_dir_name="data"
 export git_org="jimbodragon"
 export git_branch="master"
-export data_dir_name="data"
 export http_git="https://raw.githubusercontent.com"
 
 export initialize_git_org="$git_org"
