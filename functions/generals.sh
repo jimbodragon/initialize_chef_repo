@@ -33,7 +33,7 @@ function create_build_file()
 current_dir="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "\$(dirname \$current_dir)/data/initialize.sh"
 source "\$functions_dir/initialize.sh"
-run_project
+run_project $2
 EOF
   fi
   chmod u+x $new_build_file
