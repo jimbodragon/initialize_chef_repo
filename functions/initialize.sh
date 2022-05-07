@@ -368,7 +368,7 @@ function run_project()
       log "Check if chef_repo_running before running = '$chef_repo_running' with install type '$run_for_type'"
       include_bashrc
       create_build_file "$build_file" "$run_for_type"
-      if [ "$run_for_type" !=  "Desktop" ]
+      if [ "$(echo "$run_for_type" | awk '{print tolower($0)}')" !=  "desktop" ]
       then
         run_internal_project
       fi

@@ -65,7 +65,7 @@ function redefine_initialize_data()
     "$functions_dir_name/knife$extension"
   )
 
-  if [ "$chef_repo_running" != "" ]
+  if [ "$chef_repo_running" == "" ]
   then
     export chef_repo_running=0
   fi
