@@ -8,7 +8,7 @@ function install_chef_workstation()
     log "Downloading Chef Workstation"
     download $downloaded_chef_file https://packages.chef.io/files/stable/chef-workstation/$chef_workstation_version/$os/$os_version/chef-workstation_$chef_workstation_version-1_amd64.deb
     log "Installing Chef Workstation"
-    dpkg -i $downloaded_chef_file
+    sudo dpkg -i $downloaded_chef_file
   fi
 }
 export -f install_chef_workstation
