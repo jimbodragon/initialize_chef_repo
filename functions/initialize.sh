@@ -374,9 +374,10 @@ function run_project()
       fi
       log_title "Project $project_name finished to run"
     ;;
-    "no_project_name" )
-      log_bold "Adding project_name to chef_repo_path '$chef_repo_path/$project_name'"
-      switch_project "$chef_repo_path/$project_name" "$run_for_type"
+    "no_project_name" | "root" )
+      new_chef_repo="$chef_repo_path/automatic_chef_repositories"
+      log_bold "Adding project_name to chef_repo_path '$new_chef_repo'"
+      switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"

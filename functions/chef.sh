@@ -407,7 +407,7 @@ function prepare_chef_repo()
   create_directory "$data_bags_path/cookbook_secret_keys"
   create_directory "$data_bags_path/passwords"
 
-  log "Directory created as result $(ls -alh $chef_repo_path)"
+  log "Directory '$chef_repo_path' created as result $(ls -alh $chef_repo_path)"
 
   cd "$chef_repo_path"
 
