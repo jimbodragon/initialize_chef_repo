@@ -115,9 +115,9 @@ function download()
   then
     log_bold "File exist but not downloaded correctly: $1"
     log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
-    wget--no-clobber --no-cache --no-cookies -O $1 $2
+    wget --no-clobber --no-cache --no-cookies -O $1 $2
   else
-    log_bold "File downloaded does not exist: $1"
+    log_bold "File downloaded but does not exist: $1"
     log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
     wget --no-clobber --no-cache --no-cookies -O $1 $2
   fi
