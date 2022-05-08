@@ -120,6 +120,7 @@ function download()
   else
     log_bold "File downloaded but does not exist: $1"
     log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
+    rm -f $1
     wget --no-clobber --no-cache --no-cookies -O $1 $2
   fi
 }
