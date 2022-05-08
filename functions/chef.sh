@@ -768,7 +768,7 @@ EOF
 
   log "Creating encrypted data bag at current dir $(pwd)"
   knife data bag create cookbook_secret_keys virtualbox --local-mode --editor $file_cache_path/cookbook_virtual.sh
-  knife data bag create password www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json --editor $file_cache_path/cookbook_virtual.sh | jq .secret | cut -d '"' -f 2)" --local-mode --editor $file_cache_path/password_www-data.sh
+  knife data bag create passwords www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json --editor $file_cache_path/cookbook_virtual.sh | jq .secret | cut -d '"' -f 2)" --local-mode --editor $file_cache_path/password_www-data.sh
 
   berks_vendor "$chef_repo_path" "$berks_vendor"
 
