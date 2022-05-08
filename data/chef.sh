@@ -12,7 +12,7 @@ function redefine_chef_data()
   export cookbook_path="$chef_repo_path/cookbooks"
   export libraries_path="$chef_repo_path/libraries"
   export resources_path="$chef_repo_path/resources"
-  export data_bag_path="$chef_repo_path/data_bags"
+  export data_bags_path="$chef_repo_path/data_bags"
   export environment_path="$chef_repo_path/environments"
   export role_path="$chef_repo_path/roles"
   export scripts_dir="$chef_repo_path/scripts"
@@ -24,6 +24,7 @@ function redefine_chef_data()
   export checksum_path="$chef_repo_path/checksums"
   export file_backup_path="$chef_repo_path/backup"
   export file_cache_path="$chef_repo_path/cache"
+  export download_path="$chef_repo_path/download"
   export log_path="$chef_repo_path/logs"
   export berks_vendor="$chef_repo_path/berks_vendor"
 

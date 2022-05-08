@@ -172,6 +172,7 @@ function generate_new_chef_repo()
   create_directory $(basename $scripts_dir)
   create_directory $(basename $libraries_path)
   create_directory $(basename $resources_path)
+  create_directory $(basename $download_path)
 
   sed -i 's|# !cookbooks/chef_workstation|# !cookbooks/chef_workstation\n\ncookbooks/example\ndata_bags/example\nenvironments/example\nroles/example\nlibraries/example\nresources/example\nroles/example\ncookbooks/README.md\ndata_bags/README.md\nenvironments/README.md\nroles/README.md\nenvironments/example.json\nroles/example.json\nchecksums\nbackup\ncache\nlogs|g' .gitignore
 
@@ -396,7 +397,7 @@ function prepare_chef_repo()
   create_directory $cookbook_path
   create_directory $libraries_path
   create_directory $resources_path
-  create_directory $data_bag_path
+  create_directory $data_bags_path
   create_directory $environment_path
   create_directory $role_path
   create_directory $checksum_path
@@ -427,7 +428,7 @@ checksum_path '$checksum_path'
 cookbook_path [
               '$berks_vendor'
             ]
-data_bag_path '$data_bag_path'
+data_bags_path '$data_bags_path'
 environment '$chef_environment'
 environment_path '$environment_path'
 file_backup_path '$file_backup_path'
@@ -588,7 +589,7 @@ current_dir = File.dirname(__FILE__)
 # count_log_resource_updates:           false
 # data_bag_decrypt_minimum_version:     0
 # data_bag_encrypt_version:             3
-# data_bag_path:                        /root/data_bags
+# data_bags_path:                        /root/data_bags
 # data_collector:
 #   mode:             both
 #   organization:     chef_solo
@@ -726,7 +727,7 @@ cookbook_path [
   "$libraries_path",
   "$resources_path"
 ]
-data_bag_path                        "$data_bag_path"
+data_bags_path                        "$data_bags_path"
 environment_path                     "$environment_path"
 log_level                            "$log_level"
 node_name                            "$project_name"
@@ -752,22 +753,22 @@ cat << EOF > "$data_bags_path/cookbook_secret_keys/virtualbox.json"
 }
 EOF
 
-cat << EOF > "/tmp/password_www-data.sh"
+cat << EOF > "$file_cache_path/password_www-data.sh"
 #!/bin/bash
 echo "{\"id\": \"www-data\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
 EOF
 
-cat << EOF > "/tmp/cookbook_virtual.sh"
+cat << EOF > "$file_cache_path/cookbook_virtual.sh"
 #!/bin/bash
 echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d '\r\n')\"}" > \$1
 EOF
 
-  chmod 775 /tmp/password_www-data.sh
-  chmod 775 /tmp/cookbook_virtual.sh
+  chmod 775 $file_cache_path/password_www-data.sh
+  chmod 775 $file_cache_path/cookbook_virtual.sh
 
   log "Creating encrypted data bag at current dir $(pwd)"
-  knife data bag create cookbook_secret_keys virtualbox --local-mode --editor /tmp/cookbook_virtual.sh
-  knife data bag create password www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json --editor /tmp/cookbook_virtual.sh | jq .secret | cut -d '"' -f 2)" --local-mode --editor /tmp/password_www-data.sh
+  knife data bag create cookbook_secret_keys virtualbox --local-mode --editor $file_cache_path/cookbook_virtual.sh
+  knife data bag create password www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json --editor $file_cache_path/cookbook_virtual.sh | jq .secret | cut -d '"' -f 2)" --local-mode --editor $file_cache_path/password_www-data.sh
 
   berks_vendor "$chef_repo_path" "$berks_vendor"
 

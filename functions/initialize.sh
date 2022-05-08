@@ -13,7 +13,13 @@ function create_directory()
     then
       log "Try to create a folder when it's a file that exit at $1"
     else
-      mkdir -p $1
+      if [ "$2" == "sudo" ]
+      then
+        cmd="sudo "
+      else
+        cmd=""
+      fi
+      $cmd mkdir -p $1
       log "Folder $1 fully created"
     fi
   fi
@@ -348,6 +354,7 @@ function switch_project() {
   run_project "$switch_for_type"
   log_title "Project $project_name finished to run"
 }
+export -f switch_project
 
 function run_project()
 {
@@ -377,6 +384,11 @@ function run_project()
     "no_project_name" | "root" )
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Adding project_name to chef_repo_path '$new_chef_repo'"
+      if [ "$state" == "root" ]
+      then
+        create_directory "$new_chef_repo" sudo
+        chown -r $(id --user --name $USER):$(id --group --name $USER) "$chef_repo_path"
+      fi
       switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
