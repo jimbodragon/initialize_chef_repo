@@ -746,13 +746,6 @@ EOF
 # }
 # EOF
 
-cat << EOF > "$data_bags_path/cookbook_secret_keys/virtualbox.json"
-{
-  "id": "virtualbox",
-  "secret": "$(openssl rand -base64 512 | tr -d '\r\n')"
-}
-EOF
-
 cat << EOF > "$file_cache_path/password_www-data.sh"
 #!/bin/bash
 echo "{\"id\": \"www-data\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
@@ -767,8 +760,8 @@ EOF
   chmod 775 $file_cache_path/cookbook_virtual.sh
 
   log "Creating encrypted data bag at current dir $(pwd)"
-  knife data bag create cookbook_secret_keys virtualbox --local-mode --editor $file_cache_path/cookbook_virtual.sh
-  knife data bag create passwords www-data --secret "$(knife data bag show cookbook_secret_keys virtualbox --local-mode --format json --editor $file_cache_path/cookbook_virtual.sh | jq .secret | cut -d '"' -f 2)" --local-mode --editor $file_cache_path/password_www-data.sh
+  create_databag cookbook_secret_keys virtualbox $file_cache_path/cookbook_virtual.sh
+  create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret $file_cache_path/password_www-data.sh
 
   berks_vendor "$chef_repo_path" "$berks_vendor"
 
