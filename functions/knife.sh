@@ -8,6 +8,7 @@ export -f knife_exec
 function create_databag()
 {
   if [ "$3" == "" ]
+  then
     editor="/bin/nano"
   else
     editor="$3"
@@ -19,6 +20,7 @@ export -f create_databag
 function create_encrypted_databag()
 {
   if [ "$6" == "" ]
+  then
     editor="/bin/nano"
   else
     editor="$6"
@@ -30,6 +32,7 @@ export -f create_databag
 function show_databag_item()
 {
   if [ "$4" == "" ]
+  then
     editor="/bin/nano"
   else
     editor="$4"
