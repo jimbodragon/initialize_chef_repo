@@ -9,18 +9,18 @@ function redefine_project_data()
   debug_log "Redefine project data: $chef_repo_path | $project_name"
   export git_branch="master"
   export environment="production"
-  export git_main_project_name="installation_of_initialize_chef_repo"
-  export git_org="installation_of_initialize_chef_repo"
+  export git_main_project_name="initialize_chef_repo"
+  export git_org="jimbodragon"
   export git_baseurl='github.com'
   export git_user='git'
   export http_git="https://raw.githubusercontent.com"
 
-  export initialize_git_org="JimboDragonGit"
+  export initialize_git_org="$git_org"
   export initialize_script_name="initialize_chef_repo"
   export initial_role="$project_name"
   export initial_workstation_cookbook="infra_chef"
   export initial_recipe="ubuntu"
-  export additionnal_environments="$additionnal_environments"
+  export additionnal_environments=""
 
   export is_require_git_clone=0
 
