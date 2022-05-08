@@ -27,7 +27,7 @@ function create_encrypted_databag()
   fi
   knife data bag create $1 $2 --local-mode --editor $editor --secret "$(show_databag_item $3 $4 $5 )"
 }
-export -f create_databag
+export -f create_encrypted_databag
 
 function show_databag_item()
 {
@@ -39,4 +39,4 @@ function show_databag_item()
   fi
   knife data bag show $1 $2 --local-mode --format json --editor $editor | jq .$3 | cut -d '"' -f 2
 }
-export -f show_databag
+export -f show_databag_item
