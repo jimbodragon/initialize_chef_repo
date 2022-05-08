@@ -323,6 +323,7 @@ function run_internal_project()
     download_github_raw install.sh
 
     log_title "Install $project_name as fresh with environments $additionnal_environments"
+    log "Running command: 'bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments'"
     bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments
   else
     log_title "Fetching latest source for project $project_name"

@@ -62,6 +62,7 @@ function redefine_initialize_data()
     "$functions_dir_name/generals$extension"
     "$functions_dir_name/git$extension"
     "$functions_dir_name/chef$extension"
+    "$functions_dir_name/kitchen$extension"
     "$functions_dir_name/knife$extension"
   )
 
