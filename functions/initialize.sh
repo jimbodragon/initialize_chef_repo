@@ -381,14 +381,16 @@ function run_project()
       fi
       log_title "Project $project_name finished to run"
     ;;
-    "no_project_name" | "root" )
+    "no_project_name" )
+      new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
+      log_bold "Switching to chef_repo_path '$new_chef_repo'"
+      switch_project "$new_chef_repo" "$run_for_type"
+    ;;
+    "root" )
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
-      log_bold "Adding project_name to chef_repo_path '$new_chef_repo'"
-      if [ "$state" == "root" ]
-      then
-        create_directory "$new_chef_repo" sudo
-        chown -r $(id --user --name $USER):$(id --group --name $USER) "$chef_repo_path"
-      fi
+      log_bold "Switching to chef_repo_path '$new_chef_repo'"
+      create_directory "$new_chef_repo" sudo
+      chown -r $(id --user --name $USER):$(id --group --name $USER) "$chef_repo_path"
       switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
