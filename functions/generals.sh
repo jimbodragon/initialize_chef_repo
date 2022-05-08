@@ -71,21 +71,33 @@ function get_github_netrc()
   debug_log "checking ~/.netrc"
   if [ ! -f ~/.netrc ] || [ "$(grep "machine github.com" ~/.netrc)" == "" ]
   then
+    if [ ! -f ~/.ssh/id_rsa ] || [ ! -f ~/.ssh/id_rsa.pub ]
+    then
+      ssh-keygen -P "" -N ""
+    fi
     log "creating ~/.netrc"
     echo
-    read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from github: " "github_user"
+    read -p "Insert your personnal GitHub account to allow Berkshelf at downloading cookbook from HTTP github: " "github_user"
     read -sp "Insert password: " "github_password"
     echo
     echo
 
+    log "Do you want to accept ssh fingerprint to allow Berkshelf at downloading cookbook from SSH github: "
+    ssh-copy-id git@github.com
     if [ "$github_password" != "" ]
     then
       cat << EOF >> ~/.netrc
 machine github.com
 login $github_user
 password $github_password
+
+machine api.github.com
+login $github_user
+password $github_password
 EOF
     fi
+
+    validate_git_repo
   fi
 }
 export -f get_github_netrc
@@ -118,6 +130,7 @@ export -f yes_no_question
 
 function validate_git_repo()
 {
-	yes_no_question "Be sure to have a git repository and a SSH key import to it. Do you want to continue? " "validate_git_repo" "" "exit 1"
+  log "SSH public key: $(cat ~/.ssh/id_rsa.pub)"
+	yes_no_question "Be sure to have a git repository and the SSH key import to it. Write 'yes' when imported? " "validate_git_repo" "" "exit 1"
 }
 export -f validate_git_repo

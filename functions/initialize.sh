@@ -390,7 +390,7 @@ function run_project()
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
       create_directory "$new_chef_repo" sudo
-      chown -r $(id --user --name $USER):$(id --group --name $USER) "$chef_repo_path"
+      chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$chef_repo_path"
       switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
