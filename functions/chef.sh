@@ -748,7 +748,7 @@ EOF
 
 cat << EOF > "$file_cache_path/password_www-data.sh"
 #!/bin/bash
-echo "{\"id\": \"www-data\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
+echo "{\"id\": \"www-data\", \"password\": \"TestStrongPassword\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
 EOF
 
 cat << EOF > "$file_cache_path/cookbook_virtual.sh"
