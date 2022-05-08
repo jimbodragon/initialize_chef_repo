@@ -114,7 +114,8 @@ function download()
   elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ]
   then
     log_bold "File exist but not downloaded correctly: $1"
-    log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
+    log "Delete destination file and retrying download: wget --no-cache --no-cookies -O $1 $2"
+    rm -f $1
     wget --no-clobber --no-cache --no-cookies -O $1 $2
   else
     log_bold "File downloaded but does not exist: $1"
