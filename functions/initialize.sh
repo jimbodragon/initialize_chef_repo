@@ -184,6 +184,7 @@ function wait_for_command()
           then
             return
           else
+            log "Next run at $4 days, $3 hours and $2 minutes"
             sleep $1
           fi
         done

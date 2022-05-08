@@ -345,7 +345,7 @@ export -f ensure_default_attributes
 
 function project_json
 {
-  echo "{\"name\": \"$1\",\"description\": \"$project_description\",\"chef_type\": \"${2,,}\",\"json_class\": \"Chef::$1\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"recipe[$initial_workstation_cookbook]\"]}"
+  echo "{\"name\": \"$1\",\"description\": \"$project_description\",\"chef_type\": \"${2,,}\",\"json_class\": \"Chef::$2\",$(ensure_default_attributes), \"override_attributes\": {},\"run_list\": [\"recipe[$initial_workstation_cookbook]\"]}"
 }
 export -f project_json
 
