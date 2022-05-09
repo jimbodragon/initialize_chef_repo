@@ -174,7 +174,7 @@ function wait_for_command()
     let "duration=$(date +%s)-$start_internal_timer"
     if [ $duration -gt 0 ]
     then
-      log "Next run at $(date -r $expected_restart)"
+      log "Next run at '$expected_restart' = $(date -r $expected_restart) for $duration seconds at $start_internal_timer"
       sleep $1
     else
       log_bold "$(date): Starting '$(echo "$5" | tr ';' '\n')'"
