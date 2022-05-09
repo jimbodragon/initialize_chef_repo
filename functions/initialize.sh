@@ -386,7 +386,7 @@ function run_project()
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
       create_directory "$new_chef_repo" sudo
-      chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$chef_repo_path"
+      chown_project
       switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
@@ -396,6 +396,12 @@ function run_project()
   esac
 }
 export -f run_project
+
+function chown_project()
+{
+  sudo chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$chef_repo_path"
+}
+export -f chown_project
 
 function copy_project()
 {
