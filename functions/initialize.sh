@@ -166,30 +166,21 @@ export -f download_latest_files
 
 function wait_for_command()
 {
-  for day in {0..365}
+  start_internal_timer=$(date +%s)
+  let "expected_restart=$start_internal_timer+(($4*3600)+($3*3600)+($2*60)+$1)"
+
+  while [ $(date +%s) -le $expected_restart ]
   do
-    for hour in {0..24}
-    do
-      for min in {0..59}
-      do
-        for sec in `seq 0 $1 59`
-        do
-          log "$day day $hour h $min min $sec sec"
-          if [ $day -eq 0 ] && [ $hour -eq 0 ] && [ $min -eq 0 ] && [ $sec -eq 0 ]
-          then
-            log_bold "$day day $hour h $min min $sec sec: Starting '$(echo "$5" | tr ';' '\n')'"
-            log_title "$(eval "$5")"
-            log_bold "$day day $hour h $min min $sec sec: Stopping '$(echo "$5" | tr ';' '\n')'"
-          elif [ $day -eq $4 ] && [ $hour -eq $3 ] && [ $min -eq $2 ] && [ $sec -eq 0 ]
-          then
-            return
-          else
-            log "Next run at $4 days, $3 hours and $2 minutes"
-            sleep $1
-          fi
-        done
-      done
-    done
+    let "duration=$(date +%s)-$start_internal_timer"
+    if [ $duration -gt 0 ]
+    then
+      log "Next run at $(date -r $expected_restart)"
+      sleep $1
+    else
+      log_bold "$(date): Starting '$(echo "$5" | tr ';' '\n')'"
+      log_title "$(eval "$5")"
+      log_bold "$(date): Stopping '$(echo "$5" | tr ';' '\n')'"
+    fi
   done
 }
 export -f wait_for_command
