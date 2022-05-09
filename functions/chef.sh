@@ -473,10 +473,6 @@ cookbook 'chef_workstation_initialize', '~> 0.1.0', git: "git@github.com:jimbodr
 # cookbook 'chef_workstation_initialize', '~> 0.1.0', path: "/usr/local/chef/repo/Example/cookbooks/chef_workstation_initialize.git"
 EOF
 
-cat << EOF > "$chef_repo_path/.kitchen.yml"
-kitchen file for chef repo at $chef_repo_path
-EOF
-
 cat << EOF > "$chef_repo_path/knife.rb"
 current_dir = File.dirname(__FILE__)
 

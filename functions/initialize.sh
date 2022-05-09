@@ -169,7 +169,7 @@ function wait_for_command()
   start_internal_timer=$(date +%s)
   let "expected_restart=$start_internal_timer+(($4*3600)+($3*3600)+($2*60)+$1)"
 
-  while [ $(date +%s) -le $expected_restart ]
+  while [ $(date +%s) -lt $expected_restart ]
   do
     let "duration=$(date +%s)-$start_internal_timer"
     if [ $duration -gt 0 ]
