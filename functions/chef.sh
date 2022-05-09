@@ -772,7 +772,7 @@ function execute_chef_solo()
 {
   log_bold "Starting run list = $chef_run_list"
 
-  chef-solo --chef-license 'accept' --config $solo_file --override-runlist "$chef_run_list" --logfile "$log_path/chef_solo_$project_name_$environment.log"
+  sudo chef-solo --chef-license 'accept' --config $solo_file --override-runlist "$chef_run_list" --logfile "$log_path/chef_solo_$project_name_$environment.log"
 }
 export -f execute_chef_solo
 
