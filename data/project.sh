@@ -25,7 +25,7 @@ function redefine_project_data()
   export is_require_git_clone=0
 
   export jump_in_second=3
-  export max_min=5
+  export max_min=1
   export max_hour=0
   export max_day=0
   export initial_current_dir="/root"
