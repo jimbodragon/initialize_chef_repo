@@ -763,6 +763,7 @@ EOF
 
   berks_vendor_all "$berks_vendor"
 }
+export -f prepare_chef_repo
 
 function execute_chef_solo()
 {

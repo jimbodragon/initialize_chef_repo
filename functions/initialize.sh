@@ -111,9 +111,9 @@ function download()
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
     echo > /dev/null
-  elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ]
+  elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ] || [ "$3" == "-force" ]
   then
-    log_bold "File exist but not downloaded correctly: $1"
+    log_bold "File exist but not downloaded correctly: $1 or force (flag $3 detected)"
     log "Delete destination file and retrying download: wget --no-cache --no-cookies -O $1 $2"
     rm -f $1
     wget --no-clobber --no-cache --no-cookies -O $1 $2
@@ -132,7 +132,7 @@ function download_github_raw()
   local_path="$initialize_install_dir/$file_to_download"
   raw_url="$http_git/$initialize_git_org/$initialize_script_name/$git_branch/$file_to_download"
   create_directory $(dirname $local_path)
-  download "$local_path" "$raw_url"
+  download "$local_path" "$raw_url" "$2"
 }
 export -f download_github_raw
 
@@ -142,7 +142,7 @@ function download_project()
 
   for file in ${file_list[@]}
   do
-    download_github_raw "$file"
+    download_github_raw "$file" $1
   done
 }
 export -f download_project
@@ -159,7 +159,7 @@ export -f source_all_require_files
 
 function download_latest_files() {
   log_bold "Downloading latest files $chef_repo_path | $project_name"
-  download_project
+  download_project $1
   source_all_require_files
 }
 export -f download_latest_files
@@ -219,12 +219,9 @@ export -f clear_project
 function download_and_run_project()
 {
   cd $initial_current_dir
-  if [ ! -f "$install_file_name" ]
-  then
-    rm -f "$install_file_name"
-  fi
-  download_github_raw "$install_file_name"
-  bash "$install_file_name" $project_name
+  download_project
+  log "Running command: 'bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments'"
+  bash --norc --noprofile "$install_file_name" "$project_name" "$additionnal_environments"
 }
 export -f download_and_run_project
 
@@ -298,7 +295,7 @@ function prepare_project()
     source_all_require_files
   else
     create_directory_project
-    download_latest_files
+    download_latest_files "$1"
   fi
   redefine_data
 }
@@ -309,27 +306,27 @@ function run_internal_project()
   log_title "log_title Running chef $project_name"
   check_and_install procmail
 
-  if [ ! -f $lockfile ]
+  if [ ! -f $initialize_chef_repo_lockfile ]
   then
-    touch $lockfile
+    touch $initialize_chef_repo_lockfile
 
     cd $initialize_install_dir
     rm -f install.sh*
     download_github_raw install.sh
 
     log_title "Install $project_name as fresh with environments $additionnal_environments"
-    log "Running command: 'bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments'"
-    bash --norc --noprofile $initialize_install_dir/install.sh $project_name $additionnal_environments
+
+    prepare_project "-force"
+    run_internal_project
   else
     log_title "Fetching latest source for project $project_name"
     prepare_project
     prepare_chef_repo
     cd $chef_repo_path
     # wait_for_project_command "knife config show --all"
-    wait_for_project_command "execute_chef_solo \"\$project_name\""
-    rm -f $lockfile
+    execute_chef_solo "$project_name"
+    rm -f $initialize_chef_repo_lockfile
     log_title "Able to change run_internal_project function dynamically: $project_name"
-    run_internal_project
   fi
   log "Here the loaded source files: ${BASH_SOURCE[@]}"
 }
@@ -371,11 +368,24 @@ function run_project()
       log "Check if chef_repo_running before running = '$chef_repo_running' with install type '$run_for_type'"
       include_bashrc
       create_build_file "$build_file" "$run_for_type"
-      if [ "$(echo "$run_for_type" | awk '{print tolower($0)}')" !=  "desktop" ]
-      then
+      case "$(echo "$run_for_type" | awk '{print tolower($0)}')" in
+      "server" )
         run_internal_project
-      fi
-      log_title "Project $project_name finished to run"
+        ;;
+      "deamon" )
+        while true
+        do
+          wait_for_project_command "run_internal_project"
+        done
+        ;;
+      "desktop" )
+        log "Desktop type Installed successfully"
+        ;;
+      "*" )
+        log "Unknown run_for_type $run_for_type"
+        ;;
+      esac
+      log_title "Project $project_name finished to run for type $run_for_type"
     ;;
     "no_project_name" )
       new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
