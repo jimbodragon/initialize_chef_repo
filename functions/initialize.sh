@@ -297,6 +297,7 @@ function prepare_project()
     create_directory_project
     download_latest_files "$1"
   fi
+  chown_project
   redefine_data
 }
 export -f prepare_project
@@ -383,6 +384,8 @@ function run_project()
         ;;
       "*" )
         log "Unknown run_for_type $run_for_type"
+        log "Run internal project anyway"
+        run_internal_project
         ;;
       esac
       log_title "Project $project_name finished to run for type $run_for_type"
