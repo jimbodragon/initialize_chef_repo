@@ -111,6 +111,7 @@ function download()
   fi
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ]
   then
+    log_bold "Skipping file as it exists $2 to $1 with flag $3"
     echo > /dev/null
   elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ] || [ "$3" == "-force" ]
   then
@@ -153,6 +154,7 @@ function source_all_require_files()
 {
   for file in ${file_list[@]}
   do
+    log "Source file $initialize_install_dir/$file"
     source "$initialize_install_dir/$file"
   done
   redefine_data
