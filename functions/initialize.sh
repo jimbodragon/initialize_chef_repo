@@ -300,7 +300,6 @@ function prepare_project()
     create_directory_project
     download_latest_files "$1"
   fi
-  chown_project
   redefine_data
 }
 export -f prepare_project
@@ -321,6 +320,7 @@ function run_internal_project()
     log_title "Install $project_name as fresh with environments $additionnal_environments"
 
     prepare_project "-force"
+    chown_project
     run_project
   else
     log_title "Fetching latest source for project $project_name"
@@ -401,7 +401,6 @@ function run_project()
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
       create_directory "$new_chef_repo" sudo
-      chown_project
       switch_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
