@@ -144,7 +144,6 @@ function download_project()
 
   for file in ${file_list[@]}
   do
-    log "Downloading $file from githubraw"
     download_github_raw "$file" $1
   done
 }
