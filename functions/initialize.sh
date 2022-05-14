@@ -103,7 +103,6 @@ export -f delete_directory_project
 
 function download()
 {
-  log "Downloading $2 to $1 with flag $3"
   if [ ! -f $1 ]
   then
     debug_log "Downloading file $2 => $1"
@@ -300,7 +299,6 @@ function prepare_project()
     create_directory_project
     download_latest_files "$1"
   fi
-  redefine_data
 }
 export -f prepare_project
 
@@ -317,14 +315,12 @@ function run_internal_project()
     rm -f install.sh*
     download_github_raw install.sh
 
-    log_title "Install $project_name as fresh with environments $additionnal_environments"
-
+    log_title "Fetching latest source for project $project_name"
     prepare_project "-force"
     chown_project
     run_project
   else
-    log_title "Fetching latest source for project $project_name"
-    prepare_project
+    log_title "Install $project_name as fresh with environments $additionnal_environments"
     prepare_chef_repo
     cd $chef_repo_path
     # wait_for_project_command "knife config show --all"
@@ -355,8 +351,6 @@ export -f switch_project
 function run_project()
 {
   run_for_type=$1
-  prepare_project
-
   log_title "Running project $project_name at $chef_repo_path"
   state="$(validate_project)"
 
@@ -364,6 +358,7 @@ function run_project()
   case $state in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
+      prepare_project
       prepare_chef_repo
       run_project "$run_for_type"
     ;;
@@ -387,6 +382,7 @@ function run_project()
       "*" )
         log "Unknown run_for_type $run_for_type"
         log "Run internal project anyway"
+        prepare_chef_repo
         run_internal_project
         ;;
       esac
