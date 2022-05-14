@@ -103,7 +103,7 @@ export -f delete_directory_project
 
 function download()
 {
-  log "Downloading $2 to $1 with flag $3 from githubraw"
+  log "Downloading $2 to $1 with flag $3"
   if [ ! -f $1 ]
   then
     debug_log "Downloading file $2 => $1"
