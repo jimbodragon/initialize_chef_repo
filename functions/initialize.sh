@@ -103,6 +103,7 @@ export -f delete_directory_project
 
 function download()
 {
+  log "Downloading $2 to $1 with flag $3 from githubraw"
   if [ ! -f $1 ]
   then
     debug_log "Downloading file $2 => $1"
@@ -142,6 +143,7 @@ function download_project()
 
   for file in ${file_list[@]}
   do
+    log "Downloading $file from githubraw"
     download_github_raw "$file" $1
   done
 }
@@ -318,7 +320,7 @@ function run_internal_project()
     log_title "Install $project_name as fresh with environments $additionnal_environments"
 
     prepare_project "-force"
-    run_internal_project
+    run_project
   else
     log_title "Fetching latest source for project $project_name"
     prepare_project
@@ -344,7 +346,6 @@ function switch_project() {
   redefine_data
   rename_project $project_name
   log_bold "Reexecuting the project"
-  prepare_chef_repo
   run_project "$switch_for_type"
   log_title "Project $project_name finished to run"
 }
@@ -370,7 +371,7 @@ function run_project()
       include_bashrc
       create_build_file "$build_file" "$run_for_type"
       case "$(echo "$run_for_type" | awk '{print tolower($0)}')" in
-      "server" )
+      "server" | "" )
         run_internal_project
         ;;
       "deamon" )
