@@ -19,7 +19,6 @@ function redefine_chef_data()
   export nodes_dir="$chef_repo_path/nodes"
   export policy_group_dir="$chef_repo_path/policy_group"
   export policy_dir="$chef_repo_path/policies"
-  export scripts_dir="$chef_repo_path/scripts"
 
   export checksum_path="$chef_repo_path/checksums"
   export file_backup_path="$chef_repo_path/backup"

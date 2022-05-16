@@ -88,9 +88,6 @@ function run_new_project()
 }
 export -f run_new_project
 
-initialize_parameters "${BASH_SOURCE[0]}"
-redefine_initialize_data
-
 if [ "$(type source_all_require_files 2>&1 | grep "is a function")" == "source_all_require_files is a function" ]
 then
   for file in ${file_list[@]}
@@ -101,4 +98,7 @@ then
     fi
   done
   redefine_data
+else
+  initialize_parameters "${BASH_SOURCE[0]}"
+  redefine_initialize_data
 fi

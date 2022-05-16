@@ -198,21 +198,21 @@ export -f wait_for_project_command
 function clear_project()
 {
   log "Clear Project: $chef_repo_path | $project_name"
-  for file in ${file_list[@]}
-  do
-    log "Removing file $initialize_install_dir/$file"
-    rm -f "$initialize_install_dir/$file"
-  done
-  delete_directory_project
   is_good=$(validate_project)
 
   case $is_good in
     "OK" )
       log "Clear all chef_repo_path: $chef_repo_path | $project_name"
+      for file in ${file_list[@]}
+      do
+        log "Removing file $initialize_install_dir/$file"
+        rm -f "$initialize_install_dir/$file"
+      done
+      delete_directory_project
       rm -rf $chef_repo_path
       ;;
     * )
-      log "Cannot clear the project at $chef_repo_path"
+      log "Cannot clear the project at $chef_repo_path of cause $is_good"
       ;;
   esac
 }
@@ -312,8 +312,7 @@ function run_internal_project()
     touch $initialize_chef_repo_lockfile
 
     cd $initialize_install_dir
-    rm -f install.sh*
-    download_github_raw install.sh
+    download_github_raw install.sh "-force"
 
     log_title "Fetching latest source for project $project_name"
     prepare_project "-force"
@@ -338,7 +337,6 @@ function switch_project() {
   switch_for_type=$2
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
   copy_project "$new_project_folder"
-  clear_project
   initialize_parameters "$new_source_file"
   redefine_data
   rename_project $project_name
@@ -359,7 +357,6 @@ function run_project()
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_project
-      prepare_chef_repo
       run_project "$run_for_type"
     ;;
     "OK" )
@@ -382,7 +379,6 @@ function run_project()
       "*" )
         log "Unknown run_for_type $run_for_type"
         log "Run internal project anyway"
-        prepare_chef_repo
         run_internal_project
         ;;
       esac
@@ -391,17 +387,18 @@ function run_project()
     "no_project_name" )
       new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
-      switch_project "$new_chef_repo" "$run_for_type"
+      move_project "$new_chef_repo" "$run_for_type"
     ;;
     "root" )
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
       create_directory "$new_chef_repo" sudo
-      switch_project "$new_chef_repo" "$run_for_type"
+      cd $new_chef_repo
+      move_project "$new_chef_repo" "$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
-      yes_no_question "Could not validate project. Do you want to continue with default values? " use_default "switch_project '$default_chef_path' '$run_for_type'" "exit 10"
+      yes_no_question "Could not validate project. Do you want to continue with default values? " use_default "move_project '$default_chef_path' '$run_for_type'" "exit 10"
     ;;
   esac
 }
@@ -426,3 +423,17 @@ function copy_project()
   done
 }
 export -f copy_project
+
+function move_project()
+{
+  new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
+  new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+  switch_for_type=$2
+  log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+  copy_project "$new_project_folder"
+  initialize_parameters "$new_source_file"
+  log_bold "Reexecuting the project"
+  run_project "$switch_for_type"
+  log_title "Project $project_name finished to run"
+}
+export -f move_project

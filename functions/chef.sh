@@ -1,5 +1,11 @@
 #!/bin/bash##!/bin/bash#
 
+function get_chef_repo_path()
+{
+  "$(dirname $(dirname $initialize_install_dir))"
+}
+export -f get_chef_repo_path
+
 function install_chef_workstation()
 {
   install_git
@@ -194,17 +200,20 @@ function new_chef_infra()
   new_git_user="$7"
   new_http_git="$8"
   new_initialize_script_name="$9"
-  if [ "${10}" == "/" ]
-  then
-    new_chef_repo=${14}
-  else
-    new_chef_repo=${10}
-  fi
-  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_initialize_script_name"
   new_initial_role="${11}"
   new_initial_workstation_cookbook="${12}"
   new_initial_current_dir=${13}
   new_default_chef_path=${14}
+  if [ "${10}" == "/" ]
+  then
+    new_chef_repo=$new_default_chef_path
+  elif [ "${10}" == "" ]
+  then
+    new_chef_repo="$chef_path/$new_project_name"
+  else
+    new_chef_repo=${10}
+  fi
+  new_install_path="$new_chef_repo/$new_project_name/$(basename $scripts_dir)/$new_initialize_script_name"
   new_is_require_git_clone=${15}
   new_install_file_name=${16}
   new_initialize_git_org=${17}
