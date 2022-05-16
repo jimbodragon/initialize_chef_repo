@@ -1,6 +1,9 @@
 #!/bin/bash
 
-export initial_paramater=$@
+if [ "${initial_paramater[@]}" != "" ]
+then
+  export initial_paramater=$@
+fi
 
 function initialize_parameters()
 {
@@ -75,7 +78,7 @@ export -f redefine_initialize_data
 
 function run_new_project()
 {
-  declare -l install_type="$1"
+  export run_for_type=$1
 
   echo
   echo "--------------------------------------------------------------"
@@ -84,21 +87,23 @@ function run_new_project()
   echo
   download_github_raw "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
   source "$initialize_install_dir/$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
-  run_project $install_type
+  if [ "$(echo "$run_for_type" | awk '{print tolower($0)}')" == "deamon" ]
+  then
+    while [ "$(echo "$run_for_type" | awk '{print tolower($0)}')" == "deamon" ]
+    do
+      wait_for_project_command "run_project"
+    done
+
+    rm -f $initialize_chef_repo_stopfile
+  else
+    run_project
+  fi
 }
 export -f run_new_project
 
-if [ "$(type source_all_require_files 2>&1 | grep "is a function")" == "source_all_require_files is a function" ]
+if [ "$(type redefine_data 2>&1 | grep "is a function")" != "redefine_data is a function" ]
 then
-  for file in ${file_list[@]}
-  do
-    if [ "$initialize_install_dir/$file" != "$initialize_install_dir/$data_dir_name/$(basename ${BASH_SOURCE[0]})" ]
-    then
-      source "$initialize_install_dir/$file"
-    fi
-  done
-  redefine_data
-else
   initialize_parameters "${BASH_SOURCE[0]}"
   redefine_initialize_data
+  run_new_project ${initial_paramater[@]}
 fi

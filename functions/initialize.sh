@@ -162,9 +162,15 @@ export -f source_all_require_files
 function download_latest_files() {
   log_bold "Downloading latest files $chef_repo_path | $project_name"
   download_project $1
-  source_all_require_files
 }
 export -f download_latest_files
+
+function update_files() {
+  log_bold "Downloading latest files $chef_repo_path | $project_name"
+  download_latest_files "-force"
+  source_all_require_files
+}
+export -f update_files
 
 function wait_for_command()
 {
@@ -234,6 +240,10 @@ function valide_chef_repo()
   then
     chef_repo_path_is_ok="root"
     log_bold "chef_repo_path cannot be '/'"
+  elif [ "$chef_repo_path)" != "/home" ]
+  then
+    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    chef_repo_path_is_ok="home"
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
@@ -268,6 +278,27 @@ function validate_project()
   then
     log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good'"
     project_is_good="$chef_repo_is_good"
+  fi
+
+  if [ "$(type redefine_project_data 2>&1 | grep "is a function")" == "redefine_project_data is a function" ]
+  then
+    log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
+    project_is_good="not loaded"
+  fi
+
+  for file in ${file_list[@]}
+  do
+    if [ ! -f "$initialize_install_dir/$file" ]
+    then
+      log_bold "file is missing \"$initialize_install_dir/$file\" '$chef_repo_is_good'"
+      project_is_good="not downloaded"
+    fi
+  done
+
+  if [ -f "$initialize_chef_repo_stopfile" ]
+  then
+    log_bold "Quitting project '$chef_repo_is_good'"
+    project_is_good="quit"
   fi
 
   echo -n "$project_is_good"
@@ -311,19 +342,15 @@ function run_internal_project()
   then
     touch $initialize_chef_repo_lockfile
 
-    cd $initialize_install_dir
-    download_github_raw install.sh "-force"
-
     log_title "Fetching latest source for project $project_name"
-    prepare_project "-force"
+    update_files
     chown_project
     run_project
   else
     log_title "Install $project_name as fresh with environments $additionnal_environments"
-    prepare_chef_repo
     cd $chef_repo_path
     # wait_for_project_command "knife config show --all"
-    execute_chef_solo "$project_name"
+    execute_chef_solo
     rm -f $initialize_chef_repo_lockfile
     log_title "Able to change run_internal_project function dynamically: $project_name"
   fi
@@ -334,21 +361,19 @@ export -f run_internal_project
 function switch_project() {
   new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
   new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-  switch_for_type=$2
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
   copy_project "$new_project_folder"
   initialize_parameters "$new_source_file"
   redefine_data
   rename_project $project_name
   log_bold "Reexecuting the project"
-  run_project "$switch_for_type"
+  run_project
   log_title "Project $project_name finished to run"
 }
 export -f switch_project
 
 function run_project()
 {
-  run_for_type=$1
   log_title "Running project $project_name at $chef_repo_path"
   state="$(validate_project)"
 
@@ -356,7 +381,7 @@ function run_project()
   case $state in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
-      prepare_project
+      prepare_chef_repo
       run_project "$run_for_type"
     ;;
     "OK" )
@@ -364,14 +389,8 @@ function run_project()
       include_bashrc
       create_build_file "$build_file" "$run_for_type"
       case "$(echo "$run_for_type" | awk '{print tolower($0)}')" in
-      "server" | "" )
+      "server" | "deamon" | "" )
         run_internal_project
-        ;;
-      "deamon" )
-        while true
-        do
-          wait_for_project_command "run_internal_project"
-        done
         ;;
       "desktop" )
         log "Desktop type Installed successfully"
@@ -387,14 +406,23 @@ function run_project()
     "no_project_name" )
       new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
-      move_project "$new_chef_repo" "$run_for_type"
+      move_project "$new_chef_repo"
     ;;
     "root" )
       new_chef_repo="$chef_repo_path/automatic_chef_repositories"
       log_bold "Switching to chef_repo_path '$new_chef_repo'"
       create_directory "$new_chef_repo" sudo
       cd $new_chef_repo
-      move_project "$new_chef_repo" "$run_for_type"
+      move_project "$new_chef_repo"
+    "not downloaded" )
+      update_files
+      run_project
+    "not loaded" )
+      source_all_require_files
+      run_project
+    ;;
+    "quit" )
+      run_for_type="quit_$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
@@ -414,11 +442,14 @@ function copy_project()
 {
   for file in ${file_list[@]}
   do
-    log "Copying '$initialize_install_dir/$file' to '$1/$file'"
-    if [ "$initialize_install_dir/$file" != "$1/$file" ]
+    if [ -f "$initialize_install_dir/$file" ]
     then
-      create_directory "$(dirname $1/$file)"
-      cp -f $initialize_install_dir/$file $1/$file
+      log "Copying '$initialize_install_dir/$file' to '$1/$file'"
+      if [ "$initialize_install_dir/$file" != "$1/$file" ]
+      then
+        create_directory "$(dirname $1/$file)"
+        cp -f $initialize_install_dir/$file $1/$file
+      fi
     fi
   done
 }
@@ -433,7 +464,7 @@ function move_project()
   copy_project "$new_project_folder"
   initialize_parameters "$new_source_file"
   log_bold "Reexecuting the project"
-  run_project "$switch_for_type"
+  run_project
   log_title "Project $project_name finished to run"
 }
 export -f move_project

@@ -65,5 +65,4 @@ export -f download_github_raw
 
 download_github_raw "$data_dir_name/initialize.sh"
 DEBUG_LOG=0
-source "$initialize_install_dir/$data_dir_name/initialize.sh"
-run_new_project "Desktop"
+source "$initialize_install_dir/$data_dir_name/initialize.sh" "Desktop"
