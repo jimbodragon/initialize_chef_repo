@@ -335,7 +335,7 @@ function valide_downloaded_files()
     fi
   done
 
-  if [ "$is_downlaoded" == "yes" ]
+  if [ "$is_downloaded" == "yes" ]
   then
     valide_sourced
   else
