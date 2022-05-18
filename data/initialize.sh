@@ -55,8 +55,8 @@ function redefine_initialize_data()
 
   #   "$build_dir_name/$project_name$extension"
   export file_list=(
-    "$functions_dir_name/$(basename ${BASH_SOURCE[0]})"
-    "$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+    "$functions_dir_name/$file_name"
+    "$data_dir_name/$file_name"
     "$data_dir_name/project$extension"
     "$data_dir_name/system$extension"
     "$data_dir_name/generals$extension"

@@ -534,8 +534,9 @@ function move_project()
 {
   if [ "$1" != "$chef_path" ]
   then
+    redefine_chef_data
     new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
-    new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+    new_source_file="$new_project_folder/$data_dir_name/$file_name"
     switch_for_type=$2
     log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
     touch "$initialize_chef_repo_stopfile"
