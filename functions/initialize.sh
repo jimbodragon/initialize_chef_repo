@@ -240,16 +240,16 @@ function valide_chef_repo()
   chef_repo_path_is_ok="OK"
   if [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
-    chef_repo_path_is_ok="root"
-    log_bold "chef_repo_path cannot be '/'"
+    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    chef_repo_path_is_ok="no_project_name"
   elif [ "$chef_repo_path" == "/" ]
+  then
+    log_bold "chef_repo_path cannot be '/'"
+    chef_repo_path_is_ok="root"
+  elif [ "$chef_repo_path)" == "/home" ]
   then
     log_bold "chef_repo_path should not be home folder '$chef_repo_path'"
     chef_repo_path_is_ok="home"
-  elif [ "$chef_repo_path)" == "/home" ]
-  then
-    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
-    chef_repo_path_is_ok="no_project_name"
   fi
   echo -n "$chef_repo_path_is_ok"
 }
@@ -435,7 +435,7 @@ function run_project()
       run_project
     ;;
     "quit" )
-      log "Leaving the eamon project $project_name"
+      log "Leaving the Deamon project $project_name"
       run_for_type="quit_$run_for_type"
     ;;
     * )
