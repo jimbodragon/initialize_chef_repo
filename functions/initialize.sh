@@ -378,9 +378,8 @@ export -f redefine_data
 
 function reinitialize_parameters()
 {
-  initialize_parameters "$1"
-  download_github_raw "$functions_dir_name/$file_name"
-  source "$data_dir/$file_name"
+  initialize_parameters "$source_file"
+  redefine_data
 }
 export -f reinitialize_parameters
 
@@ -539,13 +538,14 @@ function move_project()
 {
   if [ "$1" != "$chef_path" ]
   then
-    redefine_chef_data
+    update_files
+    redefine_data
     new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
     new_source_file="$new_project_folder/$data_dir_name/$file_name"
-    switch_for_type=$2
     log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
     touch "$initialize_chef_repo_stopfile"
-    reinitialize_parameters "$new_source_file"
+    initialize_parameters "$new_source_file"
+    reinitialize_parameters
     log_bold "Reexecuting the project from $1"
   fi
   run_project
