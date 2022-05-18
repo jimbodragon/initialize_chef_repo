@@ -294,6 +294,8 @@ function valide_berksfile()
   then
     log_bold "No Berksfile in : '$chef_repo_path'"
     echo -n "no_berksfile"
+  else
+    echo -n "OK"
   fi
 }
 export -f valide_berksfile
