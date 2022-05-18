@@ -378,7 +378,7 @@ function run_project()
   state="$(validate_project)"
 
   log "State is $state"
-  case $state in
+  case "$state" in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
       prepare_chef_repo
