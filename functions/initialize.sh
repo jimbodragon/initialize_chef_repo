@@ -242,7 +242,7 @@ export -f ord
 
 function valide_main_chef_repo()
 {
-  if [ "$chef_path" != "/" ]
+  if [ "$chef_path" == "/" ]
   then
     log_bold "chef_path cannot be '/'"
     echo -n "root"
@@ -436,7 +436,6 @@ export -f switch_project
 
 function run_project()
 {
-  log_title "Running project $project_name at $chef_repo_path"
   state="$(validate_project)"
 
   case "$state" in
