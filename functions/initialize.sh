@@ -13,7 +13,7 @@ function create_directory()
     then
       log "Try to create a folder when it's a file that exit at $1"
     else
-      $cmd="mkdir -p $1"
+      cmd="mkdir -p $1"
       if [ "$1" == "$default_chef_path" ]
       then
         sudo $cmd
