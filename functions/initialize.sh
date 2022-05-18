@@ -250,7 +250,7 @@ function valide_main_chef_repo()
     valide_chef_repo_root
   fi
 }
-export -f valide_chef_repo_name
+export -f valide_main_chef_repo
 
 function valide_chef_repo_name()
 {
@@ -259,7 +259,7 @@ function valide_chef_repo_name()
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     echo -n "no_project_name"
   else
-    valide_main_chef_repo
+    valide_downloaded_files
   fi
 }
 export -f valide_chef_repo_name
@@ -283,7 +283,7 @@ function valide_chef_repo_home()
     log_bold "chef_repo_path cannot be '/home'"
     echo -n "home"
   else
-    valide_downloaded_files
+    valide_chef_repo_name
   fi
 }
 export -f valide_chef_repo_home
@@ -351,7 +351,7 @@ function valide_leave_requested()
     log_bold "Quitting project '$chef_repo_is_good'"
     echo -n "quit"
   else
-    valide_chef_repo_name
+    valide_main_chef_repo
   fi
 }
 export -f valide_leave_requested
