@@ -169,7 +169,7 @@ export -f download_latest_files
 
 function update_files() {
   log_bold "Downloading latest files $chef_repo_path | $project_name"
-  download_latest_files "-force"
+  download_latest_files $1
   source_all_require_files
 }
 export -f update_files
@@ -379,7 +379,8 @@ export -f redefine_data
 function reinitialize_parameters()
 {
   initialize_parameters "$1"
-  redefine_data
+  download_github_raw "$functions_dir_name/$file_name"
+  source "$data_dir/$file_name"
 }
 export -f reinitialize_parameters
 
@@ -409,7 +410,7 @@ function run_internal_project()
     touch $initialize_chef_repo_lockfile
 
     log_title "Fetching latest source for project $project_name"
-    update_files
+    update_files "-force"
     run_project
   else
     log_title "Install $project_name as fresh with environments $additionnal_environments"
