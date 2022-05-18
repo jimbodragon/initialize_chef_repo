@@ -411,7 +411,7 @@ function run_project()
       log_title "Project $project_name finished to run for type $run_for_type"
     ;;
     "no_project_name" )
-      new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
+      new_chef_repo="$chef_repo/automatic_chef_repositories"
       move_project "$new_chef_repo"
     ;;
     "root" )
@@ -428,16 +428,12 @@ function run_project()
       source_all_require_files
       run_project
     ;;
-    "home" )
-      move_project "$default_chef_path"
-    ;;
     "quit" )
       run_for_type="quit_$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
       yes_no_question "Could not validate project. Do you want to continue with default values? " use_default "move_project '$default_chef_path' '$run_for_type'" "exit 10"
-      run_project
     ;;
   esac
 }
@@ -473,6 +469,7 @@ function move_project()
   switch_for_type=$2
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
   copy_project "$new_project_folder"
+  touch "$initialize_chef_repo_stopfile"
   reinitialize_parameters "$new_source_file"
   log_bold "Reexecuting the project from $1"
   run_project

@@ -93,8 +93,6 @@ function run_new_project()
     do
       wait_for_project_command "run_project"
     done
-
-    rm -f $initialize_chef_repo_stopfile
   else
     run_project
   fi
