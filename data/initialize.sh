@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "${initial_paramater[@]}" != "" ]
+if [ "$initial_paramater" != "" ]
 then
   export initial_paramater=$@
 fi
@@ -94,6 +94,7 @@ function run_new_project()
   else
     run_project
   fi
+  log "End of new project "
 }
 export -f run_new_project
 

@@ -275,13 +275,6 @@ function validate_project()
     project_is_good="no_solo_file"
   fi
 
-  chef_repo_is_good="$(valide_chef_repo)"
-  if [ "$chef_repo_is_good" != "OK" ]
-  then
-    log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good'"
-    project_is_good="$chef_repo_is_good"
-  fi
-
   if [ "$(type redefine_project_data 2>&1 | grep "is a function")" != "redefine_project_data is a function" ]
   then
     log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
@@ -296,6 +289,13 @@ function validate_project()
       project_is_good="not_downloaded"
     fi
   done
+
+  chef_repo_is_good="$(valide_chef_repo)"
+  if [ "$chef_repo_is_good" != "OK" ]
+  then
+    log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good'"
+    project_is_good="$chef_repo_is_good"
+  fi
 
   if [ -f "$initialize_chef_repo_stopfile" ]
   then
