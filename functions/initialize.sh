@@ -331,7 +331,7 @@ function valide_downloaded_files()
   do
     if [ ! -f "$initialize_install_dir/$file" ]
     then
-      log_bold "file is missing \"$initialize_install_dir/$file\" '$chef_repo_is_good'"
+      log_bold "file is missing \"$initialize_install_dir/$file\""
       is_downloaded="no"
       break
     fi
@@ -350,7 +350,7 @@ function valide_leave_requested()
 {
   if [ -f "$initialize_chef_repo_stopfile" ]
   then
-    log_bold "Quitting project '$chef_repo_is_good'"
+    log_bold "Quitting project '$chef_repo_path'"
     echo -n "quit"
   else
     valide_main_chef_repo
@@ -481,12 +481,12 @@ function run_project()
       move_project "$default_chef_path"
     ;;
     "not_downloaded" )
-      log "File not downloaded"
+      log "File not downloaded at $chef_repo_path"
       update_files
       run_project
     ;;
     "not_loaded" )
-      log "File not loaded"
+      log "File not loaded at $chef_repo_path"
       source_all_require_files
       run_project
     ;;
