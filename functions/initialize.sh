@@ -474,12 +474,12 @@ function run_project()
       move_project "$new_chef_repo"
     ;;
     "root" )
-      log "Set location to default instead of $chef_path"
+      log "Set location to default '$default_chef_path' instead of $chef_path"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "home" )
-      log "Set location to default instead of $chef_path"
+      log "Set location to default '$default_chef_path' instead of $chef_path"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
