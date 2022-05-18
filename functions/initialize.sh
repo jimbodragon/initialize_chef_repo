@@ -235,76 +235,118 @@ function download_and_run_project()
 }
 export -f download_and_run_project
 
-function valide_chef_repo()
-{
-  chef_repo_path_is_ok="OK"
-  if [ "$(basename $chef_repo_path)" != "$project_name" ]
-  then
-    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
-    chef_repo_path_is_ok="no_project_name"
-  fi
-  if [ "$chef_repo_path" == "/" ]
-  then
-    log_bold "chef_repo_path cannot be '/'"
-    chef_repo_path_is_ok="root"
-  elif [ "$chef_repo_path)" == "/home" ]
-  then
-    log_bold "chef_repo_path should not be home folder '$chef_repo_path'"
-    chef_repo_path_is_ok="home"
-  fi
-  echo -n "$chef_repo_path_is_ok"
-}
-export -f valide_chef_repo
-
 function ord() {
   LC_CTYPE=C printf '%d' "'$1"
 }
 export -f ord
 
-function validate_project()
+function valide_chef_repo_name()
 {
-  project_is_good="OK"
+  if [ "$(basename $chef_repo_path)" != "$project_name" ]
+  then
+    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    echo -n "no_project_name"
+  else
+    valide_chef_repo_root
+  fi
+}
+export -f valide_chef_repo_name
+
+function valide_chef_repo_root()
+{
+  if [ "$chef_repo_path" == "/" ]
+  then
+    log_bold "chef_repo_path cannot be '/'"
+    echo -n "root"
+  else
+    valide_chef_repo_home
+  fi
+}
+export -f valide_chef_repo_root
+
+function valide_chef_repo_home()
+{
+  if [ "$chef_repo_path" == "/" ]
+  then
+    log_bold "chef_repo_path cannot be '/home'"
+    echo -n "home"
+  else
+    valide_downloaded_files
+  fi
+}
+export -f valide_chef_repo_home
+
+function valide_berksfile()
+{
   if [ ! -f "$chef_repo_path/Berksfile" ]
   then
     log_bold "No Berksfile in : '$chef_repo_path'"
-    project_is_good="no_berksfile"
+    echo -n "no_berksfile"
   fi
+}
+export -f valide_berksfile
 
+function valide_solofile()
+{
   if [ ! -f "$solo_file" ]
   then
     log_bold "No '$solo_file' in : '$chef_repo_path'"
-    project_is_good="no_solo_file"
+    echo -n "no_solo_file"
+  else
+    valide_berksfile
   fi
+}
+export -f valide_solofile
 
+function valide_sourced()
+{
   if [ "$(type redefine_project_data 2>&1 | grep "is a function")" != "redefine_project_data is a function" ]
   then
     log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
-    project_is_good="not_loaded"
+    echo -n "not_loaded"
+  else
+    valide_solofile
   fi
+}
+export -f valide_sourced
 
+function valide_downloaded_files()
+{
+  is_downloaded='yes'
   for file in ${file_list[@]}
   do
     if [ ! -f "$initialize_install_dir/$file" ]
     then
       log_bold "file is missing \"$initialize_install_dir/$file\" '$chef_repo_is_good'"
-      project_is_good="not_downloaded"
+      is_downloaded="no"
+      break
     fi
   done
 
-  chef_repo_is_good="$(valide_chef_repo)"
-  if [ "$chef_repo_is_good" != "OK" ]
+  if [ "$is_downlaoded" == "yes" ]
   then
-    log_bold "chef_repo_path is not in a desire path '$chef_repo_is_good'"
-    project_is_good="$chef_repo_is_good"
+    valide_sourced
+  else
+    echo -n "not_downloaded"
   fi
+}
+export -f valide_downloaded_files
 
+function valide_leave_requested()
+{
   if [ -f "$initialize_chef_repo_stopfile" ]
   then
     log_bold "Quitting project '$chef_repo_is_good'"
-    project_is_good="quit"
+    echo -n "quit"
+  else
+    valide_chef_repo_name
   fi
+}
+export -f valide_leave_requested
 
-  echo -n "$project_is_good"
+function validate_project()
+{
+  valide_leave_requested
 }
 export -f validate_project
 
