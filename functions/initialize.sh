@@ -259,7 +259,7 @@ function valide_chef_repo_name()
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     echo -n "no_project_name"
   else
-    valide_downloaded_files
+    valide_solofile
   fi
 }
 export -f valide_chef_repo_name
@@ -319,7 +319,7 @@ function valide_sourced()
     log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
     echo -n "not_loaded"
   else
-    valide_solofile
+    valide_main_chef_repo
   fi
 }
 export -f valide_sourced
@@ -353,7 +353,7 @@ function valide_leave_requested()
     log_bold "Quitting project '$chef_repo_path'"
     echo -n "quit"
   else
-    valide_main_chef_repo
+    valide_downloaded_files
   fi
 }
 export -f valide_leave_requested
@@ -538,8 +538,6 @@ function move_project()
 {
   if [ "$1" != "$chef_path" ]
   then
-    update_files
-    redefine_data
     new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
     new_source_file="$new_project_folder/$data_dir_name/$file_name"
     log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
