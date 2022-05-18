@@ -362,7 +362,6 @@ function run_internal_project()
     rm -f $initialize_chef_repo_lockfile
     log_title "Able to change run_internal_project function dynamically: $project_name"
   fi
-  log "Here the loaded source files: ${BASH_SOURCE[@]}"
 }
 export -f run_internal_project
 

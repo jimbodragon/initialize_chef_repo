@@ -78,8 +78,6 @@ export -f redefine_initialize_data
 
 function run_new_project()
 {
-  export run_for_type=$1
-
   echo
   echo "--------------------------------------------------------------"
   echo "Running new project $project_name at $chef_repo_path"
