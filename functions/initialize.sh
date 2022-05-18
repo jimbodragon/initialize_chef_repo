@@ -451,19 +451,22 @@ function run_project()
       include_bashrc
       create_build_file "$build_file" "$run_for_type"
       case "$(echo "$run_for_type" | awk '{print tolower($0)}')" in
-      "server" | "deamon" | "" )
+      "server" | "" )
         run_internal_project
         ;;
+      "deamon" )
+        wait_for_project_command "run_internal_project"
+      ;;
       "desktop" )
         log "Desktop type Installed successfully"
         ;;
       "*" )
-        log "Unknown run_for_type $run_for_type"
+        log "Unknown run_for_type $run_for_type at $chef_repo_path"
         log "Run internal project anyway"
         run_internal_project
         ;;
       esac
-      log_title "Project $project_name finished to run for type $run_for_type"
+      log_title "Project $project_name finished to run for type $run_for_type from $chef_repo_path"
     ;;
     "no_project_name" )
       log "Change the project location that fit with his name $project_name"

@@ -89,7 +89,7 @@ function run_new_project()
   then
     while [ "$(echo "$run_for_type" | awk '{print tolower($0)}')" == "deamon" ]
     do
-      wait_for_project_command "run_project"
+      run_project
     done
   else
     run_project

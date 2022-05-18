@@ -61,7 +61,7 @@ function include_bashrc()
 {
   if [ ! -f ~/.bashrc ] ||[ "$(grep "source $data_dir/initialize.sh" ~/.bashrc)" == "" ]
   then
-    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo -e \"source $data_dir/initialize.sh\" >> ~/.bashrc" "echo -e \"#source $data_dir/initialize.sh\" >> ~/.bashrc"
+    yes_no_question "Do you want to include the script in the bash shell? " "include_bashrc" "echo -e \"export run_for_type=\"Desktop\"\\nsource $data_dir/initialize.sh\" >> ~/.bashrc" "echo -e \"#source $data_dir/initialize.sh\" >> ~/.bashrc"
   fi
 }
 export -f include_bashrc
