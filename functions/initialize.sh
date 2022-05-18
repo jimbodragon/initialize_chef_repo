@@ -13,13 +13,15 @@ function create_directory()
     then
       log "Try to create a folder when it's a file that exit at $1"
     else
-      if [ "$2" == "sudo" ]
+      $cmd="mkdir -p $1"
+      if [ "$1" == "$default_chef_path" ]
       then
-        cmd="sudo "
+        sudo $cmd
+        chown_folder "$default_chef_path"
       else
-        cmd=""
+        $cmd
       fi
-      $cmd mkdir -p $1
+
       log "Folder $1 fully created"
     fi
   fi
@@ -351,7 +353,6 @@ function run_internal_project()
 
     log_title "Fetching latest source for project $project_name"
     update_files
-    chown_project
     run_project
   else
     log_title "Install $project_name as fresh with environments $additionnal_environments"
@@ -415,9 +416,11 @@ function run_project()
       move_project "$new_chef_repo"
     ;;
     "root" )
+      create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "home" )
+      create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "not_downloaded" )
@@ -439,9 +442,15 @@ function run_project()
 }
 export -f run_project
 
+function chown_folder()
+{
+  sudo chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$1"
+}
+export -f chown_project
+
 function chown_project()
 {
-  sudo chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$chef_repo_path"
+  chown_folder "$chef_repo_path"
 }
 export -f chown_project
 
@@ -454,7 +463,7 @@ function copy_project()
       log "Copying '$initialize_install_dir/$file' to '$1/$file'"
       if [ "$initialize_install_dir/$file" != "$1/$file" ]
       then
-        create_directory "$(dirname $1/$file)"
+        create_directory "$(dirname $1/$file)" "$2"
         cp -f $initialize_install_dir/$file $1/$file
       fi
     fi
@@ -468,7 +477,7 @@ function move_project()
   new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
   switch_for_type=$2
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
-  copy_project "$new_project_folder"
+  copy_project "$new_project_folder" "$3"
   touch "$initialize_chef_repo_stopfile"
   reinitialize_parameters "$new_source_file"
   log_bold "Reexecuting the project from $1"
