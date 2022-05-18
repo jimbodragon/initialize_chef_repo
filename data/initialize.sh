@@ -101,7 +101,7 @@ function run_new_project()
 }
 export -f run_new_project
 
-if [ "$(type redefine_data 2>&1 | grep "is a function")" != "redefine_data is a function" ]
+if [ "$(type redefine_data 2>&1 | grep "is a function")" != "redefine_data is a function" ] || [ "$source_file" != "${BASH_SOURCE[0]}" ]
 then
   initialize_parameters "${BASH_SOURCE[0]}"
   redefine_initialize_data
