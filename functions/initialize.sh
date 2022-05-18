@@ -385,7 +385,6 @@ function run_project()
   log_title "Running project $project_name at $chef_repo_path"
   state="$(validate_project)"
 
-  log "State is $state"
   case "$state" in
     "no_solo_file" | "no_berksfile" )
       log_title "Error as $state: Preparing the chef repo: $default_chef_path"
@@ -412,26 +411,32 @@ function run_project()
       log_title "Project $project_name finished to run for type $run_for_type"
     ;;
     "no_project_name" )
+      log "Change the project location that fit with his name"
       new_chef_repo="$chef_repo/automatic_chef_repositories"
       move_project "$new_chef_repo"
     ;;
     "root" )
+      log "Set location to default instead of $chef_repo"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "home" )
+      log "Set location to default instead of $chef_repo"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "not_downloaded" )
+      log "Change the project location that fit with his name"
       update_files
       run_project
     ;;
     "not_loaded" )
+      log "Change the project location that fit with his name"
       source_all_require_files
       run_project
     ;;
     "quit" )
+      log "Change the project location that fit with his name"
       run_for_type="quit_$run_for_type"
     ;;
     * )
