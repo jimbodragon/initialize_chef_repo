@@ -94,7 +94,7 @@ function run_new_project()
   else
     run_project
   fi
-  log "End of new project "
+  log "End of new project $project_name at $source_file"
 }
 export -f run_new_project
 

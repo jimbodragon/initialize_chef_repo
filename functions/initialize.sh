@@ -242,7 +242,8 @@ function valide_chef_repo()
   then
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     chef_repo_path_is_ok="no_project_name"
-  elif [ "$chef_repo_path" == "/" ]
+  fi
+  if [ "$chef_repo_path" == "/" ]
   then
     log_bold "chef_repo_path cannot be '/'"
     chef_repo_path_is_ok="root"
@@ -483,7 +484,6 @@ function move_project()
     new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
     switch_for_type=$2
     log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
-    copy_project "$new_project_folder"
     touch "$initialize_chef_repo_stopfile"
     reinitialize_parameters "$new_source_file"
     log_bold "Reexecuting the project from $1"
