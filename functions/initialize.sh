@@ -283,7 +283,7 @@ function validate_project()
   if [ "$(type redefine_project_data 2>&1 | grep "is a function")" == "redefine_project_data is a function" ]
   then
     log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
-    project_is_good="not loaded"
+    project_is_good="not_loaded"
   fi
 
   for file in ${file_list[@]}
@@ -291,7 +291,7 @@ function validate_project()
     if [ ! -f "$initialize_install_dir/$file" ]
     then
       log_bold "file is missing \"$initialize_install_dir/$file\" '$chef_repo_is_good'"
-      project_is_good="not downloaded"
+      project_is_good="not_downloaded"
     fi
   done
 
@@ -414,10 +414,10 @@ function run_project()
       create_directory "$new_chef_repo" sudo
       cd $new_chef_repo
       move_project "$new_chef_repo"
-    "not downloaded" )
+    "not_downloaded" )
       update_files
       run_project
-    "not loaded" )
+    "not_loaded" )
       source_all_require_files
       run_project
     ;;
