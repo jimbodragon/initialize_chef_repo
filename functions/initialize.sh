@@ -463,7 +463,7 @@ function copy_project()
       log "Copying '$initialize_install_dir/$file' to '$1/$file'"
       if [ "$initialize_install_dir/$file" != "$1/$file" ]
       then
-        create_directory "$(dirname $1/$file)" "$2"
+        create_directory "$(dirname $1/$file)"
         cp -f $initialize_install_dir/$file $1/$file
       fi
     fi
@@ -473,14 +473,17 @@ export -f copy_project
 
 function move_project()
 {
-  new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
-  new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
-  switch_for_type=$2
-  log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
-  copy_project "$new_project_folder" "$3"
-  touch "$initialize_chef_repo_stopfile"
-  reinitialize_parameters "$new_source_file"
-  log_bold "Reexecuting the project from $1"
+  if [ "$1" != "$chef_path" ]
+  then
+    new_project_folder="$1/$project_name/$(basename $scripts_dir)/$initialize_script_name"
+    new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
+    switch_for_type=$2
+    log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
+    copy_project "$new_project_folder"
+    touch "$initialize_chef_repo_stopfile"
+    reinitialize_parameters "$new_source_file"
+    log_bold "Reexecuting the project from $1"
+  fi
   run_project
 }
 export -f move_project
