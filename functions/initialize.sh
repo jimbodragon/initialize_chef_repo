@@ -509,7 +509,7 @@ function chown_folder()
 {
   sudo chown -R "$(id --user --name $USER)":"$(id --group --name $USER)" "$1"
 }
-export -f chown_project
+export -f chown_folder
 
 function chown_project()
 {
