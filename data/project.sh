@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$project_name" == "" ]
 then
-  export project_name="installation_of_initialize_chef_repo"
+  export project_name="$(basename $chef_repo_path)"
 fi
 
 function redefine_project_data()

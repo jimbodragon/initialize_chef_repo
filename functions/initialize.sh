@@ -240,6 +240,18 @@ function ord() {
 }
 export -f ord
 
+function valide_main_chef_repo()
+{
+  if [ "$chef_path" != "/" ]
+  then
+    log_bold "chef_path cannot be '/'"
+    echo -n "root"
+  else
+    valide_chef_repo_root
+  fi
+}
+export -f valide_chef_repo_name
+
 function valide_chef_repo_name()
 {
   if [ "$(basename $chef_repo_path)" != "$project_name" ]
@@ -247,7 +259,7 @@ function valide_chef_repo_name()
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     echo -n "no_project_name"
   else
-    valide_chef_repo_root
+    valide_main_chef_repo
   fi
 }
 export -f valide_chef_repo_name
@@ -266,7 +278,7 @@ export -f valide_chef_repo_root
 
 function valide_chef_repo_home()
 {
-  if [ "$chef_repo_path" == "/" ]
+  if [ "$chef_repo_path" == "/home" ]
   then
     log_bold "chef_repo_path cannot be '/home'"
     echo -n "home"
@@ -454,16 +466,16 @@ function run_project()
     ;;
     "no_project_name" )
       log "Change the project location that fit with his name $project_name"
-      new_chef_repo="$chef_repo/automatic_chef_repositories"
+      new_chef_repo="$chef_path/automatic_chef_repositories"
       move_project "$new_chef_repo"
     ;;
     "root" )
-      log "Set location to default instead of $chef_repo"
+      log "Set location to default instead of $chef_path"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;
     "home" )
-      log "Set location to default instead of $chef_repo"
+      log "Set location to default instead of $chef_path"
       create_directory "$default_chef_path"
       move_project "$default_chef_path"
     ;;

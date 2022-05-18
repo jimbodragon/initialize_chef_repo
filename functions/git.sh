@@ -145,7 +145,7 @@ function git_push_submodule()
 {
   for github_repo in "${git_repos[@]}"
   do
-    cd $chef_repo
+    cd $chef_path
     eval $github_repo
     log "Pushing $type $name $fork_from_public $git_url"
     cd $type/$name
