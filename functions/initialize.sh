@@ -238,15 +238,15 @@ export -f download_and_run_project
 function valide_chef_repo()
 {
   chef_repo_path_is_ok="OK"
-  if [ "$chef_repo_path" == "/" ]
+  if [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
     chef_repo_path_is_ok="root"
     log_bold "chef_repo_path cannot be '/'"
-  elif [ "$chef_repo_path)" == "/home" ]
+  elif [ "$chef_repo_path" == "/" ]
   then
     log_bold "chef_repo_path should not be home folder '$chef_repo_path'"
     chef_repo_path_is_ok="home"
-  elif [ "$(basename $chef_repo_path)" != "$project_name" ]
+  elif [ "$chef_repo_path)" == "/home" ]
   then
     log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
     chef_repo_path_is_ok="no_project_name"
