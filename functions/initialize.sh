@@ -280,7 +280,7 @@ function validate_project()
     project_is_good="$chef_repo_is_good"
   fi
 
-  if [ "$(type redefine_project_data 2>&1 | grep "is a function")" == "redefine_project_data is a function" ]
+  if [ "$(type redefine_project_data 2>&1 | grep "is a function")" != "redefine_project_data is a function" ]
   then
     log_bold "redefine_project_data function not recognize '$chef_repo_is_good'"
     project_is_good="not_loaded"
