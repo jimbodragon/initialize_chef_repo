@@ -242,7 +242,7 @@ function valide_chef_repo()
     log_bold "chef_repo_path cannot be '/'"
   elif [ "$chef_repo_path)" != "/home" ]
   then
-    log_bold "chef_repo_path must contain the project_name: '$chef_repo_path'"
+    log_bold "chef_repo_path should not be home folder '$chef_repo_path'"
     chef_repo_path_is_ok="home"
   elif [ "$(basename $chef_repo_path)" != "$project_name" ]
   then
@@ -317,6 +317,13 @@ function redefine_data()
 }
 export -f redefine_data
 
+function reinitialize_parameters()
+{
+  initialize_parameters "$1"
+  redefine_data
+}
+export -f reinitialize_parameters
+
 function prepare_project()
 {
   log "Preparing project for source_file '$source_file'"
@@ -363,7 +370,7 @@ function switch_project() {
   new_source_file="$new_project_folder/$data_dir_name/$(basename ${BASH_SOURCE[0]})"
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
   copy_project "$new_project_folder"
-  initialize_parameters "$new_source_file"
+  reinitialize_parameters "$new_source_file"
   redefine_data
   rename_project $project_name
   log_bold "Reexecuting the project"
@@ -405,15 +412,13 @@ function run_project()
     ;;
     "no_project_name" )
       new_chef_repo="$initialize_install_dir/automatic_chef_repositories"
-      log_bold "Switching to chef_repo_path '$new_chef_repo'"
       move_project "$new_chef_repo"
     ;;
     "root" )
-      new_chef_repo="$chef_repo_path/automatic_chef_repositories"
-      log_bold "Switching to chef_repo_path '$new_chef_repo'"
-      create_directory "$new_chef_repo" sudo
-      cd $new_chef_repo
-      move_project "$new_chef_repo"
+      move_project "$default_chef_path"
+    ;;
+    "home" )
+      move_project "$default_chef_path"
     ;;
     "not_downloaded" )
       update_files
@@ -423,12 +428,16 @@ function run_project()
       source_all_require_files
       run_project
     ;;
+    "home" )
+      move_project "$default_chef_path"
+    ;;
     "quit" )
       run_for_type="quit_$run_for_type"
     ;;
     * )
       log_title "Houston we got a problem (state is $state): installing on default path: $default_chef_path"
       yes_no_question "Could not validate project. Do you want to continue with default values? " use_default "move_project '$default_chef_path' '$run_for_type'" "exit 10"
+      run_project
     ;;
   esac
 }
@@ -464,9 +473,8 @@ function move_project()
   switch_for_type=$2
   log_bold "Switching to new_source_file '$new_source_file': Old one is '$source_file'"
   copy_project "$new_project_folder"
-  initialize_parameters "$new_source_file"
-  log_bold "Reexecuting the project"
+  reinitialize_parameters "$new_source_file"
+  log_bold "Reexecuting the project from $1"
   run_project
-  log_title "Project $project_name finished to run"
 }
 export -f move_project
