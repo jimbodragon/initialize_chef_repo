@@ -414,9 +414,11 @@ function run_project()
       create_directory "$new_chef_repo" sudo
       cd $new_chef_repo
       move_project "$new_chef_repo"
+    ;;
     "not_downloaded" )
       update_files
       run_project
+    ;;
     "not_loaded" )
       source_all_require_files
       run_project
