@@ -410,11 +410,15 @@ function run_internal_project()
 
     log_title "Fetching latest source for project $project_name"
     update_files "-force"
+
     run_project
   else
     log_title "Install $project_name as fresh with environments $additionnal_environments"
     cd $chef_repo_path
     # wait_for_project_command "knife config show --all"
+
+    rm -rf "$chef_repo_path/Berksfile.lock"
+    berks_vendor_self
     execute_chef_solo
     rm -f $initialize_chef_repo_lockfile
     log_title "Able to change run_internal_project function dynamically: $project_name"

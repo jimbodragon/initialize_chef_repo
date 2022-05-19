@@ -25,7 +25,7 @@ function redefine_chef_data()
   export file_cache_path="$chef_repo_path/cache"
   export download_path="$chef_repo_path/download"
   export log_path="$chef_repo_path/logs"
-  export berks_vendor="$chef_repo_path/berks_vendor"
+  export berks_vendor_folder="$chef_repo_path/berks_vendor"
 
   export solo_file="$chef_repo_path/solo.rb"
   # export chef_run_list='recipe[infraClass::genericinfo]'

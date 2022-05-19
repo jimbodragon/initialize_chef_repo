@@ -40,18 +40,16 @@ function berks_vendor_all()
 
   debug_log "Berks Vendor all cookbooks, librairies and resources"
 
-  berks_vendor_repo "$cookbook_path" "$1"
-  berks_vendor_repo "$libraries_path" "$1"
-  berks_vendor_repo "$resources_path" "$1"
+  berks_vendor_repo "$cookbook_path"
+  berks_vendor_repo "$libraries_path"
+  berks_vendor_repo "$resources_path"
 }
 export -f berks_vendor_all
 
 function berks_vendor_repo()
 {
   cookbooks_folder=$1
-  berks_vendor_folder=$2
-
-  debug_log "Berks Vendor all cookbooks, librairies and resources"
+  debug_log "Berks Vendor for $cookbooks_folder"
   for cookbook in $(ls $cookbooks_folder)
   do
     if [ -d "$cookbooks_folder/$cookbook" ]
@@ -147,7 +145,7 @@ function chef_import_submodule()
 {
   for github_repo in "${git_repos[@]}"
   do
-    cd $chef_repo
+    cd $chef_path
     eval $github_repo
     log "Importing submodule $name of type $type => fork_from_public = $fork_from_public, git_url = $git_url"
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
@@ -159,7 +157,7 @@ function chef_update_submodule()
 {
   for github_repo in "${git_repos[@]}"
   do
-    cd $chef_repo
+    cd $chef_path
     eval $github_repo
     git submodule update --recursive "$type/$name"
     executing_chef_clone "$type" "$name" "$fork_from_public" "$git_url"
@@ -413,7 +411,7 @@ function prepare_chef_repo()
   create_directory $file_backup_path
   create_directory $file_cache_path
   create_directory $log_path
-  create_directory $berks_vendor
+  create_directory $berks_vendor_folder
   create_directory "$data_bags_path/cookbook_secret_keys"
   create_directory "$data_bags_path/passwords"
 
@@ -435,7 +433,7 @@ function prepare_chef_repo()
     cat << EOS > $solo_file
 checksum_path '$checksum_path'
 cookbook_path [
-              '$berks_vendor'
+              '$berks_vendor_folder'
             ]
 data_bags_path '$data_bags_path'
 environment '$chef_environment'
@@ -458,7 +456,7 @@ umask 0022
 EOS
   fi
 
-  rm -rf "$berks_vendor/*"
+  rm -rf "$berks_vendor_folder/*"
   rm -rf "$chef_repo_path/Berksfile.lock"
 
   cat << EOF > "$chef_repo_path/Berksfile"
@@ -768,11 +766,16 @@ EOF
   create_databag cookbook_secret_keys virtualbox $file_cache_path/cookbook_virtual.sh
   create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret $file_cache_path/password_www-data.sh
 
-  berks_vendor "$chef_repo_path" "$berks_vendor"
-
-  berks_vendor_all "$berks_vendor"
+  berks_vendor_self
 }
 export -f prepare_chef_repo
+
+function berks_vendor_self()
+{
+  berks_vendor "$chef_repo_path" "$berks_vendor_folder"
+  berks_vendor_all "$berks_vendor_folder"
+}
+export -f berks_vendor_self
 
 function execute_chef_solo()
 {
