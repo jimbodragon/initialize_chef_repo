@@ -463,6 +463,7 @@ function run_project()
       ;;
       "desktop" )
         log "Desktop type Installed successfully"
+        install_chef_workstation
         ;;
       "*" )
         log "Unknown run_for_type $run_for_type at $chef_repo_path"

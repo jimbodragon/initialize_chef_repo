@@ -16,6 +16,8 @@ function install_chef_workstation()
     log "Installing Chef Workstation"
     sudo dpkg -i $downloaded_chef_file
   fi
+  eval "$(chef shell-init bash)"
+  export PATH="/opt/chefdk/embedded/bin:$PATH"
 }
 export -f install_chef_workstation
 
