@@ -103,28 +103,32 @@ function delete_directory_project()
 }
 export -f delete_directory_project
 
+function wget_download()
+{
+  wget --no-clobber --quiet --no-cache --no-cookies -O $1 $2
+}
+
 function download()
 {
   if [ ! -f $1 ]
   then
     debug_log "Downloading file $2 => $1"
-    wget --no-clobber --quiet --no-cache --no-cookies -O $1 $2
+    wget_download $1 $2
   fi
   if [ -f $1 ] && [ "$(cat $1 | wc -l)" -gt "0" ] && [ "$3" != "-force" ]
   then
-    log_bold "Skipping file as it exists $2 to $1 with flag $3"
-    echo > /dev/null
+    debug_log "Skipping file as it exists $2 to $1 with flag $3"
   elif [ -f $1 ] && [ "$(cat $1 | wc -l)" -eq "0" ] || [ "$3" == "-force" ]
   then
-    log_bold "File exist but not downloaded correctly: $1 or force (flag $3 detected)"
-    log "Delete destination file and retrying download: wget --no-cache --no-cookies -O $1 $2"
+    debug_log "File exist but not downloaded correctly: $1 or force (flag $3 detected)"
+    debug_log "Delete destination file and retrying download: wget --no-cache --no-cookies -O $1 $2"
     rm -f $1
-    wget --no-clobber --no-cache --no-cookies -O $1 $2
+    wget_download $1 $2
   else
-    log_bold "File downloaded but does not exist: $1"
-    log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
+    debug_log "File downloaded but does not exist: $1"
+    debug_log "Retrying download: wget --no-cache --no-cookies -O $1 $2"
     rm -f $1
-    wget --no-clobber --no-cache --no-cookies -O $1 $2
+    wget_download $1 $2
   fi
 }
 export -f download
