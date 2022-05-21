@@ -348,7 +348,7 @@ export -f change_chef_parameter
 
 function ensure_default_attributes
 {
-  echo "\"default_attributes\": {\"$initial_workstation_cookbook\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$chef_path\", \"gitinfo\": {}, \"chef_initialized\": true}, \"virtualbox\":{\"default_interface\": \"eth0\"}}"
+  echo "\"default_attributes\": {\"$initial_workstation_cookbook\": {\"project_name\": \"$project_name\", \"environments\": [\"$chef_environment\"], \"install_dir\": \"$chef_path\", \"gitinfo\": {}, \"chef_initialized\": true}, \"virtualbox\":{\"default_interface\": \"eth0\"},\"chef-git-server\":{\"user_data_bag\": \"chef_git_server_user\", \"ssh_keys_data_bag\": \"ssh_keys\"}}"
 }
 export -f ensure_default_attributes
 
@@ -751,22 +751,54 @@ EOF
 # }
 # EOF
 
-cat << EOF > "$file_cache_path/password_www-data.sh"
-#!/bin/bash
-echo "{\"id\": \"www-data\", \"password\": \"TestStrongPassword\", \"sha512_encrypted_password\": \"\$6\$ScATBxYnGu2g1yMl\$0V/5CaCH5ipDihPDTYo3FGQHdd6Dwtip/BKYjR2h3zx04.BtvVy9vz/jZVymZXXgFttpErR22DYzo7DuTt0lt0\"}" > \$1
+cat << EOF > "$file_cache_path/password_www-data.rb"
+#!/opt/chef-workstation/embedded/bin/ruby
+
+require 'json'
+
+file_path = ARGV[0]
+
+virtualbox_web_user = JSON.parse(File.read(file_path))
+virtualbox_web_user['password'] = 'TestStrongPassword'
+
+File.write(file_path, JSON.dump(virtualbox_web_user))
 EOF
 
-cat << EOF > "$file_cache_path/cookbook_virtual.sh"
-#!/bin/bash
+cat << EOF > "$file_cache_path/cookbook_virtual.rb"
+#!/opt/chef-workstation/embedded/bin/ruby
+
+require 'json'
+
+file_path = ARGV[0]
+
+secret_virtualbox_cookbook = JSON.parse(File.read(file_path))
+chef_git_server_user['$USER'] = {"ssh_keys": [File.read("~/.ssh/id_rsa.pub")]}
+
+File.write(file_path, JSON.dump(chef_git_server_user))
 echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d '\r\n')\"}" > \$1
+EOF
+
+cat << EOF > "$file_cache_path/chef_git_server_user.rb"
+#!/opt/chef-workstation/embedded/bin/ruby
+
+require 'json'
+
+file_path = ARGV[0]
+
+chef_git_server_user = JSON.parse(File.read(file_path))
+chef_git_server_user['$USER'] = {"ssh_keys": [File.read("~/.ssh/id_rsa.pub")]}
+
+File.write(file_path, JSON.dump(chef_git_server_user))
 EOF
 
   chmod 775 $file_cache_path/password_www-data.sh
   chmod 775 $file_cache_path/cookbook_virtual.sh
+  chmod 775 $file_cache_path/chef_git_server_user.sh
 
   log "Creating encrypted data bag at current dir $(pwd)"
-  create_databag cookbook_secret_keys virtualbox $file_cache_path/cookbook_virtual.sh
-  create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret $file_cache_path/password_www-data.sh
+  create_databag "chef_git_server_user" $USER "$file_cache_path/chef_git_server_user.rb"
+  create_databag cookbook_secret_keys virtualbox "$file_cache_path/cookbook_virtual.rb"
+  create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret "$file_cache_path/password_www-data.rb"
 
   berks_vendor_self
 }

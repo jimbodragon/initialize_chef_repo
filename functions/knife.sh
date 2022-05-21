@@ -17,6 +17,18 @@ function create_databag()
 }
 export -f create_databag
 
+function delete_databag()
+{
+  if [ "$3" == "" ]
+  then
+    editor="/bin/nano"
+  else
+    editor="$3"
+  fi
+  knife data bag delete $1 $2 --local-mode --editor $editor
+}
+export -f delete_databag
+
 function create_encrypted_databag()
 {
   if [ "$6" == "" ]
