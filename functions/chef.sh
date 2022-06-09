@@ -786,7 +786,7 @@ require 'json'
 file_path = ARGV[0]
 
 chef_git_server_user = JSON.parse(File.read(file_path))
-chef_git_server_user['$USER'] = {"ssh_keys": [File.read("$HOME/.ssh/id_rsa.pub")]}
+chef_git_server_user['private_keys'] = [File.read("$HOME/.ssh/id_rsa.pub")]
 
 File.write(file_path, JSON.dump(chef_git_server_user))
 EOF
