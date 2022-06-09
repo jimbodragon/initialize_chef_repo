@@ -774,13 +774,11 @@ require 'securerandom'
 file_path = ARGV[0]
 
 secret_virtualbox_cookbook = JSON.parse(File.read(file_path))
-chef_git_server_user['$USER'] = {"ssh_keys": [File.read("$HOME/.ssh/id_rsa.pub")]}
 
 secret = SecureRandom.random_number(36 ** 8).to_s(36)
-chef_git_server_user['secret'] = secret.crypt('\$6\$' + SecureRandom.random_number(36 ** 8).to_s(36))
+secret_virtualbox_cookbook['secret'] = secret.crypt('\$6\$' + SecureRandom.random_number(36 ** 8).to_s(36))
 
-File.write(file_path, JSON.dump(chef_git_server_user))
-echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d '\r\n')\"}" > \$1
+File.write(file_path, JSON.dump(secret_virtualbox_cookbook))
 EOF
 
 cat << EOF > "$file_cache_path/chef_git_server_user.rb"
