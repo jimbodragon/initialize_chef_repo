@@ -772,7 +772,7 @@ require 'json'
 file_path = ARGV[0]
 
 secret_virtualbox_cookbook = JSON.parse(File.read(file_path))
-chef_git_server_user['$USER'] = {"ssh_keys": [File.read("~/.ssh/id_rsa.pub")]}
+chef_git_server_user['$USER'] = {"ssh_keys": [File.read("$HOME/.ssh/id_rsa.pub")]}
 
 File.write(file_path, JSON.dump(chef_git_server_user))
 echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d '\r\n')\"}" > \$1
@@ -786,14 +786,14 @@ require 'json'
 file_path = ARGV[0]
 
 chef_git_server_user = JSON.parse(File.read(file_path))
-chef_git_server_user['$USER'] = {"ssh_keys": [File.read("~/.ssh/id_rsa.pub")]}
+chef_git_server_user['$USER'] = {"ssh_keys": [File.read("$HOME/.ssh/id_rsa.pub")]}
 
 File.write(file_path, JSON.dump(chef_git_server_user))
 EOF
 
-  chmod 775 $file_cache_path/password_www-data.sh
-  chmod 775 $file_cache_path/cookbook_virtual.sh
-  chmod 775 $file_cache_path/chef_git_server_user.sh
+  chmod 775 $file_cache_path/password_www-data.rb
+  chmod 775 $file_cache_path/cookbook_virtual.rb
+  chmod 775 $file_cache_path/chef_git_server_user.rb
 
   log "Creating encrypted data bag at current dir $(pwd)"
   create_databag "chef_git_server_user" $USER "$file_cache_path/chef_git_server_user.rb"
