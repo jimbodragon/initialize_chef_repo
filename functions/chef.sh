@@ -764,15 +764,20 @@ virtualbox_web_user['password'] = 'TestStrongPassword'
 File.write(file_path, JSON.dump(virtualbox_web_user))
 EOF
 
-cat << EOF > "$file_cache_path/cookbook_virtual.rb"
+cat << EOF > "$file_cache_path/cookbook_virtualbox.rb"
 #!/opt/chef-workstation/embedded/bin/ruby
 
 require 'json'
+require 'digest/sha2'
+require 'securerandom'
 
 file_path = ARGV[0]
 
 secret_virtualbox_cookbook = JSON.parse(File.read(file_path))
 chef_git_server_user['$USER'] = {"ssh_keys": [File.read("$HOME/.ssh/id_rsa.pub")]}
+
+secret = SecureRandom.random_number(36 ** 8).to_s(36)
+chef_git_server_user['secret'] = secret.crypt('\$6\$' + SecureRandom.random_number(36 ** 8).to_s(36))
 
 File.write(file_path, JSON.dump(chef_git_server_user))
 echo "{\"id\": \"virtualbox\", \"secret\": \"\$(openssl rand -base64 512 | tr -d '\r\n')\"}" > \$1
@@ -792,13 +797,13 @@ File.write(file_path, JSON.dump(chef_git_server_user))
 EOF
 
   chmod 775 $file_cache_path/password_www-data.rb
-  chmod 775 $file_cache_path/cookbook_virtual.rb
+  chmod 775 $file_cache_path/cookbook_virtualbox.rb
   chmod 775 $file_cache_path/chef_git_server_user.rb
 
   log "Creating encrypted data bag at current dir $(pwd)"
   create_databag "chef_git_server_user" $USER "$file_cache_path/chef_git_server_user.rb"
   create_databag "git_ssh_keys" $USER "$file_cache_path/chef_git_server_user.rb"
-  create_databag cookbook_secret_keys virtualbox "$file_cache_path/cookbook_virtual.rb"
+  create_databag cookbook_secret_keys virtualbox "$file_cache_path/cookbook_virtualbox.rb"
   create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret "$file_cache_path/password_www-data.rb"
 
   berks_vendor_self
