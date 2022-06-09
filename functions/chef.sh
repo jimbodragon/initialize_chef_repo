@@ -797,6 +797,7 @@ EOF
 
   log "Creating encrypted data bag at current dir $(pwd)"
   create_databag "chef_git_server_user" $USER "$file_cache_path/chef_git_server_user.rb"
+  create_databag "git_ssh_keys" $USER "$file_cache_path/chef_git_server_user.rb"
   create_databag cookbook_secret_keys virtualbox "$file_cache_path/cookbook_virtual.rb"
   create_encrypted_databag passwords www-data cookbook_secret_keys virtualbox secret "$file_cache_path/password_www-data.rb"
 
